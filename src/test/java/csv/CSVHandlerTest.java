@@ -6,6 +6,7 @@ import org.junit.jupiter.api.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,7 +38,7 @@ class CSVHandlerTest {
                 Erika Musterfrau;678.90;Rechnung Februar
                 """);
 
-        ArrayList<UeberweisungsAnweisungParam> result = csvHandler.massenueberweisung(TEMP_FILE);
+        ArrayList<UeberweisungsAnweisungParam> result = csvHandler.importMassenueberweisung(Path.of(TEMP_FILE));
 
         assertEquals(2, result.size(), "Es sollten 2 Überweisungen eingelesen werden");
 
@@ -58,7 +59,7 @@ class CSVHandlerTest {
         createTestFile("Max Mustermann;123.45"); // Fehlende Beschreibung
 
         CSVException exception = assertThrows(CSVException.class,
-                () -> csvHandler.massenueberweisung(TEMP_FILE));
+                () -> csvHandler.importMassenueberweisung(Path.of(TEMP_FILE)));
 
         assertTrue(exception.getMessage().contains("Das format der Datei ist falsch"),
                 "Die Fehlermeldung sollte auf ein falsches Format hinweisen");
@@ -70,7 +71,7 @@ class CSVHandlerTest {
         createTestFile("Max Mustermann;ABC;Rechnung Januar");
 
         CSVException exception = assertThrows(CSVException.class,
-                () -> csvHandler.massenueberweisung(TEMP_FILE));
+                () -> csvHandler.importMassenueberweisung(Path.of(TEMP_FILE)));
 
         assertTrue(exception.getMessage().contains("Der Betrag ist keine gültige Zahl"),
                 "Die Fehlermeldung sollte auf eine ungültige Zahl hinweisen");
@@ -79,7 +80,7 @@ class CSVHandlerTest {
     @Test
     void testMassenueberweisung_fileNotFound() {
         CSVException exception = assertThrows(CSVException.class,
-                () -> csvHandler.massenueberweisung("nicht_existierende_datei.csv"));
+                () -> csvHandler.importMassenueberweisung(Path.of("nicht_existierende_datei.csv")));
 
         assertTrue(exception.getMessage().contains("Datei konnte nicht gefunden werden"),
                 "Die Fehlermeldung sollte auf eine nicht gefundene Datei hinweisen");

@@ -29,6 +29,7 @@ public class RegexTest {
             assertTrue(exception.getMessage().contains(
                     ValidateUsernameException.Message.USERNAME_INVALID.addInfo(new UserName(s)).getServiceErrorMessage()
             ));
+
         }
 
 

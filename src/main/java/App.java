@@ -14,6 +14,7 @@ import repository.pinnwand.PinnwandRepository;
 import service.*;
 import service.GevoService;
 import service.ueberweisung.TransaktionsService;
+import service.ueberweisung.TransaktionsValidatorService;
 
 
 public class App {
@@ -42,10 +43,12 @@ public class App {
         KontoService kontoService = new KontoService(kontoRepository);
         GevoService gevoService = new GevoService(gevoRepository, userService, kontoService);
 
+        ImportExportService importExportService =  new ImportExportService(userService);
         AnmeldeService anmeldeService = new AnmeldeService(userRepository);
         PinnwandService pinnwandService = new PinnwandService(pinnwandRepository, userService);
         RegistrierungService registrierungService = new RegistrierungService(userRepository, kontoRepository);
-        TransaktionsService transaktionsService = new TransaktionsService(kontoRepository, gevoService);
+        TransaktionsValidatorService transaktionsValidatorService = new TransaktionsValidatorService(kontoRepository);
+        TransaktionsService transaktionsService = new TransaktionsService(kontoRepository, gevoService,importExportService, transaktionsValidatorService);
         MessageService messageService = new MessageService(directMessagesRepository);
 
 

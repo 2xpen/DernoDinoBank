@@ -2,22 +2,36 @@ package service.ueberweisung;
 
 import data.anweisungen.AbhebungsAnweisung;
 import data.anweisungen.UeberweisungsAnweisung;
+import data.anweisungen.UeberweisungsAnweisungParam;
+import data.identifier.KontoId;
+import data.identifier.UserId;
 import repository.konto.KontoRepository;
 import service.GevoService;
+import service.ImportExportService;
+import service.KontoService;
 import service.serviceexception.DatenbankException;
 import service.serviceexception.ServiceException;
 import validator.Validator;
 
+import java.nio.file.Path;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TransaktionsService {
 
     private final KontoRepository kontoRepository;
     private final GevoService gevoService;
+    private final KontoService kontoService;
+    private final TransaktionsValidatorService transaktionsValidatorService;
 
-    public TransaktionsService(KontoRepository kontoRepository, GevoService gevoService) {
+    private final ImportExportService importExportService;
+    public TransaktionsService(KontoRepository kontoRepository, GevoService gevoService, KontoService kontoService, ImportExportService importExportService, TransaktionsValidatorService transaktionsValidatorService) {
         this.kontoRepository = kontoRepository;
         this.gevoService = gevoService;
+        this.kontoService = kontoService;
+        this.transaktionsValidatorService = transaktionsValidatorService;
+        this.importExportService = importExportService;
     }
 
 
@@ -27,15 +41,8 @@ public class TransaktionsService {
 
         double kontostand;
 
-        try {
-            kontostand = kontoRepository.ladeKontoStandVonKonto(anweisung.getKontoId());
-        } catch (SQLException e) {
-            throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR);
-        }
 
-        TransaktionsValidator.validteAbhebungsAnweisung(
-                anweisung,
-                kontostand);
+        transaktionsValidatorService.validteAbhebungsAnweisung(anweisung);
 
         try {
             kontoRepository.abheben(anweisung);
@@ -48,10 +55,48 @@ public class TransaktionsService {
     }
 
 
-    public void massenUeberweisung() throws ServiceException {
+    public void massenUeberweisung(String quellpfad, KontoId senderId) throws ServiceException {
+
+        List<UeberweisungsAnweisungParam> ueberweisungsAnweisungParams = importExportService.importMassenUeberweisung(Path.of(quellpfad));
+
+        transaktionsValidatorService.isValidMassenueberweisungen(ueberweisungsAnweisungParams,senderId);
+
+        for (UeberweisungsAnweisungParam anweisung : ueberweisungsAnweisungParams) {
+
+            kontoRepository.ueberweisen();
+
+
+        }
+
+
 
 
     }
+
+
+
+    private List<UeberweisungsAnweisung> converMassenUeberweisung(List<UeberweisungsAnweisungParam> paramList, KontoId senderId) throws ServiceException {
+
+        List<UeberweisungsAnweisung> anweisungen = new ArrayList<>();
+
+        for (UeberweisungsAnweisungParam param : paramList) {
+            anweisungen.add(
+                    new UeberweisungsAnweisung(
+
+
+
+                    )
+            )
+        }
+
+
+
+
+
+    }
+
+
+
 
 
     public void einzelUeberweisung(UeberweisungsAnweisung anweisung) throws ServiceException {
@@ -65,9 +110,7 @@ public class TransaktionsService {
         }
 
         /// todo das Erstellen von der Service-Exception wird hier vom UeberweisungValidator übernommen, ist irgendwie mega undurchsichtig, weil die methode legit nur zum exc thrown da ist
-        TransaktionsValidator.validateUeberweisung(
-                anweisung,
-                kontoStandSender);
+        transaktionsValidatorService.validateUeberweisung(anweisung);
 
         try {
             kontoRepository.ueberweisen(anweisung);

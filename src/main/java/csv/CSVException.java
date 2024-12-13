@@ -1,12 +1,23 @@
 package csv;
+import service.serviceexception.ServiceErrorMessageProvider;
+
+import java.text.MessageFormat;
 
 public class CSVException extends Exception {
 
+    private final Message message;
+
     public CSVException(Message message) {
-        super(message.getMessage());
+        super(message.getServiceErrorMessage());
+        this.message = message;
     }
 
-    public enum Message {
+    // todo hier bitte mal diskutieren wie man die strukur hier besser halten könnte
+    public Message getServiceErrorMessage() {
+        return message;
+    }
+
+    public enum Message implements ServiceErrorMessageProvider {
         FileIstEmpty("Die Datei ist leer"),
         FileNotFound("Datei konnte nicht gefunden werden"),
         CSFFormat("Das format der Datei ist falsch"),
@@ -36,8 +47,10 @@ public class CSVException extends Exception {
         }
 
 
-        public String getMessage() {
+        public String getServiceErrorMessage() {
             return message;
         }
     }
+
+
 }

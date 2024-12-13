@@ -88,7 +88,7 @@ public class KontoAuszugExportTest {
                                 , GevoArt.UEBERWEISUNG)
                 );
 
-        csvHandler.exportKontoAuszug(liste, Path.of("C:\\Projekte\\DernoDinoBank\\src\\test\\testdaten\\csvHandler"));
+        csvHandler.exportKontoAuszuege(liste, Path.of("C:\\Projekte\\DernoDinoBank\\src\\test\\testdaten\\csvHandler"));
 
         try {
             Scanner scanner = new Scanner(new File(testDatei));

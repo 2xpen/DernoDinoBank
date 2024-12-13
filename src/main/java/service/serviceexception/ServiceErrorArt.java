@@ -7,6 +7,7 @@ public enum ServiceErrorArt {
     ANMELDEERROR,
     USERSERVICE,
     REGISTRATIONERROR,
+    IMPORT_EXPORT_ERROR,
     UNKOWNERROR;
 
 

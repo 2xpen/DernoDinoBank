@@ -12,17 +12,18 @@ import java.util.Scanner;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class CSV_Handler {
+public class CSV_Handler implements ICSV_IMPORT_EXPORT {
 
-    public ArrayList<UeberweisungsAnweisungParam> massenueberweisung(String path) throws CSVException {
+    public ArrayList<UeberweisungsAnweisungParam> importMassenueberweisung(Path path) throws CSVException {
         ArrayList<UeberweisungsAnweisungParam> rueckgabe = new ArrayList<>();
         Scanner scan;
 
         try {
-            scan = new Scanner(new File(path));
-        } catch (FileNotFoundException e) {
-            throw new CSVException(CSVException.Message.FileNotFound.addPath(path));
+            scan = new Scanner(path);
+        } catch (IOException e) {
+            throw new CSVException(CSVException.Message.FileNotFound);
         }
+
         if (!scan.hasNext()) {
             throw new CSVException(CSVException.Message.FileIstEmpty);
         }
@@ -48,7 +49,7 @@ public class CSV_Handler {
     }
 
 
-    public void exportKontoAuszug(List<KontoauszugZeile> list, Path path) throws CSVException {
+    public void exportKontoAuszuege(List<KontoauszugZeile> list, Path path) throws CSVException {
                 //header
         String content = "Transaktionsdatum; Empfänger; Sender; Beschreibung; Betrag"+"\n";
         for (KontoauszugZeile gz : list) {
@@ -63,7 +64,7 @@ public class CSV_Handler {
 
 
 
-    public void exportDirectMessages(List<NachrichtView> nachrichtViews,Path path) throws CSVException {
+    public void exportNachrichten(List<NachrichtView> nachrichtViews,Path path) throws CSVException {
         String content = "Datum;Sender;Empfänger;Nachricht+"+"\n";
         for (NachrichtView gz : nachrichtViews) {
             content += gz.getDate() + ";";
