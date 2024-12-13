@@ -31,7 +31,7 @@ public class CSVException extends Exception {
         }
 
         public Message addInfo(String be) {
-            this.message += be;
+            this.message += " "+be;
             return this;
         }
 

@@ -3,7 +3,9 @@ package data.geschaeftsvorfall;
 import data.user.UserName;
 
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.time.ZoneId;
+import java.util.Date;
 import java.util.Optional;
 
 public class KontoauszugZeile {
@@ -11,14 +13,14 @@ public class KontoauszugZeile {
 //die klasse klasse ist nur zum angucken, quasi das view objekt von Kontauszugszeile
 
 
-    private final Timestamp datum;
+    private final Date datum;
     private final Optional<UserName> empfaenger;
     private final UserName sender;
     private final String beschreibung;
     private final GevoArt art;
     private final double betrag;
 
-    public KontoauszugZeile(Timestamp datum, Optional<UserName> empfaenger, UserName sender, String beschreibung, double betrag, GevoArt art) {
+    public KontoauszugZeile(Date datum, Optional<UserName> empfaenger, UserName sender, String beschreibung, double betrag, GevoArt art) {
         this.datum = datum;
         this.empfaenger = empfaenger;
         this.sender = sender;

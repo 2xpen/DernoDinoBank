@@ -1,7 +1,6 @@
 package csv;
 
 import data.anweisungen.UeberweisungsAnweisungParam;
-import data.geschaeftsvorfall.GevoZeile;
 import data.geschaeftsvorfall.KontoauszugZeile;
 import data.nachricht.NachrichtView;
 
@@ -48,10 +47,10 @@ public class CSV_Handler {
     }
 
 
-    public void kontoauszugDrucken(List<KontoauszugZeile> list) throws CSVException {
-        //Transaktionsdatum; Empfänger; Sender; Beschreibung; Betrag
+    public void exportKontoAuszug(List<KontoauszugZeile> list) throws CSVException {
 
-        String content = null;
+                //header
+        String content = "Transaktionsdatum; Empfänger; Sender; Beschreibung; Betrag"+"\n";
 
         for (KontoauszugZeile gz : list) {
             content += gz.getDatum() + ";";
@@ -61,25 +60,47 @@ public class CSV_Handler {
             content += gz.getBetrag() + "\n";
         }
 
-        if (content == null) {
-            throw new CSVException(CSVException.Message.FileIstEmpty);
+        write(content,ExportTypes.KONTOAUSZUG);
+    }
+
+
+
+    public void exportDirectMessages(List<NachrichtView> nachrichtViews) throws CSVException {
+
+        String content = "Datum;Sender;Empfänger;Nachricht+"+"\n";
+
+        for (NachrichtView gz : nachrichtViews) {
+            content += gz.getDate() + ";";
+            content += gz.getSender() + ";";
+            content += gz.getEmpfaenger() + ";";
+            content += gz.getMessage()+ ";"+ "\n";
         }
+
+            // todo hier noch die addInfo Methode einfügen und saren mit wem die convo war (falls es eine spezifische convo war...
+        write(content, ExportTypes.NACHRICHTEN);
+
+    }
+
+
+
+
+    public void write(String content,ExportTypes type) throws CSVException {
 
         LocalDate aktuellesDatum = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         String formatiertesDatum = aktuellesDatum.format(formatter);
-        write("Kontoauszug_vom_" + formatiertesDatum, content);
-    }
 
-    public void write(String name, String content) throws CSVException {
         try {
-            FileWriter writer = new FileWriter(name + ".csv");
+
+            FileWriter writer = new FileWriter(type.getName() + formatiertesDatum+ ".csv");
             BufferedWriter bw = new BufferedWriter(writer);
             bw.write(content);
             bw.close();
+
         } catch (IOException e) {
-            throw new CSVException(CSVException.Message.WriteFailed);
+            throw new CSVException(CSVException.Message.WriteFailed.addInfo(e.getMessage()));
         }
+
     }
 
 
