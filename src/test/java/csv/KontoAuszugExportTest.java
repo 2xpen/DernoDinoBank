@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
 public class KontoAuszugExportTest {
 
 
-    private String testDatei = "C:\\Projekte\\DernoDinoBank\\%s";
+    private String testDatei = "C:\\Projekte\\DernoDinoBank\\src\\test\\testdaten\\csvHandler\\%s";
     private CSV_Handler csvHandler;
 
     @BeforeEach
@@ -87,7 +88,7 @@ public class KontoAuszugExportTest {
                                 , GevoArt.UEBERWEISUNG)
                 );
 
-        csvHandler.exportKontoAuszug(liste);
+        csvHandler.exportKontoAuszug(liste, Path.of("C:\\Projekte\\DernoDinoBank\\src\\test\\testdaten\\csvHandler"));
 
         try {
             Scanner scanner = new Scanner(new File(testDatei));

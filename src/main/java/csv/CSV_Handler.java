@@ -5,6 +5,7 @@ import data.geschaeftsvorfall.KontoauszugZeile;
 import data.nachricht.NachrichtView;
 
 import java.io.*;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -47,11 +48,9 @@ public class CSV_Handler {
     }
 
 
-    public void exportKontoAuszug(List<KontoauszugZeile> list) throws CSVException {
-
+    public void exportKontoAuszug(List<KontoauszugZeile> list, Path path) throws CSVException {
                 //header
         String content = "Transaktionsdatum; Empfänger; Sender; Beschreibung; Betrag"+"\n";
-
         for (KontoauszugZeile gz : list) {
             content += gz.getDatum() + ";";
             content += gz.getEmpfaenger() + ";";
@@ -59,16 +58,13 @@ public class CSV_Handler {
             content += gz.getBeschreibung() + ";";
             content += gz.getBetrag() + "\n";
         }
-
-        write(content,ExportTypes.KONTOAUSZUG);
+        write(path,content,ExportTypes.KONTOAUSZUG);
     }
 
 
 
-    public void exportDirectMessages(List<NachrichtView> nachrichtViews) throws CSVException {
-
+    public void exportDirectMessages(List<NachrichtView> nachrichtViews,Path path) throws CSVException {
         String content = "Datum;Sender;Empfänger;Nachricht+"+"\n";
-
         for (NachrichtView gz : nachrichtViews) {
             content += gz.getDate() + ";";
             content += gz.getSender() + ";";
@@ -77,26 +73,25 @@ public class CSV_Handler {
         }
 
             // todo hier noch die addInfo Methode einfügen und saren mit wem die convo war (falls es eine spezifische convo war...
-        write(content, ExportTypes.NACHRICHTEN);
+        write(path,content, ExportTypes.NACHRICHTEN);
 
     }
 
 
 
 
-    public void write(String content,ExportTypes type) throws CSVException {
+    public void write(Path zielPfad,String content,ExportTypes type) throws CSVException {
 
         LocalDate aktuellesDatum = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         String formatiertesDatum = aktuellesDatum.format(formatter);
 
         try {
-
-            FileWriter writer = new FileWriter(type.getName() + formatiertesDatum+ ".csv");
+            //todo kann jmd mir (leo) mal erklären wie man das anständig macht, keine lust das jetzt rauszusuchen
+            FileWriter writer = new FileWriter(zielPfad+"\\"+type.getName() + formatiertesDatum+ ".csv");
             BufferedWriter bw = new BufferedWriter(writer);
             bw.write(content);
             bw.close();
-
         } catch (IOException e) {
             throw new CSVException(CSVException.Message.WriteFailed.addInfo(e.getMessage()));
         }
