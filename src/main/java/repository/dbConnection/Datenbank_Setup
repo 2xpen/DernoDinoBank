@@ -1,0 +1,46 @@
+CREATE TABLE benutzer (
+                          user_id             VARCHAR(30) NOT NULL,
+                          username            VARCHAR(100),
+                          password            VARCHAR(30),
+                          PRIMARY KEY (user_id)
+);
+
+CREATE TABLE konto(
+                      konto_id            VARCHAR(30) NOT NULL,
+                      user_id             VARCHAR(30) NOT NULL,
+                      kontostand          DECIMAL(18,2),
+                      PRIMARY KEY (konto_id)
+);
+
+CREATE TABLE geschaeftsvorfaelle(
+                                    gevo_id      VARCHAR(30) NOT NULL,
+                                    gevo_art      VARCHAR(30) NOT NULL,
+                                    transaktionsdatum   TIMESTAMP NOT NULL,
+                                    sender              VARCHAR(30) NOT NULL,
+                                    empfaenger           VARCHAR(30),
+                                    beschreibung        VARCHAR(200),
+                                    betrag              DECIMAL(18,2) NOT NULL,
+                                    PRIMARY KEY (gevo_id)
+);
+
+
+CREATE TABLE pinnwandentry(
+                              besitzer_id         VARCHAR(30) NOT NULL,
+                              autor_id            VARCHAR(30) NOT NULL,
+                              nachricht           VARCHAR(200)
+);
+
+CREATE TABLE directMessages(
+                               date                TIMESTAMP,
+                               sender              VARCHAR(30) NOT NULL,
+                               empfaenger          VARCHAR(30) NOT NULL,
+                               message             VARCHAR(200)
+);
+
+ALTER TABLE konto               ADD FOREIGN KEY (user_id)       REFERENCES benutzer(user_id);
+ALTER TABLE geschaeftsvorfaelle ADD FOREIGN KEY (sender)        REFERENCES konto(konto_id);
+ALTER TABLE pinnwandentry       ADD FOREIGN KEY (autor_id)      REFERENCES benutzer(user_id);
+ALTER TABLE pinnwandentry       ADD FOREIGN KEY (besitzer_id)   REFERENCES benutzer(user_id);
+ALTER TABLE directMessages      ADD FOREIGN KEY (sender)        REFERENCES benutzer(user_id);
+ALTER TABLE directMessages      ADD FOREIGN KEY (empfaenger)    REFERENCES benutzer(user_id);
+
