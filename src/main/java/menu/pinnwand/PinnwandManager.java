@@ -100,6 +100,8 @@ public class PinnwandManager extends ManagerBase {
         try {
             pinnwandService.schreibenAufAnderePinnwand(message, autor.getUserId() ,empfaenger.getUserId());
             System.out.println("Ihr Pinnwand eintrag wurde erstellt");
+            pinnwandVonUserAufrufen(autor,empfaenger);
+
         } catch (ServiceException e) {
             System.out.println(e.getMessage());
             System.out.println("Erneut versuchen? (y) sonst anderes zeichen wählen");

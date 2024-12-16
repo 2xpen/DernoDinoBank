@@ -2,7 +2,6 @@ package menu.directMessages;
 
 import data.nachricht.Nachricht;
 import data.user.User;
-import data.user.UserName;
 import menu.ManagerBase;
 import menu.Menufehlermeldungen;
 import menu.konto.UserLogedInManager;
@@ -10,7 +9,6 @@ import menu.personsuche.PersonSucheManager;
 import service.MessageService;
 import service.UserService;
 import service.serviceexception.ServiceException;
-import service.serviceexception.validateexception.ValidateBeschreibungException;
 
 import java.text.SimpleDateFormat;
 
@@ -30,7 +28,6 @@ public class MessageManager extends ManagerBase {
     }
 
     public void start(User user) {
-
 
         printHead();
 
@@ -62,8 +59,9 @@ public class MessageManager extends ManagerBase {
         }
     }
 
-    private void seeAllMessages(User user) {
 
+
+    private void seeAllMessages(User user) {
         try {
             List<Nachricht> allMessages = messageService.getNachrichten(user.getUserId());
             if(allMessages.isEmpty()) {
@@ -80,7 +78,40 @@ public class MessageManager extends ManagerBase {
     }
 
 
-    public void sendDirectMessage(User selector, User selectedUser) {
+
+    /// sorry kein nerv für bennenuing
+    public void einstiegMitPersonsuche(User selector, User selectedUser){
+
+        System.out.println("1: Convo ansehen");
+        System.out.println("2: Nachricht senden");
+        System.out.println("0: Zurück");
+
+        try {
+
+            int wahlnummer = Integer.parseInt(scanner.nextLine());
+            switch (wahlnummer){
+                case 1:
+                    printConvo(selector, selectedUser);
+                    break;
+                case 2:
+                    sendMessage(selector, selectedUser);
+                case 0:
+                    personSucheManager.startWithSelectedUser(selector, selectedUser);
+            }
+
+        } catch (NumberFormatException e) {
+            Menufehlermeldungen.WAHLNUMMER_NICHT_KORREKT.print();
+            einstiegMitPersonsuche(selector, selectedUser);
+        }
+
+    }
+
+
+
+
+
+
+    public void sendMessage(User selector, User selectedUser) {
 
         try {
             System.out.println("""
@@ -104,11 +135,81 @@ public class MessageManager extends ManagerBase {
             System.out.println(serviceException.getMessage());
             System.out.println("Erneut versuchen? (y) sonst anderes Zeichen eingeben");
             if (scanner.nextLine().equals("y")) {
-                sendDirectMessage(selectedUser, selector);
+                sendMessage(selectedUser, selector);
             }
         }
         personSucheManager.startWithSelectedUser(selector, selectedUser);
 
+    }
+
+
+
+
+    private void printConvo(User selector, User selectedUser) {
+        try {
+                List<Nachricht> convo = messageService.getConvo(selector, selectedUser);
+            try {
+                StringBuilder sb = new StringBuilder();
+                int counter = 1;
+                sb.append("Conversation mit ").append(selectedUser.getUsername()).append("\n");
+
+                printNachrichtenListe(convo, sb, counter);
+
+
+                IMPORT_EXPORT_DIRECTMESSAGE_MENU_OPTION.printAll();
+
+                try {
+
+                    switch (IMPORT_EXPORT_DIRECTMESSAGE_MENU_OPTION.ofWahlNummer(Integer.parseInt(scanner.nextLine()))){
+                        case EXPORT:
+                            //todo hier TOM EXPORT
+                            break;
+
+                        case ZURUECK:
+                            einstiegMitPersonsuche(selectedUser, selector);
+                        case null, default:
+                            throw new NumberFormatException();
+                    }
+
+
+                } catch (NumberFormatException e) {
+                    Menufehlermeldungen.WAHLNUMMER_NICHT_KORREKT.print();
+                    printConvo(selectedUser, selector);
+                }
+
+
+
+            } catch (ServiceException serviceException) {
+                System.out.println(serviceException.getMessage());
+                sendMessage(selectedUser, selector);
+            }
+
+
+            } catch (ServiceException serviceException) {
+            System.out.println(serviceException.getMessage());
+            System.out.println("Erneut versuchen? (y) sonst anderes Zeichen eingeben");
+            if (scanner.nextLine().equals("y")) {
+                printConvo(selectedUser, selector);
+            }
+            sendMessage(selectedUser, selector);
+}
+
+
+    }
+
+    private void printNachrichtenListe(List<Nachricht> convo, StringBuilder sb, int counter) throws ServiceException {
+        for (Nachricht nachricht : convo) {
+            SimpleDateFormat formatter = new SimpleDateFormat("dd. MMMM yyyy, HH:mm 'Uhr'");
+            String formattedTimestamp = formatter.format(nachricht.getDate());
+            sb.append("------------------------------------------").append("\n")
+                    .append("Nachricht ").append(counter).append(":\n")
+                    .append("Von: ").append(userService.ermittleUserByUserId(nachricht.getSender()).getUsername()).append("\n")
+                    .append("Am: ").append(formattedTimestamp).append("\n")
+                    .append("Nachricht: ").append(nachricht.getMessage()).append("\n")
+                    .append("------------------------------------------").append("\n");
+            counter++;
+        }
+        System.out.println(sb);
     }
 
 
@@ -117,18 +218,7 @@ public class MessageManager extends ManagerBase {
             StringBuilder sb = new StringBuilder();
             int counter = 1;
             sb.append("Posteingang von ").append(user.getUsername()).append("\n");
-            for (Nachricht nachricht : allMessages) {
-                SimpleDateFormat formatter = new SimpleDateFormat("dd. MMMM yyyy, HH:mm 'Uhr'");
-                String formattedTimestamp = formatter.format(nachricht.getDate());
-                sb.append("------------------------------------------").append("\n")
-                        .append("Nachricht ").append(counter).append(":\n")
-                        .append("Von: ").append(userService.ermittleUserByUserId(nachricht.getSender()).getUsername()).append("\n")
-                        .append("Am: ").append(formattedTimestamp).append("\n")
-                        .append("Nachricht: ").append(nachricht.getMessage()).append("\n")
-                        .append("------------------------------------------").append("\n");
-                counter++;
-            }
-            System.out.println(sb);
+            printNachrichtenListe(allMessages, sb, counter);
 
         } catch (ServiceException serviceException) {
             System.out.println(serviceException.getMessage());
@@ -141,16 +231,18 @@ public class MessageManager extends ManagerBase {
 
         // todo @TOM das thrown und catchen sieht hier so schlimm aus weil das input getten und der decider hier vermischt sind, einmal catcht man die numberformat exception, und einmal muss man catchen wenn aus der of methode ncihts rauskommt, könnte man theoretisch in einem wiederaufruf der methode fixxen, aber das sind semantisch zwei verschiedene sachen
 
-        IMPORT_EXPORT_MENU_OPTION.printAll();
+        IMPORT_EXPORT_DIRECTMESSAGE_MENU_OPTION.printAll();
 
         printBitteWahlnummerWaehlenFooter();
 
         try {
-            IMPORT_EXPORT_MENU_OPTION option = IMPORT_EXPORT_MENU_OPTION.ofWahlNummer(Integer.parseInt(scanner.nextLine()));
+            IMPORT_EXPORT_DIRECTMESSAGE_MENU_OPTION option = IMPORT_EXPORT_DIRECTMESSAGE_MENU_OPTION.ofWahlNummer(Integer.parseInt(scanner.nextLine()));
 
             printFooter();
             switch (option) {
                 case EXPORT:
+
+                    //todo hier tom einfach ecport reiunmachen
                     break;
                 case ZURUECK:
                     start(user);

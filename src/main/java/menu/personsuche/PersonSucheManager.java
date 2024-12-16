@@ -10,8 +10,6 @@ import menu.pinnwand.PinnwandManager;
 import service.UserService;
 import service.serviceexception.ServiceException;
 
-import java.awt.*;
-
 public class PersonSucheManager extends ManagerBase {
 
     private final UserLogedInManager userLogedInManager;
@@ -64,7 +62,7 @@ try {
             pinnwandManager.pinnwandVonUserAufrufen(selector, selectedUser);
             break;
         case CHAT:
-            messageManager.sendDirectMessage(selector, selectedUser);
+            messageManager.einstiegMitPersonsuche(selector, selectedUser);
             break;
         case ZURUECK:
             userLogedInManager.start(selector);

@@ -2,6 +2,7 @@ package service;
 
 import data.identifier.UserId;
 import data.nachricht.Nachricht;
+import data.user.User;
 import repository.directmessages.DirectMessagesRepository;
 import service.serviceexception.DatenbankException;
 import service.serviceexception.ServiceException;
@@ -17,6 +18,15 @@ public class MessageService {
 
     public MessageService(DirectMessagesRepository directMessagesRepository) {
         this.directMessagesRepository = directMessagesRepository;
+    }
+
+
+    public List<Nachricht> getConvo(User selector, User selectedUser) throws ServiceException {
+        try {
+            return directMessagesRepository.getConvo(selector.getUserId(),selectedUser.getUserId());
+        } catch (SQLException e) {
+            throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR);
+        }
     }
 
     public List<Nachricht> getNachrichten(UserId userId) throws ServiceException {
@@ -38,4 +48,5 @@ public class MessageService {
             throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR);
         }
     }
+
 }

@@ -12,6 +12,44 @@ public class DirectMessagesRepository {
 
     //todo @TOM
 
+
+
+    public List<Nachricht> getConvo(UserId selector, UserId selectedUser) throws SQLException {
+
+        Connection conn = DataBaseConnection.getInstance();
+
+        String selectAlleNachrichtenByUserId = """
+                        SELECT * FROM directmessages 
+                                 WHERE
+                                     empfaenger = ?  AND sender = ? 
+                                     OR 
+                                     empfaenger = ?  AND sender = ? 
+                """;
+
+        PreparedStatement preparedStatement = conn.prepareStatement(selectAlleNachrichtenByUserId);
+
+        preparedStatement.setString(1, selector.toString());
+        preparedStatement.setString(2, selectedUser.toString());
+
+        preparedStatement.setString(3, selectedUser.toString());
+        preparedStatement.setString(4, selector.toString());
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        List<Nachricht> alleNachrichten = new ArrayList<>();
+
+        while (resultSet.next()) {
+            alleNachrichten.add(
+                    new Nachricht(
+                            resultSet.getTimestamp("date"),
+                            new UserId(resultSet.getString("sender")),
+                            new UserId(resultSet.getString("empfaenger")),
+                            resultSet.getString("message")
+                    )
+            );
+        }
+        return alleNachrichten;
+    }
+
     public List<Nachricht> getNachrichtenByUserId(UserId userId) throws SQLException {
         Connection conn = DataBaseConnection.getInstance();
         String selectAlleNachrichtenByUserId = """
