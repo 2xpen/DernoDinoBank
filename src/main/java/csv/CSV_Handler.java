@@ -3,6 +3,7 @@ package csv;
 import data.anweisungen.UeberweisungsAnweisungParam;
 import data.geschaeftsvorfall.KontoauszugZeile;
 import data.nachricht.NachrichtView;
+import data.pinnwand.PinnwandEntryView;
 
 import java.io.*;
 import java.nio.file.Path;
@@ -48,6 +49,21 @@ public class CSV_Handler implements ICSV_IMPORT_EXPORT {
         return rueckgabe;
     }
 
+
+
+    public void exportPinnwandnachrichten(List<PinnwandEntryView> pinnwandEntryViews, Path path) throws CSVException {
+        String content = "Datum;Sender;Empfänger;Nachricht+" + "\n";
+
+        for (PinnwandEntryView entry : pinnwandEntryViews) {
+            content += entry.get + ";";
+            content += entry.get + ";";
+            content += entry.getAutorName() + ";";
+            content += entry.getNachricht() + ";" + "\n";
+
+        }
+        write(path,content, ExportTypes.NACHRICHTEN.addInfo(nachrichtViews.getFirst().getEmpfaenger()));
+
+    }
 
     public void exportKontoAuszuege(List<KontoauszugZeile> list, Path path) throws CSVException {
                 //header

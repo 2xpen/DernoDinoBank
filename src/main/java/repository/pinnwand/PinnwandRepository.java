@@ -31,6 +31,7 @@ public class PinnwandRepository {
             pinnwandEntryList.add(
                     new PinnwandEntry(
                             resultSet.getString("nachricht"),
+                            new UserId(resultSet.getString("besitzer_id")),
                             new UserId(resultSet.getString("autor_id"))
                     )
             );
@@ -39,6 +40,7 @@ public class PinnwandRepository {
     }
 
     public static void createPinnwandentry(String message, data.identifier.UserId autor_id, data.identifier.UserId besitzer_id) throws SQLException {
+
         Connection conn = DataBaseConnection.getInstance();
         String createPinnwandEntry = """
                 INSERT INTO pinnwandentry(besitzer_id, autor_id, nachricht)

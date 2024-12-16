@@ -1,19 +1,23 @@
 package data.pinnwand;
 
+import data.identifier.PinnwandEntryId;
 import data.identifier.UserId;
 import data.user.UserName;
 
 public class PinnwandEntryView extends PinnwandEntry {
-    private UserName autorName;
+    private final UserName empfaengerName;
+    private final UserName autorName;
 
-    public PinnwandEntryView(PinnwandEntry entry, UserName autorName) {
-        super(entry.getNachricht(), entry.getAutor_id());
+    public PinnwandEntryView(PinnwandEntry entry, UserName empfaengerName,UserName autorName) {
+        super(entry.getNachricht(), entry.getBesitzer_id(),entry.getAutor_id());
+        this.empfaengerName = empfaengerName;
         this.autorName = autorName;
     }
 
     public UserName getAutorName() {
         return autorName;
     }
+    public UserName getEmpfaengerName() {return empfaengerName;}
 
     public String toString(int counter) {
         StringBuilder sb = new StringBuilder();

@@ -61,7 +61,7 @@ public class App {
         AnmeldungsManager anmeldungsManager = new AnmeldungsManager(startseiteManager, anmeldeService);
         UserLogedInManager userLogedInManager = new UserLogedInManager(anmeldungsManager, kontoService);
         RegistrierungManger registrierungManger = new RegistrierungManger(startseiteManager, registrierungService);
-        PinnwandManager pinnwandManager = new PinnwandManager(userLogedInManager, pinnwandService);
+        PinnwandManager pinnwandManager = new PinnwandManager(userLogedInManager, pinnwandService,importExportService);
         TransaktionsManager transaktionsManager = new TransaktionsManager(userLogedInManager, kontoService, transaktionsService, userService);
         MessageManager messageManager = new MessageManager(userLogedInManager, messageService, userService,importExportService);
         KontoauszugManager kontoauszugManager = new KontoauszugManager(kontoService, gevoService, userService, userLogedInManager);

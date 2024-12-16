@@ -49,8 +49,9 @@ public class PinnwandService {
         Pinnwand pinnwand = new Pinnwand();
 
         for (PinnwandEntry entry : pinnwandEntries) {
+            UserName empfaengerName = userService.ermittleUserByUserId(entry.getBesitzer_id()).getUsername();
             UserName authorName = userService.ermittleUserByUserId(entry.getAutor_id()).getUsername();
-            pinnwand.add(new PinnwandEntryView(entry, authorName));
+            pinnwand.add(new PinnwandEntryView(entry,empfaengerName, authorName));
         }
         return pinnwand;
     }

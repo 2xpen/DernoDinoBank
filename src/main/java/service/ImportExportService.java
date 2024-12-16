@@ -51,6 +51,17 @@ public class ImportExportService {
         }
     }
 
+    public void exportPinnwandNachrichten(List<Nachricht> nachrichten, Path path) throws ServiceException {
+
+        try {
+            csvHandler.ex;
+        } catch (CSVException e) {
+            throw new ImportExportServiceException(e.getServiceErrorMessage());
+        }
+
+
+    }
+
     public List<NachrichtView> demaskNachrichten(List<Nachricht> nachrichten) throws ServiceException {
 
         List<NachrichtView> nachrichtenView = new ArrayList<>();
