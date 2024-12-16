@@ -151,9 +151,6 @@ public class KontoRepository {
         //todo calc auslagern
         double neuerKontoStand = ladeKontoStandVonKonto(anweisung.getKontoId()) - anweisung.getBetrag();
 
-        System.out.println(neuerKontoStand + "neuer kontostand");
-        System.out.println(anweisung.getBetrag());
-
         /// Befüllen Empfängerkonto
         String updateEmpfaengerKonto = """  
                 UPDATE konto SET kontostand = ? WHERE konto_id = ?;

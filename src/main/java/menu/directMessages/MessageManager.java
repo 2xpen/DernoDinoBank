@@ -68,8 +68,13 @@ public class MessageManager extends ManagerBase {
 
         try {
             List<Nachricht> allMessages = messageService.getNachrichten(user.getUserId());
-            printAlleNachrichten(allMessages);
-            printImportExportDecider();
+            if(allMessages.isEmpty()) {
+                System.out.println("Der Chatverlauf ist leer");
+                start(user);
+            }else {
+                printAlleNachrichten(allMessages);
+                printImportExportDecider();
+            }
         } catch (ServiceException serviceException) {
             System.out.println(serviceException.getMessage());
             start(user);
@@ -95,7 +100,7 @@ public class MessageManager extends ManagerBase {
             if (messageService.sendMessage(new Timestamp(System.currentTimeMillis()), user.getUserId(), empfaenger.getUserId(), messageToSend)) {
                 System.out.println("Deine Nachricht wurde erfolgreich versendet!");
                 try {
-                    Thread.sleep(3000);
+                    Thread.sleep(1500);
                 } catch (InterruptedException e) {
                     System.out.println(e.getMessage());
                 }

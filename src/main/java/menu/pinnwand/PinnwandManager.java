@@ -82,13 +82,13 @@ public class PinnwandManager extends ManagerBase {
                 input = Integer.parseInt(inputString);
             } catch (NumberFormatException n) {
                 System.out.println("Ungültige Eingabe, es sind nur Ganzzahlen erlaubt");
-                pinnwandVonUserAufrufen(selector, selectedUser);
+                pinnwandVonUserAufrufen(this.user, selectedUser);
             }
 
             if (input == 1) {
                 aufPinnwandSchreiben(this.user,selectedUser);
             } else {
-                start(selectedUser);
+                userLogedInManager.start(this.user);
             }
 
             //todo @tom teil die methode mit man will auf eine pinnwand schreiben auf, ich will nicht in die suche zurückspringgen nur weil die einggebene message nichtz korrrekt ist, ich wills einfach nochmal versuchen oder abrrechen
@@ -99,9 +99,6 @@ public class PinnwandManager extends ManagerBase {
             System.out.println(serviceException.getMessage());
             start(selectedUser);
         }
-
-        //
-
     }
 
 

@@ -6,6 +6,7 @@ import data.user.User;
 import data.user.UserName;
 import menu.ManagerBase;
 import menu.Menufehlermeldungen;
+import menu.helper.CurrencyFormatter;
 import menu.konto.UserLogedInManager;
 import service.KontoService;
 import service.UserService;
@@ -77,9 +78,7 @@ public class TransaktionsManager extends ManagerBase {
     private void startEinfacheUberweisung() {
 
         try {
-            System.out.println(
-                    "Aktueller Kontostand:" + kontoService.kontostandErmitteln(user.getUserId()) + "\n");
-
+           Kontostandanzeigen();
         } catch (ServiceException e) {
 
             System.out.println(e.getMessage());
@@ -100,11 +99,10 @@ public class TransaktionsManager extends ManagerBase {
             System.out.println("Wie viel wollen sie überweisen?");
             System.out.println("\nBetrag angeben!");
 
-            double gewaehlterBetrag = Double.parseDouble(scanner.next());
+            double gewaehlterBetrag = Double.parseDouble(scanner.nextLine());
 
             System.out.println("Beschreibung hinzufügen");
 
-            scanner.next();
             String beschreibung = scanner.nextLine();
 
             UeberweisungsAnweisung anweisung = new UeberweisungsAnweisung(
@@ -115,7 +113,7 @@ public class TransaktionsManager extends ManagerBase {
 
 
             transaktionsService.einzelUeberweisung(anweisung);
-            System.out.println("Es wurden: " + anweisung.getBetrag() + "an " + name + " ueberwiesen.");
+            System.out.println("Es wurden: " + CurrencyFormatter.formatCurrency(anweisung.getBetrag()) + " an " + name + " überwiesen.");
             start(user);
 
         } catch (NumberFormatException e) {
@@ -154,14 +152,12 @@ public class TransaktionsManager extends ManagerBase {
 
 
         try {
-            System.out.println(
-                    "Aktueller Kontostand:" + kontoService.kontostandErmitteln(user.getUserId()) + "\n");
-
+            Kontostandanzeigen();
         } catch (ServiceException e) {
             System.out.println(e.getMessage());
             System.out.println("Nochmal versuchen (y)?" +
                     "\nsonst anderes Zeichen wählen");
-            if (scanner.next().equals("y")) {
+            if (scanner.nextLine().equals("y")) {
                 abheben();
             } else start(user);
 
@@ -171,7 +167,7 @@ public class TransaktionsManager extends ManagerBase {
         System.out.println("\nBetrag angeben!");
 
         try {
-            double gewaehlterBetrag = Double.parseDouble(scanner.next());
+            double gewaehlterBetrag = Double.parseDouble(scanner.nextLine());
 
 
             //die anweisung erstellen sollte glaub auch ein service sein
@@ -188,7 +184,7 @@ public class TransaktionsManager extends ManagerBase {
             Menufehlermeldungen.BETRAG_FORMAT_FALSCH.print();
             System.out.println("Nochmal versuchen (y)?" +
                     "\nsonst anderes Zeichen wählen");
-            if (scanner.next().equals("y")) {
+            if (scanner.nextLine().equals("y")) {
                 abheben();
             } else start(user);
 
@@ -198,12 +194,18 @@ public class TransaktionsManager extends ManagerBase {
             System.out.println("Nochmal versuchen (y)?" +
                     "\nsonst anderes Zeichen wählen");
 
-            if (scanner.next().equals("y")) {
+            if (scanner.nextLine().equals("y")) {
                 abheben();
             } else start(user);
 
         }
 
+
+    }
+
+    private void Kontostandanzeigen() throws ServiceException {
+        System.out.println(
+                "Aktueller Kontostand:" + CurrencyFormatter.formatCurrency(kontoService.kontostandErmitteln(user.getUserId())));
 
     }
 

@@ -5,6 +5,7 @@ import menu.ManagerBase;
 import menu.anmeldung.AnmeldungsManager;
 import menu.Menufehlermeldungen;
 import menu.directMessages.MessageManager;
+import menu.helper.CurrencyFormatter;
 import menu.konto.transaktion.TransaktionsManager;
 import menu.kontoauszug.KontoauszugManager;
 import menu.personsuche.PersonSucheManager;
@@ -92,7 +93,7 @@ public class UserLogedInManager extends ManagerBase {
 
         printHead();
         try {
-            System.out.println("Kontostand: " + kontoService.kontostandErmitteln(user.getUserId()));
+            System.out.println("Kontostand: " + CurrencyFormatter.formatCurrency(kontoService.kontostandErmitteln(user.getUserId())));
         } catch (ServiceException e) {
             System.out.println(e.getMessage());
         }

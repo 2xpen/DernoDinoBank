@@ -37,9 +37,6 @@ public class TransaktionsService {
 
         Validator.isValidBetrag(anweisung.getBetrag());
 
-        double kontostand;
-
-
         transaktionsValidatorService.validteAbhebungsAnweisung(anweisung);
 
         try {
