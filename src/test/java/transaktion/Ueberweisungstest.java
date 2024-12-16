@@ -32,11 +32,6 @@ public class Ueberweisungstest {
     }
 
 
-    @BeforeEach
-    void setUp() {
-        Main.main();
-    }
-
 
     @Test
     void testUeberweisungPositiv () throws ServiceException {

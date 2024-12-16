@@ -79,9 +79,6 @@ public class App {
 
         startseiteManager.start();
 
-
-
-        UeberweisungsTest.
     }
 
 }
