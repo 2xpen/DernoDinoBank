@@ -75,6 +75,8 @@ public class App {
         userLogedInManager.setKontoauszugManager(kontoauszugManager);
         userLogedInManager.setPersonSucheManager(personSucheManager);
 
+        messageManager.setPersonSucheManager(personSucheManager);
+
         startseiteManager.start();
     }
 

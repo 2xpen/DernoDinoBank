@@ -25,58 +25,56 @@ public class PersonSucheManager extends ManagerBase {
     }
 
 
-    public void start(User user) {
+
+    public void selectUser(User user) {
         printHead();
 
         System.out.println("Bitte den Namen der zu suchenden Person angeben");
 
         try {
-
             User gefundenerUser = userService.ermittleUserByUserName(new UserName(scanner.nextLine()));
 
-            PersonSucheMenuOption.printAll(gefundenerUser.getUsername());
+            startWithSelectedUser(user, gefundenerUser);
 
-            printBitteWahlnummerWaehlenFooter();
-
-            switch (PersonSucheMenuOption.ofWahlnummer(Integer.parseInt(scanner.nextLine()))){
-                case PINNWAND : pinnwandManager.pinnwandVonUserAufrufen(user,gefundenerUser);
-                break;
-                case CHAT : messageManager.start(user);
-                break;
-                case ZURUECK : userLogedInManager.start(user);
-                break;
-                case null:
-                    System.out.println("Erneut versuchen? (y) sonst anderes Zeichen wählen");
-                    if(scanner.nextLine().equals("y")){
-                        start(user);
-                    }userLogedInManager.start(user);
-            }
-
-        } catch (ServiceException | NumberFormatException e) {
-            if(e.getClass() == NumberFormatException.class){
-                Menufehlermeldungen.WAHLNUMMER_NICHT_KORREKT.print();
-            }else{System.out.println(e.getMessage());}
-
-
-            System.out.println("nochmal versuchen?(y)");
+        } catch (ServiceException e) {
+            System.out.println(e.getMessage());
+            System.out.println("Erneut versuchen? (y)");
 
             if(scanner.nextLine().equals("y")) {
-                start(user);
-            }else
-                userLogedInManager.start(user);
+                selectUser(user);
+            } userLogedInManager.start(user);
         }
-
-
-
-
-
-
 
 
     }
 
 
+public void startWithSelectedUser(User selector,User selectedUser) {
 
+    PersonSucheMenuOption.printAll(selectedUser.getUsername());
 
+    printBitteWahlnummerWaehlenFooter();
 
+    switch (PersonSucheMenuOption.ofWahlnummer(Integer.parseInt(scanner.nextLine()))) {
+        case PINNWAND:
+            pinnwandManager.pinnwandVonUserAufrufen(selector, selectedUser);
+            break;
+        case CHAT:
+            messageManager.sendDirectMessage(selector, selectedUser);
+            break;
+        case ZURUECK:
+            userLogedInManager.start(selector);
+            break;
+        case null:
+            System.out.println("Erneut versuchen? (y) sonst anderes Zeichen wählen");
+            if (scanner.nextLine().equals("y")) {
+                startWithSelectedUser(selector, selectedUser);
+            }
+            userLogedInManager.start(selector);
+    }
 }
+}
+
+
+
+

@@ -6,6 +6,7 @@ import data.user.UserName;
 import menu.ManagerBase;
 import menu.Menufehlermeldungen;
 import menu.konto.UserLogedInManager;
+import menu.personsuche.PersonSucheManager;
 import service.MessageService;
 import service.UserService;
 import service.serviceexception.ServiceException;
@@ -20,7 +21,7 @@ public class MessageManager extends ManagerBase {
     private final UserLogedInManager userLogedInManager;
     private final MessageService messageService;
     private final UserService userService;
-    private User user;
+    private PersonSucheManager personSucheManager;
 
     public MessageManager(UserLogedInManager userLogedInManager, MessageService messageService, UserService userService) {
         this.userLogedInManager = userLogedInManager;
@@ -29,7 +30,7 @@ public class MessageManager extends ManagerBase {
     }
 
     public void start(User user) {
-        this.user = user;
+
 
         printHead();
 
@@ -39,20 +40,17 @@ public class MessageManager extends ManagerBase {
 
         try {
             int wahlNummer = Integer.parseInt(scanner.nextLine());
-            deciderDirectMessagesMenuOption(DIRECT_MESSAGES_MENU_OPTION.ofWahlNummer(wahlNummer));
+            deciderDirectMessagesMenuOption(DIRECT_MESSAGES_MENU_OPTION.ofWahlNummer(wahlNummer), user);
         } catch (NumberFormatException e) {
             Menufehlermeldungen.WAHLNUMMER_NICHT_KORREKT.print();
             start(user);
         }
     }
 
-    private void deciderDirectMessagesMenuOption(DIRECT_MESSAGES_MENU_OPTION option) {
+    private void deciderDirectMessagesMenuOption(DIRECT_MESSAGES_MENU_OPTION option, User user) {
         switch (option) {
             case DIRECT_MESSAGES_ANSEHEN:
-                seeAllMessages();
-                break;
-            case DIRECT_MESSAGE_SENDEN:
-                sendDirectMessage();
+                seeAllMessages(user);
                 break;
             case ZURÜCK:
                 userLogedInManager.start(user);
@@ -64,7 +62,7 @@ public class MessageManager extends ManagerBase {
         }
     }
 
-    private void seeAllMessages() {
+    private void seeAllMessages(User user) {
 
         try {
             List<Nachricht> allMessages = messageService.getNachrichten(user.getUserId());
@@ -82,44 +80,39 @@ public class MessageManager extends ManagerBase {
     }
 
 
+    public void sendDirectMessage(User selector, User selectedUser) {
 
-
-    private void sendDirectMessage() {
         try {
-            System.out.println("""
-                    Bitte gib den Namen von dem User ein,
-                    zudem du eine Nachricht senden möchtest
-                    """);
-            UserName eingegebenerName = new UserName(scanner.nextLine());
-            User empfaenger = userService.ermittleUserByUserName(eingegebenerName);
-
             System.out.println("""
                     Bitte gib deine Nachricht ein: 
                     """);
             String messageToSend = scanner.nextLine();
-            if (messageService.sendMessage(new Timestamp(System.currentTimeMillis()), user.getUserId(), empfaenger.getUserId(), messageToSend)) {
+            if (messageService.sendMessage(new Timestamp(System.currentTimeMillis()), selector.getUserId(), selectedUser.getUserId(), messageToSend)) {
                 System.out.println("Deine Nachricht wurde erfolgreich versendet!");
                 try {
                     Thread.sleep(1500);
                 } catch (InterruptedException e) {
                     System.out.println(e.getMessage());
                 }
-                start(user);
+                personSucheManager.startWithSelectedUser(selector, selectedUser);
             } else {
                 //maybe thorw iwas
-                start(user);
+                personSucheManager.startWithSelectedUser(selector, selectedUser);
             }
             /// hier das selbe wie bei pinnnwand, das aufnehmen des suer inputs und das absenden sollten zwie verschioenden prozesse sien, oder hatl die try anders setzenb so das der fortschritt vom user nicht einfach zurückgesetzt nur weil er iwie mal
-        } catch (ValidateBeschreibungException e) {
-            System.out.println(e.getMessage());
-            sendDirectMessage();
         } catch (ServiceException serviceException) {
             System.out.println(serviceException.getMessage());
-            start(user);
+            System.out.println("Erneut versuchen? (y) sonst anderes Zeichen eingeben");
+            if (scanner.nextLine().equals("y")) {
+                sendDirectMessage(selectedUser, selector);
+            }
         }
+        personSucheManager.startWithSelectedUser(selector, selectedUser);
+
     }
 
-    public void printAlleNachrichten(List<Nachricht> allMessages) {
+
+    public void printAlleNachrichten(List<Nachricht> allMessages, User user) {
         try {
             StringBuilder sb = new StringBuilder();
             int counter = 1;
@@ -144,7 +137,7 @@ public class MessageManager extends ManagerBase {
 
     }
 
-    public void printImportExportDecider() {
+    public void printImportExportDecider(User user) {
 
         // todo @TOM das thrown und catchen sieht hier so schlimm aus weil das input getten und der decider hier vermischt sind, einmal catcht man die numberformat exception, und einmal muss man catchen wenn aus der of methode ncihts rauskommt, könnte man theoretisch in einem wiederaufruf der methode fixxen, aber das sind semantisch zwei verschiedene sachen
 
@@ -164,15 +157,24 @@ public class MessageManager extends ManagerBase {
                     break;
                 case null:
                     Menufehlermeldungen.WAHLNUMMER_NICHT_KORREKT.print();
-                    printImportExportDecider();
+                    printImportExportDecider(user);
                     break;
             }
         } catch (NumberFormatException e) {
             Menufehlermeldungen.WAHLNUMMER_NICHT_KORREKT.print();
-            printImportExportDecider();
+            printImportExportDecider(user);
         }
 
     }
 
+
+
+
+    public void setPersonSucheManager(PersonSucheManager personSucheManager) {
+        this.personSucheManager = personSucheManager;
+    }
+
 }
+
+
 

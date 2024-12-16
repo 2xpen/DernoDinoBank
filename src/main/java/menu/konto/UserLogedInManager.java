@@ -77,7 +77,7 @@ public class UserLogedInManager extends ManagerBase {
                 kontoauszugManager.start(user);
                 break;
             case OPTION_PERSONSUCHE:
-                personSucheManager.start(user);
+                personSucheManager.selectUser(user);
             case AUSLOGGEN:
                 anmeldungsManager.start();
                 break;
