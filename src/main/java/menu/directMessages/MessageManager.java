@@ -70,8 +70,8 @@ public class MessageManager extends ManagerBase {
                 System.out.println("Der Chatverlauf ist leer");
                 start(user);
             }else {
-                printAlleNachrichten(allMessages);
-                printImportExportDecider();
+                printAlleNachrichten(allMessages,user);
+                printImportExportDecider(user);
             }
         } catch (ServiceException serviceException) {
             System.out.println(serviceException.getMessage());
