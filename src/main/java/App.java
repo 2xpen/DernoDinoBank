@@ -76,6 +76,8 @@ public class App {
         userLogedInManager.setPersonSucheManager(personSucheManager);
 
         messageManager.setPersonSucheManager(personSucheManager);
+        pinnwandManager.setPersonSucheManager(personSucheManager);
+
 
         startseiteManager.start();
     }

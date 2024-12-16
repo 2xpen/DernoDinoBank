@@ -46,7 +46,6 @@ public class TransaktionsService {
             throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR);
         }
 
-
     }
 
 
@@ -73,8 +72,6 @@ public class TransaktionsService {
 
     }
 
-
-
     private List<UeberweisungsAnweisung> converMassenUeberweisung(List<UeberweisungsAnweisungParam> paramList, KontoId senderId) throws ServiceException {
 
         List<UeberweisungsAnweisung> anweisungen = new ArrayList<>();
@@ -89,14 +86,9 @@ public class TransaktionsService {
             )*/
         }
 
-
-
 return null;
 
     }
-
-
-
 
 
     public void einzelUeberweisung(UeberweisungsAnweisung anweisung) throws ServiceException {

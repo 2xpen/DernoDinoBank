@@ -56,15 +56,10 @@ TransaktionsValidatorService {
 
 
 
-    public void validteAbhebungsAnweisung(AbhebungsAnweisung anweisung) throws ValidateUeberweisungException, ValidateBetragException {
-
+    public void validteAbhebungsAnweisung(AbhebungsAnweisung anweisung) throws ServiceException {
         Validator.isValidBetrag(anweisung.getBetrag());
-
-
-
-
+        ueberziehtSaldo(anweisung.getKontoId(),anweisung.getBetrag());
     }
-
 
     private void ueberziehtSaldo(KontoId id, double betrag) throws ServiceException {
 

@@ -10,6 +10,8 @@ import menu.pinnwand.PinnwandManager;
 import service.UserService;
 import service.serviceexception.ServiceException;
 
+import java.awt.*;
+
 public class PersonSucheManager extends ManagerBase {
 
     private final UserLogedInManager userLogedInManager;
@@ -54,6 +56,8 @@ public void startWithSelectedUser(User selector,User selectedUser) {
     PersonSucheMenuOption.printAll(selectedUser.getUsername());
 
     printBitteWahlnummerWaehlenFooter();
+try {
+
 
     switch (PersonSucheMenuOption.ofWahlnummer(Integer.parseInt(scanner.nextLine()))) {
         case PINNWAND:
@@ -72,6 +76,14 @@ public void startWithSelectedUser(User selector,User selectedUser) {
             }
             userLogedInManager.start(selector);
     }
+
+    }catch (NumberFormatException e) {
+    Menufehlermeldungen.WAHLNUMMER_NICHT_KORREKT.print();
+    startWithSelectedUser(selector, selectedUser);
+
+}
+
+
 }
 }
 

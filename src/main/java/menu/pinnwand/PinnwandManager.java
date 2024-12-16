@@ -1,11 +1,11 @@
 package menu.pinnwand;
 
-import data.identifier.UserId;
 import data.pinnwand.Pinnwand;
 import data.user.User;
 import menu.ManagerBase;
 import menu.Menufehlermeldungen;
 import menu.konto.UserLogedInManager;
+import menu.personsuche.PersonSucheManager;
 import service.PinnwandService;
 import service.serviceexception.ServiceException;
 import service.serviceexception.validateexception.ValidateBeschreibungException;
@@ -14,7 +14,7 @@ public class PinnwandManager extends ManagerBase {
 
     private final UserLogedInManager userLogedInManager;
     private final PinnwandService pinnwandService;
-    private User user;
+    private PersonSucheManager personSucheManager;
 
     public PinnwandManager(UserLogedInManager userLogedInManager, PinnwandService pinnwandService) {
         this.userLogedInManager = userLogedInManager;
@@ -22,7 +22,7 @@ public class PinnwandManager extends ManagerBase {
     }
 
     public void start(User user) {
-        this.user = user;
+
 
         printHead();
 
@@ -32,7 +32,7 @@ public class PinnwandManager extends ManagerBase {
 
         try {
             int wahlNummer = Integer.parseInt(scanner.nextLine());
-            deciderPinnwandMenuOption(PINNWAND_MENU_OPTION.ofWahlNummer(wahlNummer));
+            deciderPinnwandMenuOption(PINNWAND_MENU_OPTION.ofWahlNummer(wahlNummer),user);
         } catch (NumberFormatException e) {
             Menufehlermeldungen.WAHLNUMMER_NICHT_KORREKT.print();
             start(user);
@@ -40,26 +40,23 @@ public class PinnwandManager extends ManagerBase {
     }
 
 
-
-    private void deciderPinnwandMenuOption(PINNWAND_MENU_OPTION option) {
+    private void deciderPinnwandMenuOption(PINNWAND_MENU_OPTION option,User selector) {
         switch (option) {
             case PINNWAND_ANSEHEN:
-                eigenePinnwandAnsehen();
+                eigenePinnwandAnsehen(selector);
                 break;
             case ZURUECK:
-                userLogedInManager.start(user);
+                userLogedInManager.start(selector);
                 break;
             case null:
                 Menufehlermeldungen.WAHLNUMMER_NICHT_KORREKT.print();
-                start(user);
+                start(selector);
                 break;
         }
 
     }
 
     public void pinnwandVonUserAufrufen(User selector,User selectedUser) {
-
-        this.user = selector;
 
         try {
 
@@ -82,22 +79,17 @@ public class PinnwandManager extends ManagerBase {
                 input = Integer.parseInt(inputString);
             } catch (NumberFormatException n) {
                 System.out.println("Ungültige Eingabe, es sind nur Ganzzahlen erlaubt");
-                pinnwandVonUserAufrufen(this.user, selectedUser);
+                pinnwandVonUserAufrufen(selector, selectedUser);
             }
-
             if (input == 1) {
-                aufPinnwandSchreiben(this.user,selectedUser);
+                aufPinnwandSchreiben(selector,selectedUser);
             } else {
-                userLogedInManager.start(this.user);
+                personSucheManager.startWithSelectedUser(selector, selectedUser);
             }
-
             //todo @tom teil die methode mit man will auf eine pinnwand schreiben auf, ich will nicht in die suche zurückspringgen nur weil die einggebene message nichtz korrrekt ist, ich wills einfach nochmal versuchen oder abrrechen
-        } catch (ValidateBeschreibungException e) {
-            System.out.println(e.getMessage());
-            pinnwandVonUserAufrufen(this.user,selectedUser);
         } catch (ServiceException serviceException) {
             System.out.println(serviceException.getMessage());
-            start(selectedUser);
+            pinnwandVonUserAufrufen(selector,selectedUser);
         }
     }
 
@@ -107,18 +99,18 @@ public class PinnwandManager extends ManagerBase {
         String message = scanner.nextLine();
         try {
             pinnwandService.schreibenAufAnderePinnwand(message, autor.getUserId() ,empfaenger.getUserId());
+            System.out.println("Ihr Pinnwand eintrag wurde erstellt");
         } catch (ServiceException e) {
             System.out.println(e.getMessage());
             System.out.println("Erneut versuchen? (y) sonst anderes zeichen wählen");
             if(scanner.nextLine().equals("y")){
                 aufPinnwandSchreiben(autor,empfaenger);
-            }pinnwandVonUserAufrufen(autor,empfaenger);
+            }
+            pinnwandVonUserAufrufen(autor,empfaenger);
         }
-        System.out.println("Ihr Pinnwand eintrag wurde erstellt");
-        pinnwandVonUserAufrufen(autor,empfaenger);
     }
 
-    private void eigenePinnwandAnsehen() {
+    private void eigenePinnwandAnsehen(User user) {
         try {
 
             Pinnwand pinnwand = pinnwandService.getPinnwand(user.getUserId());
@@ -136,12 +128,19 @@ public class PinnwandManager extends ManagerBase {
                     start(user);
                 }
             }
+
+
         } catch (ServiceException serviceException) {
             System.out.println(serviceException.getMessage());
             start(user);
         }
     }
 
+
+
+    public void setPersonSucheManager(PersonSucheManager personSucheManager) {
+        this.personSucheManager = personSucheManager;
+    }
 
 }
 
@@ -154,28 +153,3 @@ public class PinnwandManager extends ManagerBase {
 
 
 
-
-   /* public void komentarSchreiben(){
-        String inputString = scanner.nextLine();
-
-        int input = -1;
-        try {
-            input = Integer.parseInt(inputString);
-        } catch (NumberFormatException n) {
-            System.out.println("Ungültige Eingabe, es sind nur Ganzzahlen erlaubt");
-            start(user);
-        }
-
-        if (input == 1) {
-            PINNWAND_DIALOG.PINNWAND_NACHRICHT_EINGEBEN.print();
-            String message = scanner.nextLine();
-
-            pinnwandService.schreibenAufAnderePinnwand(message, user.getUserId(), besitzer.getUserId());
-
-
-            PINNWAND_DIALOG.PINNWAND_NACHRICHT_ERSTELLT.print();
-            start(user);
-        } else {
-            start(user);
-        }
-    }*/
