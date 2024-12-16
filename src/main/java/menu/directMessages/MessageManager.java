@@ -4,14 +4,17 @@ import csv.CSV_Handler;
 import data.nachricht.Nachricht;
 import data.nachricht.NachrichtView;
 import data.user.User;
+import helper.FileHelper;
 import menu.ManagerBase;
 import menu.Menufehlermeldungen;
 import menu.konto.UserLogedInManager;
 import menu.personsuche.PersonSucheManager;
+import service.ImportExportService;
 import service.MessageService;
 import service.UserService;
 import service.serviceexception.ServiceException;
 
+import java.io.FileNotFoundException;
 import java.io.SyncFailedException;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
@@ -24,16 +27,16 @@ import java.util.stream.Collectors;
 
 public class MessageManager extends ManagerBase {
     private final UserLogedInManager userLogedInManager;
-    private final MessageService messageService;
     private final UserService userService;
+    private final MessageService messageService;
     private PersonSucheManager personSucheManager;
-    private final CSV_Handler csvHandler;
+    private final ImportExportService importExportService;
 
-    public MessageManager(UserLogedInManager userLogedInManager, MessageService messageService, UserService userService, CSV_Handler csvHandler) {
+    public MessageManager(UserLogedInManager userLogedInManager, MessageService messageService, UserService userService, ImportExportService importExportService) {
         this.userLogedInManager = userLogedInManager;
         this.messageService = messageService;
         this.userService = userService;
-        this.csvHandler = csvHandler;
+        this.importExportService = importExportService;
     }
 
     public void start(User user) {
@@ -78,7 +81,7 @@ public class MessageManager extends ManagerBase {
                 start(user);
             }else {
                 printAlleNachrichten(allMessages,user);
-                printImportExportDecider(user);
+                printImportExportDecider(user,allMessages);
             }
         } catch (ServiceException serviceException) {
             System.out.println(serviceException.getMessage());
@@ -101,6 +104,7 @@ public class MessageManager extends ManagerBase {
             switch (wahlnummer){
                 case 1:
                     printConvo(selector, selectedUser);
+                    einstiegMitPersonsuche(selector, selectedUser);
                     break;
                 case 2:
                     sendMessage(selector, selectedUser);
@@ -171,9 +175,9 @@ public class MessageManager extends ManagerBase {
 
                     switch (IMPORT_EXPORT_DIRECTMESSAGE_MENU_OPTION.ofWahlNummer(Integer.parseInt(scanner.nextLine()))){
                         case EXPORT:
-                            //todo hier TOM EXPORT
+                            export(convo, selector);
+                            printNachrichtenListe(convo, sb, counter);
                             break;
-
                         case ZURUECK:
                             einstiegMitPersonsuche(selectedUser, selector);
                         case null, default:
@@ -236,7 +240,7 @@ public class MessageManager extends ManagerBase {
 
     }
 
-    public void printImportExportDecider(User user) {
+    public void printImportExportDecider(User user, List<Nachricht> nachrichten) {
 
         // todo @TOM das thrown und catchen sieht hier so schlimm aus weil das input getten und der decider hier vermischt sind, einmal catcht man die numberformat exception, und einmal muss man catchen wenn aus der of methode ncihts rauskommt, könnte man theoretisch in einem wiederaufruf der methode fixxen, aber das sind semantisch zwei verschiedene sachen
 
@@ -250,33 +254,35 @@ public class MessageManager extends ManagerBase {
             printFooter();
             switch (option) {
                 case EXPORT:
-
-                    //todo hier tom einfach ecport reiunmachen
+                    export(nachrichten,user);
+                    printImportExportDecider(user, nachrichten);
                     break;
                 case ZURUECK:
                     start(user);
                     break;
                 case null:
                     Menufehlermeldungen.WAHLNUMMER_NICHT_KORREKT.print();
-                    printImportExportDecider(user);
+                    printImportExportDecider(user,nachrichten);
                     break;
             }
         } catch (NumberFormatException e) {
             Menufehlermeldungen.WAHLNUMMER_NICHT_KORREKT.print();
-            printImportExportDecider(user);
+            printImportExportDecider(user,nachrichten);
         }
+
 
     }
 
 
-
-    private void export(List<Nachricht> nachrichten) {
+/// das die methode bei wahlnummer 0 quasi leer läuft ist leider gewollt
+    private void export(List<Nachricht> nachrichten,User user) {
 
         /// hier die nachtichten zu view nachrtichten machen
 
 
         System.out.println("1: Alle nachrichten exportieren");
         System.out.println("2: Nachrichten auswählen zum exportieren");
+        System.out.println("0: Zurück");
 
         int wahlnummer = 0;
 
@@ -284,31 +290,57 @@ public class MessageManager extends ManagerBase {
             wahlnummer = Integer.parseInt(scanner.nextLine());
         } catch (NumberFormatException e) {
             Menufehlermeldungen.WAHLNUMMER_NICHT_KORREKT.print();
-            export(nachrichten);
+            export(nachrichten,user);
         }
 
-        switch (wahlnummer){
-            case 1:
-
-
-            case 2:
-
+        if(wahlnummer == 0){
+            return;
         }
-
-
 
         System.out.println("Bitte den Zielpfad angeben");
         Path zielPfad = Path.of(scanner.nextLine());
 
-        csvHandler.exportNachrichten(zielPfad,);
+        try {
+            FileHelper.isPathAccessible(zielPfad);
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+            export(nachrichten,user);
+        }
+
+        switch (wahlnummer){
+            case 1:
+                try {
+                    importExportService.exportDirectMessages(nachrichten, zielPfad);
+                    System.out.println("Es wurde ein Protokoll unter: "+zielPfad+" abgelegt");
+                    export(nachrichten,user);
+                } catch (ServiceException e) {
+                    System.out.println(e.getMessage());
+                    export(nachrichten,user);
+                }
+                break;
+
+            case 2:
+
+                try {
+                    importExportService.exportDirectMessages(selectMessages(nachrichten,user),
+                                zielPfad);
+                    System.out.println("Es wurde ein Protokoll unter: "+zielPfad.toString()+" abgelegt");
+                    export(nachrichten,user);
+                } catch (ServiceException e) {
+                    System.out.println(e.getMessage());
+                    export(nachrichten,user);
+                }
+                break;
+        }
+
+
 
     }
 
 
-    private List<NachrichtView> selectMessages( List<NachrichtView> quellList){
+    private List<Nachricht> selectMessages( List<Nachricht> quellList,User user){
         System.out.println("Bitte gib die Nummern aller gewünschten Nachrichten an Bitte im folgenden Format \"1,2,3\" ");
         String gewaehlteNummern = scanner.nextLine();
-
 
         ///  aua aua
         List<Integer> selectedIndex = new ArrayList<>();
@@ -321,14 +353,23 @@ public class MessageManager extends ManagerBase {
             System.out.println(e.getMessage());
             System.out.println("Erneut versuchen? (y) sonst anderes Zeichen eingeben");
             if(scanner.nextLine().equals("y")) {
-                selectMessages(quellList);
+                selectMessages(quellList,user);
             }
         }
 
 
-        List<NachrichtView> selectedMessages = new ArrayList<>();
+        List<Nachricht> selectedMessages = new ArrayList<>();
         for (int index : selectedIndex){
-            selectedMessages.add(quellList.get(index));
+            try {
+
+                selectedMessages.add(quellList.get(index-1));
+            }catch (IndexOutOfBoundsException e) {
+                System.out.println("Die Nachricht mit der Nummer: "+index+" gibt es nicht");
+                System.out.println("nochmal versuchen?(y/n)");
+                if (scanner.nextLine().equals("y")) {
+                    selectMessages(quellList,user);
+                }export(quellList,user);
+            }
         }
         return selectedMessages;
     }

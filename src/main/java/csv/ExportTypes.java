@@ -3,7 +3,7 @@ package csv;
 public enum ExportTypes {
 
     KONTOAUSZUG("Kontoauszug "),
-    NACHRICHTEN("Nachrichten %s"),
+    NACHRICHTEN("Nachrichten "),
     PINNWANDEINTRAEGE("PinnwandEintraege vom");
 
 

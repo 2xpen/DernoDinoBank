@@ -74,7 +74,7 @@ public class CSV_Handler implements ICSV_IMPORT_EXPORT {
         }
 
             // todo hier noch die addInfo Methode einfügen und saren mit wem die convo war (falls es eine spezifische convo war...
-        write(path,content, ExportTypes.NACHRICHTEN);
+        write(path,content, ExportTypes.NACHRICHTEN.addInfo(nachrichtViews.getFirst().getEmpfaenger()));
 
     }
 
@@ -89,7 +89,8 @@ public class CSV_Handler implements ICSV_IMPORT_EXPORT {
 
         try {
             //todo kann jmd mir (leo) mal erklären wie man das anständig macht, keine lust das jetzt rauszusuchen
-            FileWriter writer = new FileWriter(zielPfad+"\\"+type.getName() + formatiertesDatum+ ".csv");
+            //der Writer appended die date falls der datei name im dir  schon vergeben ist
+            FileWriter writer = new FileWriter(zielPfad+"\\"+type.getName() + formatiertesDatum+ ".csv",true);
             BufferedWriter bw = new BufferedWriter(writer);
             bw.write(content);
             bw.close();

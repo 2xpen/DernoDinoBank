@@ -2,6 +2,7 @@ package service;
 
 import data.identifier.UserId;
 import data.nachricht.Nachricht;
+import data.nachricht.NachrichtView;
 import data.user.User;
 import repository.directmessages.DirectMessagesRepository;
 import service.serviceexception.DatenbankException;
@@ -11,13 +12,16 @@ import validator.Validator;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MessageService {
     private final DirectMessagesRepository directMessagesRepository;
+    private final UserService userService;
 
-    public MessageService(DirectMessagesRepository directMessagesRepository) {
+    public MessageService(DirectMessagesRepository directMessagesRepository, UserService userService) {
         this.directMessagesRepository = directMessagesRepository;
+        this.userService = userService;
     }
 
 
@@ -48,5 +52,8 @@ public class MessageService {
             throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR);
         }
     }
+
+
+
 
 }

@@ -51,7 +51,7 @@ public class App {
         RegistrierungService registrierungService = new RegistrierungService(userRepository, kontoRepository);
         TransaktionsValidatorService transaktionsValidatorService = new TransaktionsValidatorService(kontoRepository);
         TransaktionsService transaktionsService = new TransaktionsService(kontoRepository, gevoService,importExportService, transaktionsValidatorService);
-        MessageService messageService = new MessageService(directMessagesRepository);
+        MessageService messageService = new MessageService(directMessagesRepository,userService);
 
 
         CSV_Handler csvHandler = new CSV_Handler();
@@ -63,7 +63,7 @@ public class App {
         RegistrierungManger registrierungManger = new RegistrierungManger(startseiteManager, registrierungService);
         PinnwandManager pinnwandManager = new PinnwandManager(userLogedInManager, pinnwandService);
         TransaktionsManager transaktionsManager = new TransaktionsManager(userLogedInManager, kontoService, transaktionsService, userService);
-        MessageManager messageManager = new MessageManager(userLogedInManager, messageService, userService, csvHandler);
+        MessageManager messageManager = new MessageManager(userLogedInManager, messageService, userService,importExportService);
         KontoauszugManager kontoauszugManager = new KontoauszugManager(kontoService, gevoService, userService, userLogedInManager);
         PersonSucheManager personSucheManager = new PersonSucheManager(userLogedInManager,pinnwandManager,messageManager,userService);
 
