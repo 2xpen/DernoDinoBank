@@ -10,6 +10,8 @@ import service.PinnwandService;
 import service.serviceexception.ServiceException;
 import service.serviceexception.validateexception.ValidateBeschreibungException;
 
+import java.sql.Timestamp;
+
 public class PinnwandManager extends ManagerBase {
 
     private final UserLogedInManager userLogedInManager;
@@ -98,7 +100,7 @@ public class PinnwandManager extends ManagerBase {
         System.out.println("Bitte gebe deine Nachricht ein:");
         String message = scanner.nextLine();
         try {
-            pinnwandService.schreibenAufAnderePinnwand(message, autor.getUserId() ,empfaenger.getUserId());
+            pinnwandService.schreibenAufAnderePinnwand(message, autor.getUserId() ,empfaenger.getUserId(), new Timestamp(System.currentTimeMillis()));
             System.out.println("Ihr Pinnwand eintrag wurde erstellt");
         } catch (ServiceException e) {
             System.out.println(e.getMessage());

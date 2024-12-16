@@ -13,6 +13,7 @@ import service.serviceexception.validateexception.ValidateBeschreibungException;
 import validator.Validator;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 
 public class PinnwandService {
@@ -27,18 +28,18 @@ public class PinnwandService {
 
     public Pinnwand getPinnwand(UserId userId) throws ServiceException {
         try {
-            return convertPinnwandEntriesToPinnwand(PinnwandRepository.getPinnwandByUserId(userId));
+            return convertPinnwandEntriesToPinnwand(pinnwandRepository.getPinnwandByUserId(userId));
         } catch (SQLException e) {
             throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR);
         }
     }
 
-    public void schreibenAufAnderePinnwand(String message, UserId autor_id, UserId besitzer_id) throws ValidateBeschreibungException, ServiceException {
+    public void schreibenAufAnderePinnwand(String message, UserId autor_id, UserId besitzer_id, Timestamp date) throws ValidateBeschreibungException, ServiceException {
 
         Validator.isValidBeschreibung(message);
 
         try {
-            PinnwandRepository.createPinnwandentry(message, autor_id, besitzer_id);
+            pinnwandRepository.createPinnwandentry(message, autor_id, besitzer_id, date);
         } catch (SQLException e) {
             throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR);
         }
