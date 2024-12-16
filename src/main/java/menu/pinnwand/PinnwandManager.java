@@ -114,7 +114,7 @@ public class PinnwandManager extends ManagerBase {
                 aufPinnwandSchreiben(autor,empfaenger);
             }pinnwandVonUserAufrufen(autor,empfaenger);
         }
-        System.out.println("Pinnwand eintrag wurde erstellt");
+        System.out.println("Ihr Pinnwand eintrag wurde erstellt");
         pinnwandVonUserAufrufen(autor,empfaenger);
     }
 

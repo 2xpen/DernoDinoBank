@@ -18,7 +18,7 @@ public class StartseiteManager extends ManagerBase {
     public void start() {
 
         printHead();
-        System.out.println("Willkommen bei ihrem OnlineBanking, wie können wir ihnen helfen?");
+        System.out.println("Willkommen bei Ihrem OnlineBanking, wie können wir Ihnen helfen?");
 
         STARTSEITE_MENU_OPTION.printAll();
 

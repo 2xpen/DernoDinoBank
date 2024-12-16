@@ -84,7 +84,7 @@ public class TransaktionsManager extends ManagerBase {
             System.out.println(e.getMessage());
             System.out.println("Nochmal versuchen (y)?" +
                     "\nsonst anderes Zeichen wählen");
-            if (scanner.next().equals("y")) {
+            if (scanner.nextLine().equals("y")) {
                 startEinfacheUberweisung();
             } else start(user);
 
@@ -92,7 +92,7 @@ public class TransaktionsManager extends ManagerBase {
 
         try {
 
-            System.out.println("An wen wollen sie geld schicken?");
+            System.out.println("An wen wollen Sie Geld schicken?");
 
             UserName name = new UserName(scanner.nextLine());
 
@@ -205,7 +205,7 @@ public class TransaktionsManager extends ManagerBase {
 
     private void Kontostandanzeigen() throws ServiceException {
         System.out.println(
-                "Aktueller Kontostand:" + CurrencyFormatter.formatCurrency(kontoService.kontostandErmitteln(user.getUserId())));
+                "Aktueller Kontostand: " + CurrencyFormatter.formatCurrency(kontoService.kontostandErmitteln(user.getUserId())));
 
     }
 

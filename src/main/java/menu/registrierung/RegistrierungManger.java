@@ -72,7 +72,7 @@ public class RegistrierungManger extends ManagerBase {
 
         }
 
-        System.out.println("Registrierung erfolgreich, es wurde für: " + name + " erstellt");
+        System.out.println("Registrierung erfolgreich, es wurde für: " + name + " ein Konto erstellt");
         printFooter();
         startseiteManager.start();
 

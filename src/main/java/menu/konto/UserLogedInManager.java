@@ -38,7 +38,7 @@ public class UserLogedInManager extends ManagerBase {
     private void eingeloggtBildschirm() {
 
         printHead();
-        System.out.println("Herzlich Willkommen " + user.getUsername() + ", viel Spaß bei ihrem OnlineBanking");
+        System.out.println("Herzlich Willkommen " + user.getUsername() + ", viel Spaß bei Ihrem OnlineBanking");
         //printet alle Optionen aus
 
         KONTO_MENU_OPTION.printAll();
