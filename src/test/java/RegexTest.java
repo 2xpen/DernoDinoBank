@@ -1,6 +1,8 @@
+import data.user.Passwort;
 import data.user.UserName;
 import org.junit.jupiter.api.Test;
 import service.serviceexception.validateexception.ValidateBetragException;
+import service.serviceexception.validateexception.ValidatePasswortException;
 import service.serviceexception.validateexception.ValidateUsernameException;
 import validator.Validator;
 
@@ -86,7 +88,25 @@ public class RegexTest {
     }
     @Test
     void testPasswordValidationNegativ() {
+        List < Passwort > negativePasswortListe = List.of(
+                new Passwort("DiesisteinnegativesPasswortweileszuvieleZeichenhat")
+                , new Passwort("")
 
+        );
+        for (Passwort p : negativePasswortListe) {
+            assertThrows(ValidatePasswortException.class, () -> Validator.isValidPasswort(p));
+        }
     }
-
+    @Test
+    void testPasswordValidationPositive() throws ValidatePasswortException {
+        List < Passwort > positivePasswortListe = List.of(
+                new Passwort("PassswortmitäöüÄÖÜ")
+                , new Passwort("1234568790")
+                , new Passwort("!§$%&/()=")
+                , new Passwort("ΩΩδκξψΔΦωιζγΩΒΦΗΔΨσι")
+        );
+        for (Passwort p : positivePasswortListe) {
+            assertTrue(Validator.isValidPasswort(p));
+        }
+    }
 }
