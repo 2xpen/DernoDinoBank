@@ -86,7 +86,6 @@ public class MessageManager extends ManagerBase {
                     zudem du eine Nachricht senden möchtest
                     """);
             UserName eingegebenerName = new UserName(scanner.nextLine());
-            scanner.nextLine();
             User empfaenger = userService.ermittleUserByUserName(eingegebenerName);
 
             System.out.println("""
