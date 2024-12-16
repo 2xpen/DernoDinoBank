@@ -101,13 +101,6 @@ return null;
 
     public void einzelUeberweisung(UeberweisungsAnweisung anweisung) throws ServiceException {
 
-        double kontoStandSender;
-
-        try {
-            kontoStandSender = kontoRepository.ladeKontoStandVonKonto(anweisung.getSenderId());
-        } catch (SQLException e) {
-            throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR);
-        }
 
         /// todo das Erstellen von der Service-Exception wird hier vom UeberweisungValidator übernommen, ist irgendwie mega undurchsichtig, weil die methode legit nur zum exc thrown da ist
         transaktionsValidatorService.validateUeberweisung(anweisung);

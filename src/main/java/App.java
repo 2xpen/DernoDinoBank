@@ -78,6 +78,10 @@ public class App {
         messageManager.setPersonSucheManager(personSucheManager);
 
         startseiteManager.start();
+
+
+
+        UeberweisungsTest.
     }
 
 }
