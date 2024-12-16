@@ -25,7 +25,7 @@ public class StartseiteManager extends ManagerBase {
         printFooter();
 
         try {
-            int wahlNummer = Integer.parseInt(scanner.next());
+            int wahlNummer = Integer.parseInt(scanner.nextLine());
             deciderStartseiteMenuOption(STARTSEITE_MENU_OPTION.ofWahlNummer(wahlNummer));
 
         } catch (NumberFormatException e) {

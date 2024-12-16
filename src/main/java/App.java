@@ -1,8 +1,9 @@
 import menu.anmeldung.AnmeldungsManager;
 import menu.directMessages.MessageManager;
-import menu.konto.KontoAnsichtManager;
+import menu.konto.UserLogedInManager;
 import menu.konto.transaktion.TransaktionsManager;
 import menu.kontoauszug.KontoauszugManager;
+import menu.personsuche.PersonSucheManager;
 import menu.pinnwand.PinnwandManager;
 import menu.registrierung.RegistrierungManger;
 import menu.startseite.StartseiteManager;
@@ -54,22 +55,25 @@ public class App {
 
         StartseiteManager startseiteManager = new StartseiteManager();
         AnmeldungsManager anmeldungsManager = new AnmeldungsManager(startseiteManager, anmeldeService);
-        KontoAnsichtManager kontoAnsichtManager = new KontoAnsichtManager(anmeldungsManager, kontoService);
+        UserLogedInManager userLogedInManager = new UserLogedInManager(anmeldungsManager, kontoService);
         RegistrierungManger registrierungManger = new RegistrierungManger(startseiteManager, registrierungService);
-        PinnwandManager pinnwandManager = new PinnwandManager(kontoAnsichtManager, pinnwandService, userService);
-        TransaktionsManager transaktionsManager = new TransaktionsManager(kontoAnsichtManager, kontoService, transaktionsService, userService);
-        MessageManager messageManager = new MessageManager(kontoAnsichtManager, messageService, userService);
-        KontoauszugManager kontoauszugManager = new KontoauszugManager(kontoService, gevoService, userService, kontoAnsichtManager);
+        PinnwandManager pinnwandManager = new PinnwandManager(userLogedInManager, pinnwandService);
+        TransaktionsManager transaktionsManager = new TransaktionsManager(userLogedInManager, kontoService, transaktionsService, userService);
+        MessageManager messageManager = new MessageManager(userLogedInManager, messageService, userService);
+        KontoauszugManager kontoauszugManager = new KontoauszugManager(kontoService, gevoService, userService, userLogedInManager);
+        PersonSucheManager personSucheManager = new PersonSucheManager(userLogedInManager,pinnwandManager,messageManager,userService);
+
 
         startseiteManager.setAnmeldungsManager(anmeldungsManager);
         startseiteManager.setRegistrierungManger(registrierungManger);
 
-        anmeldungsManager.setKontoansichtsmanager(kontoAnsichtManager);
+        anmeldungsManager.setKontoansichtsmanager(userLogedInManager);
 
-        kontoAnsichtManager.setPinnwandManager(pinnwandManager);
-        kontoAnsichtManager.setUeberweisungManager(transaktionsManager);
-        kontoAnsichtManager.setMessageManager(messageManager);
-        kontoAnsichtManager.setKontoauszugManager(kontoauszugManager);
+        userLogedInManager.setPinnwandManager(pinnwandManager);
+        userLogedInManager.setUeberweisungManager(transaktionsManager);
+        userLogedInManager.setMessageManager(messageManager);
+        userLogedInManager.setKontoauszugManager(kontoauszugManager);
+        userLogedInManager.setPersonSucheManager(personSucheManager);
 
         startseiteManager.start();
     }

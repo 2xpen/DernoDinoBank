@@ -22,14 +22,12 @@ public class TransaktionsService {
 
     private final KontoRepository kontoRepository;
     private final GevoService gevoService;
-    private final KontoService kontoService;
     private final TransaktionsValidatorService transaktionsValidatorService;
 
     private final ImportExportService importExportService;
-    public TransaktionsService(KontoRepository kontoRepository, GevoService gevoService, KontoService kontoService, ImportExportService importExportService, TransaktionsValidatorService transaktionsValidatorService) {
+    public TransaktionsService(KontoRepository kontoRepository, GevoService gevoService, ImportExportService importExportService, TransaktionsValidatorService transaktionsValidatorService) {
         this.kontoRepository = kontoRepository;
         this.gevoService = gevoService;
-        this.kontoService = kontoService;
         this.transaktionsValidatorService = transaktionsValidatorService;
         this.importExportService = importExportService;
     }
@@ -61,13 +59,18 @@ public class TransaktionsService {
 
         transaktionsValidatorService.isValidMassenueberweisungen(ueberweisungsAnweisungParams,senderId);
 
-        for (UeberweisungsAnweisungParam anweisung : ueberweisungsAnweisungParams) {
+        try {
+            for (UeberweisungsAnweisungParam anweisung : ueberweisungsAnweisungParams) {
 
-            kontoRepository.ueberweisen();
+
+                kontoRepository.ueberweisen(null);
 
 
+            }
+
+        } catch (SQLException e) {
+            throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR);
         }
-
 
 
 
@@ -80,18 +83,18 @@ public class TransaktionsService {
         List<UeberweisungsAnweisung> anweisungen = new ArrayList<>();
 
         for (UeberweisungsAnweisungParam param : paramList) {
-            anweisungen.add(
+  /*          anweisungen.add(
                     new UeberweisungsAnweisung(
 
 
 
                     )
-            )
+            )*/
         }
 
 
 
-
+return null;
 
     }
 

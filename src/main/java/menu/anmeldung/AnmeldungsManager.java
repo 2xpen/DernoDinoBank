@@ -6,7 +6,7 @@ import data.user.Passwort;
 import menu.ManagerBase;
 import menu.startseite.StartseiteManager;
 import menu.Menufehlermeldungen;
-import menu.konto.KontoAnsichtManager;
+import menu.konto.UserLogedInManager;
 import service.AnmeldeService;
 import service.serviceexception.ServiceException;
 
@@ -15,7 +15,7 @@ public class AnmeldungsManager extends ManagerBase {
 
     private final AnmeldeService anmeldeService;
     private final StartseiteManager startseiteManager;
-    private KontoAnsichtManager kontoAnsichtManager;
+    private UserLogedInManager userLogedInManager;
 
     public AnmeldungsManager(StartseiteManager startseiteManager, AnmeldeService anmeldeService) {
         super();
@@ -32,7 +32,7 @@ public class AnmeldungsManager extends ManagerBase {
         printFooter();
 
         try {
-            int wahlNummer = Integer.parseInt(scanner.next());
+            int wahlNummer = Integer.parseInt(scanner.nextLine());
             deciderAnmeldeMenuOption(ANMELDE_MENU_OPTION.ofWahlNummer(wahlNummer));
         } catch (NumberFormatException e) {
             System.out.println(e.getMessage());
@@ -68,12 +68,12 @@ public class AnmeldungsManager extends ManagerBase {
 
         try {
             ANMELDE_DIALOG.BENUTZERNAMEN_EINGEBEN.print();
-            UserName benutzername = new UserName(scanner.next());
+            UserName benutzername = new UserName(scanner.nextLine());
 
             ANMELDE_DIALOG.PASSWORT_EINGEBEN.print();
-            Passwort password = new Passwort(scanner.next());
+            Passwort password = new Passwort(scanner.nextLine());
 
-            kontoAnsichtManager.start(anmeldeService.anmelden(
+            userLogedInManager.start(anmeldeService.anmelden(
 
                     benutzername,
                     password));
@@ -87,8 +87,8 @@ public class AnmeldungsManager extends ManagerBase {
     }
 
 
-    public void setKontoansichtsmanager(KontoAnsichtManager k) {
-        this.kontoAnsichtManager = k;
+    public void setKontoansichtsmanager(UserLogedInManager k) {
+        this.userLogedInManager = k;
     }
 
     // GENAU DAS HIER GEHT IN DIE SERVICE STRUKTUR ÜBER, DIE MANAGER-KLASSEN SIND NUR FÜR DEN DIALOG MIT DEM NUTZER ZUSTÄNDIG

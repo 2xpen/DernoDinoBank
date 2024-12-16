@@ -5,12 +5,11 @@ import data.user.User;
 import data.user.UserName;
 import menu.ManagerBase;
 import menu.Menufehlermeldungen;
-import menu.konto.KontoAnsichtManager;
+import menu.konto.UserLogedInManager;
 import service.MessageService;
 import service.UserService;
 import service.serviceexception.ServiceException;
 import service.serviceexception.validateexception.ValidateBeschreibungException;
-import validator.Validator;
 
 import java.text.SimpleDateFormat;
 
@@ -18,13 +17,13 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public class MessageManager extends ManagerBase {
-    private final KontoAnsichtManager kontoAnsichtManager;
+    private final UserLogedInManager userLogedInManager;
     private final MessageService messageService;
     private final UserService userService;
     private User user;
 
-    public MessageManager(KontoAnsichtManager kontoAnsichtManager, MessageService messageService, UserService userService) {
-        this.kontoAnsichtManager = kontoAnsichtManager;
+    public MessageManager(UserLogedInManager userLogedInManager, MessageService messageService, UserService userService) {
+        this.userLogedInManager = userLogedInManager;
         this.messageService = messageService;
         this.userService = userService;
     }
@@ -39,7 +38,7 @@ public class MessageManager extends ManagerBase {
         printFooter();
 
         try {
-            int wahlNummer = Integer.parseInt(scanner.next());
+            int wahlNummer = Integer.parseInt(scanner.nextLine());
             deciderDirectMessagesMenuOption(DIRECT_MESSAGES_MENU_OPTION.ofWahlNummer(wahlNummer));
         } catch (NumberFormatException e) {
             Menufehlermeldungen.WAHLNUMMER_NICHT_KORREKT.print();
@@ -56,7 +55,7 @@ public class MessageManager extends ManagerBase {
                 sendDirectMessage();
                 break;
             case ZURÜCK:
-                kontoAnsichtManager.start(user);
+                userLogedInManager.start(user);
                 break;
             case null:
                 Menufehlermeldungen.WAHLNUMMER_NICHT_KORREKT.print();
@@ -77,13 +76,16 @@ public class MessageManager extends ManagerBase {
         }
     }
 
+
+
+
     private void sendDirectMessage() {
         try {
             System.out.println("""
                     Bitte gib den Namen von dem User ein,
                     zudem du eine Nachricht senden möchtest
                     """);
-            UserName eingegebenerName = new UserName(scanner.next());
+            UserName eingegebenerName = new UserName(scanner.nextLine());
             scanner.nextLine();
             User empfaenger = userService.ermittleUserByUserName(eingegebenerName);
 
@@ -147,12 +149,10 @@ public class MessageManager extends ManagerBase {
         printBitteWahlnummerWaehlenFooter();
 
         try {
-            IMPORT_EXPORT_MENU_OPTION option = IMPORT_EXPORT_MENU_OPTION.ofWahlNummer(Integer.parseInt(scanner.next()));
+            IMPORT_EXPORT_MENU_OPTION option = IMPORT_EXPORT_MENU_OPTION.ofWahlNummer(Integer.parseInt(scanner.nextLine()));
 
             printFooter();
             switch (option) {
-                case IMPORT:
-                    break;
                 case EXPORT:
                     break;
                 case ZURUECK:

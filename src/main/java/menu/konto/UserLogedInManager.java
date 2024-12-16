@@ -7,11 +7,12 @@ import menu.Menufehlermeldungen;
 import menu.directMessages.MessageManager;
 import menu.konto.transaktion.TransaktionsManager;
 import menu.kontoauszug.KontoauszugManager;
+import menu.personsuche.PersonSucheManager;
 import menu.pinnwand.PinnwandManager;
 import service.KontoService;
 import service.serviceexception.ServiceException;
 
-public class KontoAnsichtManager extends ManagerBase {
+public class UserLogedInManager extends ManagerBase {
 
     private final AnmeldungsManager anmeldungsManager;
     private final KontoService kontoService;
@@ -19,9 +20,10 @@ public class KontoAnsichtManager extends ManagerBase {
     private PinnwandManager pinnwandManager;
     private MessageManager messageManager;
     private KontoauszugManager kontoauszugManager;
+    private PersonSucheManager personSucheManager;
     private User user;
 
-    public KontoAnsichtManager(AnmeldungsManager anmeldungsManager, KontoService kontoService) {
+    public UserLogedInManager(AnmeldungsManager anmeldungsManager, KontoService kontoService) {
         super();
         this.anmeldungsManager = anmeldungsManager;
         this.kontoService = kontoService;
@@ -44,7 +46,7 @@ public class KontoAnsichtManager extends ManagerBase {
 
         try {
 
-            int wahlNummer = Integer.parseInt(scanner.next());
+            int wahlNummer = Integer.parseInt(scanner.nextLine());
             auswahlDecider(KONTO_MENU_OPTION.ofWahlNummer(wahlNummer));
 
         } catch (NumberFormatException e) {
@@ -72,6 +74,9 @@ public class KontoAnsichtManager extends ManagerBase {
                 break;
             case OPTION_KONTOBEWEGUNGEN:
                 kontoauszugManager.start(user);
+                break;
+            case OPTION_PERSONSUCHE:
+                personSucheManager.start(user);
             case AUSLOGGEN:
                 anmeldungsManager.start();
                 break;
@@ -96,20 +101,26 @@ public class KontoAnsichtManager extends ManagerBase {
     }
 
 
-    public void setPinnwandManager(PinnwandManager pinnwandManager) {
+    public UserLogedInManager setPinnwandManager(PinnwandManager pinnwandManager) {
         this.pinnwandManager = pinnwandManager;
+        return this;
     }
 
-    public void setMessageManager(MessageManager messageManager) {
+    public UserLogedInManager setMessageManager(MessageManager messageManager) {
         this.messageManager = messageManager;
+        return this;
     }
 
-    public void setUeberweisungManager(TransaktionsManager transaktionsManager) {
-        this.transaktionsManager = transaktionsManager;
+    public UserLogedInManager setUeberweisungManager(TransaktionsManager transaktionsManager) {
+        this.transaktionsManager = transaktionsManager;return this;
     }
 
-    public void setKontoauszugManager(KontoauszugManager kontoauszugManager) {
-        this.kontoauszugManager = kontoauszugManager;
+    public UserLogedInManager setKontoauszugManager(KontoauszugManager kontoauszugManager) {
+        this.kontoauszugManager = kontoauszugManager;return this;
+    }
+
+    public UserLogedInManager setPersonSucheManager(PersonSucheManager personSucheManager) {
+        this.personSucheManager = personSucheManager;return this;
     }
 
 }

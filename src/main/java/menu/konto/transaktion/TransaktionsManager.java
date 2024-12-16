@@ -6,7 +6,7 @@ import data.user.User;
 import data.user.UserName;
 import menu.ManagerBase;
 import menu.Menufehlermeldungen;
-import menu.konto.KontoAnsichtManager;
+import menu.konto.UserLogedInManager;
 import service.KontoService;
 import service.UserService;
 import service.serviceexception.ServiceException;
@@ -14,14 +14,14 @@ import service.ueberweisung.TransaktionsService;
 
 public class TransaktionsManager extends ManagerBase {
 
-    private final KontoAnsichtManager kontoAnsichtManager;
+    private final UserLogedInManager userLogedInManager;
     private final KontoService kontoService;
     private final TransaktionsService transaktionsService;
     private final UserService userService;
     private User user;
 
-    public TransaktionsManager(KontoAnsichtManager kontoAnsichtManager, KontoService kontoService, TransaktionsService transaktionsService, UserService userService) {
-        this.kontoAnsichtManager = kontoAnsichtManager;
+    public TransaktionsManager(UserLogedInManager userLogedInManager, KontoService kontoService, TransaktionsService transaktionsService, UserService userService) {
+        this.userLogedInManager = userLogedInManager;
         this.kontoService = kontoService;
         this.transaktionsService = transaktionsService;
         this.userService = userService;
@@ -40,7 +40,7 @@ public class TransaktionsManager extends ManagerBase {
         printBitteWahlnummerWaehlenFooter();
 
         try {
-            decider(TransaktionOption.ofWahlNummer(Integer.parseInt(scanner.next())));
+            decider(TransaktionOption.ofWahlNummer(Integer.parseInt(scanner.nextLine())));
         } catch (NumberFormatException e) {
             Menufehlermeldungen.WAHLNUMMER_NICHT_KORREKT.print();
             start(user);
@@ -63,7 +63,7 @@ public class TransaktionsManager extends ManagerBase {
                 startMassenUberweisung();
                 break;
             case Zurueck:
-                kontoAnsichtManager.start(user);
+                userLogedInManager.start(user);
                 break;
 
             case null:
@@ -93,9 +93,9 @@ public class TransaktionsManager extends ManagerBase {
 
         try {
 
-            System.out.println("An wen wolle sie geld schicken?");
+            System.out.println("An wen wollen sie geld schicken?");
 
-            UserName name = new UserName(scanner.next());
+            UserName name = new UserName(scanner.nextLine());
 
             System.out.println("Wie viel wollen sie überweisen?");
             System.out.println("\nBetrag angeben!");

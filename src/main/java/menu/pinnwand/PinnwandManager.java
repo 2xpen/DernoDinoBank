@@ -1,32 +1,24 @@
 package menu.pinnwand;
 
+import data.identifier.UserId;
 import data.pinnwand.Pinnwand;
-import data.pinnwand.PinnwandEntry;
 import data.user.User;
-import data.user.UserName;
 import menu.ManagerBase;
 import menu.Menufehlermeldungen;
-import menu.anmeldung.ANMELDE_DIALOG;
-import menu.konto.KontoAnsichtManager;
+import menu.konto.UserLogedInManager;
 import service.PinnwandService;
-import service.UserService;
 import service.serviceexception.ServiceException;
 import service.serviceexception.validateexception.ValidateBeschreibungException;
-import validator.Validator;
-
-import java.util.List;
 
 public class PinnwandManager extends ManagerBase {
 
-    private final KontoAnsichtManager kontoAnsichtManager;
+    private final UserLogedInManager userLogedInManager;
     private final PinnwandService pinnwandService;
-    private final UserService userService;
     private User user;
 
-    public PinnwandManager(KontoAnsichtManager kontoAnsichtManager, PinnwandService pinnwandService, UserService userService) {
-        this.kontoAnsichtManager = kontoAnsichtManager;
+    public PinnwandManager(UserLogedInManager userLogedInManager, PinnwandService pinnwandService) {
+        this.userLogedInManager = userLogedInManager;
         this.pinnwandService = pinnwandService;
-        this.userService = userService;
     }
 
     public void start(User user) {
@@ -39,7 +31,7 @@ public class PinnwandManager extends ManagerBase {
         printFooter();
 
         try {
-            int wahlNummer = Integer.parseInt(scanner.next());
+            int wahlNummer = Integer.parseInt(scanner.nextLine());
             deciderPinnwandMenuOption(PINNWAND_MENU_OPTION.ofWahlNummer(wahlNummer));
         } catch (NumberFormatException e) {
             Menufehlermeldungen.WAHLNUMMER_NICHT_KORREKT.print();
@@ -48,16 +40,14 @@ public class PinnwandManager extends ManagerBase {
     }
 
 
+
     private void deciderPinnwandMenuOption(PINNWAND_MENU_OPTION option) {
         switch (option) {
-            case PINNWAND_SUCHEN:
-                pinnwandSuche();
-                break;
             case PINNWAND_ANSEHEN:
                 eigenePinnwandAnsehen();
                 break;
             case ZURUECK:
-                kontoAnsichtManager.start(user);
+                userLogedInManager.start(user);
                 break;
             case null:
                 Menufehlermeldungen.WAHLNUMMER_NICHT_KORREKT.print();
@@ -67,32 +57,22 @@ public class PinnwandManager extends ManagerBase {
 
     }
 
-    private void pinnwandSuche() {
+    public void pinnwandVonUserAufrufen(User selector,User selectedUser) {
+
+        this.user = selector;
 
         try {
-            scanner.nextLine();
-            PINNWAND_DIALOG.BESITZER_VON_PINNWAND_EINGEBEN.print();
 
-            UserName eingegebenerName = new UserName(scanner.nextLine());
-
-            User besitzer = userService.ermittleUserByUserName(eingegebenerName);
-
-            Pinnwand pinnwand = pinnwandService.getPinnwand(besitzer.getUserId());
+            Pinnwand pinnwand = pinnwandService.getPinnwand(selectedUser.getUserId());
 
             if (pinnwand.getPinnwandentries().isEmpty()) {
                 PINNWAND_DIALOG.PINNWAND_IST_LEER.print();
-                PINNWAND_KOMMENTAR_MENU.printAll();
-
-                int wahlNummer = Integer.parseInt(scanner.next());
-                deciderPinnwandKommentar(PINNWAND_KOMMENTAR_MENU.ofWahlNummer(wahlNummer));
-
-                System.out.println("Wenn du einen Kommentar schreiben möchtest Bitte 1 eingeben");
-                System.out.println("Wenn du zurück möchtest bitte eine andere Zahl eingeben");
 
             } else {
-                System.out.println("Pinnwand von " + besitzer.getUsername());
+                System.out.println("Pinnwand von " + selectedUser.getUsername());
                 System.out.println(pinnwand);
             }
+
             System.out.println("Wenn du einen Kommentar schreiben möchtest Bitte 1 eingeben");
             System.out.println("Wenn du zurück möchtest bitte eine andere Zahl eingeben");
             String inputString = scanner.nextLine();
@@ -102,30 +82,43 @@ public class PinnwandManager extends ManagerBase {
                 input = Integer.parseInt(inputString);
             } catch (NumberFormatException n) {
                 System.out.println("Ungültige Eingabe, es sind nur Ganzzahlen erlaubt");
-                start(user);
+                pinnwandVonUserAufrufen(selector, selectedUser);
             }
 
             if (input == 1) {
-                System.out.println("Bitte gebe deine Nachricht ein:");
-                String message = scanner.nextLine();
-                pinnwandService.schreibenAufAnderePinnwand(message, user.getUserId(), besitzer.getUserId());
-                System.out.println("Pinnwand eintrag wurde erstellt");
-                start(user);
+                aufPinnwandSchreiben(this.user,selectedUser);
             } else {
-                start(user);
+                start(selectedUser);
             }
 
             //todo @tom teil die methode mit man will auf eine pinnwand schreiben auf, ich will nicht in die suche zurückspringgen nur weil die einggebene message nichtz korrrekt ist, ich wills einfach nochmal versuchen oder abrrechen
         } catch (ValidateBeschreibungException e) {
             System.out.println(e.getMessage());
-            pinnwandSuche();
+            pinnwandVonUserAufrufen(this.user,selectedUser);
         } catch (ServiceException serviceException) {
             System.out.println(serviceException.getMessage());
-            start(user);
+            start(selectedUser);
         }
 
         //
 
+    }
+
+
+    private void aufPinnwandSchreiben(User autor, User empfaenger){
+        System.out.println("Bitte gebe deine Nachricht ein:");
+        String message = scanner.nextLine();
+        try {
+            pinnwandService.schreibenAufAnderePinnwand(message, autor.getUserId() ,empfaenger.getUserId());
+        } catch (ServiceException e) {
+            System.out.println(e.getMessage());
+            System.out.println("Erneut versuchen? (y) sonst anderes zeichen wählen");
+            if(scanner.nextLine().equals("y")){
+                aufPinnwandSchreiben(autor,empfaenger);
+            }pinnwandVonUserAufrufen(autor,empfaenger);
+        }
+        System.out.println("Pinnwand eintrag wurde erstellt");
+        pinnwandVonUserAufrufen(autor,empfaenger);
     }
 
     private void eigenePinnwandAnsehen() {
@@ -143,7 +136,6 @@ public class PinnwandManager extends ManagerBase {
 
                 System.out.println("Beliebiges Zeichen eingeben um zurück zu kehren");
                 if (scanner.hasNext()) {
-                    scanner.next();
                     start(user);
                 }
             }
@@ -152,21 +144,21 @@ public class PinnwandManager extends ManagerBase {
             start(user);
         }
     }
-    private void deciderPinnwandKommentar(PINNWAND_KOMMENTAR_MENU option) {
-        switch (option) {
-            case KOMMENTAR_SCHREIBEN:
-                komentarSchreiben();
-                break;
-            case ZURUECK:
-                start(user);
-                break;
-            case null:
-                Menufehlermeldungen.WAHLNUMMER_NICHT_KORREKT.print();
-                start(user);
-                break;
-        }
-    }
-    public void komentarSchreiben(){
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+   /* public void komentarSchreiben(){
         String inputString = scanner.nextLine();
 
         int input = -1;
@@ -181,15 +173,7 @@ public class PinnwandManager extends ManagerBase {
             PINNWAND_DIALOG.PINNWAND_NACHRICHT_EINGEBEN.print();
             String message = scanner.nextLine();
 
-
-
-
-
-            //pinnwandService.schreibenAufAnderePinnwand(message, user.getUserId(), besitzer.getUserId());
-
-
-
-
+            pinnwandService.schreibenAufAnderePinnwand(message, user.getUserId(), besitzer.getUserId());
 
 
             PINNWAND_DIALOG.PINNWAND_NACHRICHT_ERSTELLT.print();
@@ -197,5 +181,4 @@ public class PinnwandManager extends ManagerBase {
         } else {
             start(user);
         }
-    }
-}
+    }*/

@@ -5,8 +5,7 @@ import menu.startseite.STARTSEITE_MENU_OPTION;
 import java.util.Arrays;
 
 public enum IMPORT_EXPORT_MENU_OPTION {
-    IMPORT("Nachricht/en importieren", 1),
-    EXPORT("Nachricht/en exportieren", 2),
+    EXPORT("Nachricht/en exportieren", 1),
     ZURUECK("Zurück", 0);
     private final String text;
     private final int wahlnummer;

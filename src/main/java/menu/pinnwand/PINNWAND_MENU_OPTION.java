@@ -7,7 +7,6 @@ import java.util.Arrays;
 public enum PINNWAND_MENU_OPTION {
 
     PINNWAND_ANSEHEN("eigene Pinnwand ansehen", 1),
-    PINNWAND_SUCHEN("eine Pinnwand suchen", 2),
     ZURUECK("zurück", 0);
 
     private final String text;

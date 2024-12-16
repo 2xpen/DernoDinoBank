@@ -33,7 +33,7 @@ public enum DIRECT_MESSAGES_MENU_OPTION {
                 .filter(e -> e.wahlnummer == nummer)
                 .findFirst()
                 .orElse(null);
-    }
+}
 
     public String getText() {
         return text;

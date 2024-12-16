@@ -11,6 +11,7 @@ public enum KONTO_MENU_OPTION {
     OPTION_PINNWAND("Pinnwand", 3),
     OPTION_DIRECTMESSAGE("Direktnachrichten", 4),
     OPTION_KONTOBEWEGUNGEN("Kontobewegungen", 5),
+    OPTION_PERSONSUCHE("Personensuche",6),
     AUSLOGGEN("ausloggen", 0);
 
 
