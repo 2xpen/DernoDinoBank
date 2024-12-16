@@ -1,3 +1,4 @@
+import csv.CSV_Handler;
 import menu.anmeldung.AnmeldungsManager;
 import menu.directMessages.MessageManager;
 import menu.konto.UserLogedInManager;
@@ -53,13 +54,16 @@ public class App {
         MessageService messageService = new MessageService(directMessagesRepository);
 
 
+        CSV_Handler csvHandler = new CSV_Handler();
+
+
         StartseiteManager startseiteManager = new StartseiteManager();
         AnmeldungsManager anmeldungsManager = new AnmeldungsManager(startseiteManager, anmeldeService);
         UserLogedInManager userLogedInManager = new UserLogedInManager(anmeldungsManager, kontoService);
         RegistrierungManger registrierungManger = new RegistrierungManger(startseiteManager, registrierungService);
         PinnwandManager pinnwandManager = new PinnwandManager(userLogedInManager, pinnwandService);
         TransaktionsManager transaktionsManager = new TransaktionsManager(userLogedInManager, kontoService, transaktionsService, userService);
-        MessageManager messageManager = new MessageManager(userLogedInManager, messageService, userService);
+        MessageManager messageManager = new MessageManager(userLogedInManager, messageService, userService, csvHandler);
         KontoauszugManager kontoauszugManager = new KontoauszugManager(kontoService, gevoService, userService, userLogedInManager);
         PersonSucheManager personSucheManager = new PersonSucheManager(userLogedInManager,pinnwandManager,messageManager,userService);
 

@@ -1,6 +1,8 @@
 package menu.directMessages;
 
+import csv.CSV_Handler;
 import data.nachricht.Nachricht;
+import data.nachricht.NachrichtView;
 import data.user.User;
 import menu.ManagerBase;
 import menu.Menufehlermeldungen;
@@ -10,21 +12,28 @@ import service.MessageService;
 import service.UserService;
 import service.serviceexception.ServiceException;
 
+import java.io.SyncFailedException;
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MessageManager extends ManagerBase {
     private final UserLogedInManager userLogedInManager;
     private final MessageService messageService;
     private final UserService userService;
     private PersonSucheManager personSucheManager;
+    private final CSV_Handler csvHandler;
 
-    public MessageManager(UserLogedInManager userLogedInManager, MessageService messageService, UserService userService) {
+    public MessageManager(UserLogedInManager userLogedInManager, MessageService messageService, UserService userService, CSV_Handler csvHandler) {
         this.userLogedInManager = userLogedInManager;
         this.messageService = messageService;
         this.userService = userService;
+        this.csvHandler = csvHandler;
     }
 
     public void start(User user) {
@@ -257,6 +266,71 @@ public class MessageManager extends ManagerBase {
             printImportExportDecider(user);
         }
 
+    }
+
+
+
+    private void export(List<Nachricht> nachrichten) {
+
+        /// hier die nachtichten zu view nachrtichten machen
+
+
+        System.out.println("1: Alle nachrichten exportieren");
+        System.out.println("2: Nachrichten auswählen zum exportieren");
+
+        int wahlnummer = 0;
+
+        try {
+            wahlnummer = Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            Menufehlermeldungen.WAHLNUMMER_NICHT_KORREKT.print();
+            export(nachrichten);
+        }
+
+        switch (wahlnummer){
+            case 1:
+
+
+            case 2:
+
+        }
+
+
+
+        System.out.println("Bitte den Zielpfad angeben");
+        Path zielPfad = Path.of(scanner.nextLine());
+
+        csvHandler.exportNachrichten(zielPfad,);
+
+    }
+
+
+    private List<NachrichtView> selectMessages( List<NachrichtView> quellList){
+        System.out.println("Bitte gib die Nummern aller gewünschten Nachrichten an Bitte im folgenden Format \"1,2,3\" ");
+        String gewaehlteNummern = scanner.nextLine();
+
+
+        ///  aua aua
+        List<Integer> selectedIndex = new ArrayList<>();
+        try {
+
+            selectedIndex = Arrays.stream(gewaehlteNummern.split(",")).toList().stream().map(Integer::parseInt).toList();
+
+        }catch (NumberFormatException e) {
+            System.out.println("Format nicht korrekt");
+            System.out.println(e.getMessage());
+            System.out.println("Erneut versuchen? (y) sonst anderes Zeichen eingeben");
+            if(scanner.nextLine().equals("y")) {
+                selectMessages(quellList);
+            }
+        }
+
+
+        List<NachrichtView> selectedMessages = new ArrayList<>();
+        for (int index : selectedIndex){
+            selectedMessages.add(quellList.get(index));
+        }
+        return selectedMessages;
     }
 
 
