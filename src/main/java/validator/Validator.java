@@ -36,7 +36,7 @@ public class Validator {
 
     public static boolean isValidPasswort(Passwort passwort) throws ValidatePasswortException {
 
-        if (REGEX.BESCHREIBUNG.validate(passwort.toString())) {
+        if (REGEX.PASSWORT.validate(passwort.toString())) {
             return true;
         } else throw new ValidatePasswortException(ValidatePasswortException.Message.PASSWORT);
     }

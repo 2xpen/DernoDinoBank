@@ -84,6 +84,9 @@ public class RegexTest {
         }
 
     }
+    @Test
+    void testPasswordValidationNegativ() {
 
+    }
 
 }
