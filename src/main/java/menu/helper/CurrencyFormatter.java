@@ -1,5 +1,7 @@
 package menu.helper;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Locale;
 
@@ -11,8 +13,10 @@ public class CurrencyFormatter {
     }
 
     public static String formatCurrencyForCSV(double amount) {
-        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.GERMANY);
-        String formatted = currencyFormat.format(amount);
-        return formatted.replaceAll("\\p{Sc}", "").trim(); // Währungssymbol entfernen
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.GERMANY);
+        symbols.setDecimalSeparator('.');
+
+        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00", symbols);
+        return decimalFormat.format(amount);
     }
 }
