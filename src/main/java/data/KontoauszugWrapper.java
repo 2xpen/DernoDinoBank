@@ -31,5 +31,7 @@ public class KontoauszugWrapper {
         return sb.toString();
     }
 
-
+    public List<KontoauszugZeile> getKontauszugZeile() {
+        return kontauszugZeile;
+    }
 }

@@ -1,8 +1,6 @@
 package csv;
 import service.serviceexception.ServiceErrorMessageProvider;
 
-import java.text.MessageFormat;
-
 public class CSVException extends Exception {
 
     private final Message message;
@@ -21,7 +19,7 @@ public class CSVException extends Exception {
         FileIstEmpty("Die Datei ist leer"),
         NichtsZumExportieren("es wurde nichts zum exportieren gefunden"),
         FileNotFound("Datei konnte nicht gefunden werden"),
-        CSFFormat("Das format der Datei ist falsch"),
+        CSVFormat("Syntax fehler in der Datei"),
         ExportIsEmpty("Die zu exportierende Datei ist leer"),
         WriteFailed("Das schreiben der Datei ist Fehlgeschlagen"),
         NumberFormat("Der Betrag ist keine gültige Zahl");

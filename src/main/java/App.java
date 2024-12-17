@@ -45,12 +45,12 @@ public class App {
         KontoService kontoService = new KontoService(kontoRepository);
         GevoService gevoService = new GevoService(gevoRepository, userService, kontoService);
 
-        ImportExportService importExportService =  new ImportExportService(userService);
+        ImportExportService importExportService =  new ImportExportService(userService,kontoService);
         AnmeldeService anmeldeService = new AnmeldeService(userRepository);
         PinnwandService pinnwandService = new PinnwandService(pinnwandRepository, userService);
         RegistrierungService registrierungService = new RegistrierungService(userRepository, kontoRepository);
-        TransaktionsValidatorService transaktionsValidatorService = new TransaktionsValidatorService(kontoRepository);
-        TransaktionsService transaktionsService = new TransaktionsService(kontoRepository, gevoService,importExportService, transaktionsValidatorService);
+        TransaktionsValidatorService transaktionsValidatorService = new TransaktionsValidatorService(kontoRepository,userService,kontoService);
+        TransaktionsService transaktionsService = new TransaktionsService(kontoRepository, gevoService,importExportService, transaktionsValidatorService,kontoService,userService);
         MessageService messageService = new MessageService(directMessagesRepository,userService);
 
 
@@ -62,9 +62,9 @@ public class App {
         UserLogedInManager userLogedInManager = new UserLogedInManager(anmeldungsManager, kontoService);
         RegistrierungManger registrierungManger = new RegistrierungManger(startseiteManager, registrierungService);
         PinnwandManager pinnwandManager = new PinnwandManager(userLogedInManager, pinnwandService,importExportService);
-        TransaktionsManager transaktionsManager = new TransaktionsManager(userLogedInManager, kontoService, transaktionsService, userService);
+        TransaktionsManager transaktionsManager = new TransaktionsManager(userLogedInManager, kontoService, transaktionsService,importExportService,userService);
         MessageManager messageManager = new MessageManager(userLogedInManager, messageService, userService,importExportService);
-        KontoauszugManager kontoauszugManager = new KontoauszugManager(kontoService, gevoService, userService, userLogedInManager);
+        KontoauszugManager kontoauszugManager = new KontoauszugManager(kontoService, gevoService, userService, userLogedInManager,importExportService);
         PersonSucheManager personSucheManager = new PersonSucheManager(userLogedInManager,pinnwandManager,messageManager,userService);
 
 

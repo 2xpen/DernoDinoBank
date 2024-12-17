@@ -4,15 +4,19 @@ import data.anweisungen.AbhebungsAnweisung;
 import data.anweisungen.UeberweisungsAnweisung;
 import data.anweisungen.UeberweisungsAnweisungParam;
 import data.identifier.KontoId;
-import data.identifier.UserId;
+import data.user.UserName;
 import repository.konto.KontoRepository;
 import service.GevoService;
 import service.ImportExportService;
 import service.KontoService;
+import service.UserService;
 import service.serviceexception.DatenbankException;
+import service.serviceexception.ImportExportServiceException;
 import service.serviceexception.ServiceException;
+import service.serviceexception.validateexception.ValidateUeberweisungException;
 import validator.Validator;
 
+import javax.swing.text.Style;
 import java.nio.file.Path;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -23,13 +27,17 @@ public class TransaktionsService {
     private final KontoRepository kontoRepository;
     private final GevoService gevoService;
     private final TransaktionsValidatorService transaktionsValidatorService;
+    private final KontoService kontoService;
+    private final UserService userService;
 
     private final ImportExportService importExportService;
-    public TransaktionsService(KontoRepository kontoRepository, GevoService gevoService, ImportExportService importExportService, TransaktionsValidatorService transaktionsValidatorService) {
+    public TransaktionsService(KontoRepository kontoRepository, GevoService gevoService, ImportExportService importExportService, TransaktionsValidatorService transaktionsValidatorService, KontoService kontoService, UserService userService) {
         this.kontoRepository = kontoRepository;
         this.gevoService = gevoService;
         this.transaktionsValidatorService = transaktionsValidatorService;
         this.importExportService = importExportService;
+        this.kontoService = kontoService;
+        this.userService = userService;
     }
 
 
@@ -49,57 +57,47 @@ public class TransaktionsService {
     }
 
 
-    public void massenUeberweisung(String quellpfad, KontoId senderId) throws ServiceException {
+    public void massenUeberweisung(Path quellpfad, KontoId senderId) throws ServiceException {
 
-        List<UeberweisungsAnweisungParam> ueberweisungsAnweisungParams = importExportService.importMassenUeberweisung(Path.of(quellpfad));
+        List<UeberweisungsAnweisungParam> ueberweisungsAnweisungParams = importExportService.importMassenUeberweisung(quellpfad);
 
         transaktionsValidatorService.isValidMassenueberweisungen(ueberweisungsAnweisungParams,senderId);
 
-        try {
-            for (UeberweisungsAnweisungParam anweisung : ueberweisungsAnweisungParams) {
+        List<UeberweisungsAnweisung> ueberweisungsAnweisungen = convertMassenUeberweisung(ueberweisungsAnweisungParams,senderId);
 
-
-                kontoRepository.ueberweisen(null);
-
-
-            }
-
-        } catch (SQLException e) {
-            throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR);
+        if(ueberweisungsAnweisungen.isEmpty()) {
+            throw new ValidateUeberweisungException(ValidateUeberweisungException.Message.MASSENUEBERWEISUNG_LEER);
         }
 
+        for (UeberweisungsAnweisung anweisung :ueberweisungsAnweisungen ){
+            einzelUeberweisung(anweisung);
 
+        }
 
     }
 
-    private List<UeberweisungsAnweisung> converMassenUeberweisung(List<UeberweisungsAnweisungParam> paramList, KontoId senderId) throws ServiceException {
+    private List<UeberweisungsAnweisung> convertMassenUeberweisung(List<UeberweisungsAnweisungParam> paramList, KontoId senderId) throws ServiceException {
 
         List<UeberweisungsAnweisung> anweisungen = new ArrayList<>();
 
+        int i = 0;
         for (UeberweisungsAnweisungParam param : paramList) {
-  /*          anweisungen.add(
-                    new UeberweisungsAnweisung(
+                i++;
+            anweisungen.add(new UeberweisungsAnweisung(
+                    senderId
+                    ,getKontoIdByUserName(new UserName(param.getEmpfeanger()),i)
+                    ,param.getBeschreibung()
+                    ,param.getBetrag()
 
+            )
 
-
-                    )
-            )*/
+            );
         }
-
-return null;
-
+        return anweisungen;
     }
 
 
     public void einzelUeberweisung(UeberweisungsAnweisung anweisung) throws ServiceException {
-
-        double kontoStandSender;
-
-        try {
-            kontoStandSender = kontoRepository.ladeKontoStandVonKonto(anweisung.getSenderId());
-        } catch (SQLException e) {
-            throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR);
-        }
 
         /// todo das Erstellen von der Service-Exception wird hier vom UeberweisungValidator übernommen, ist irgendwie mega undurchsichtig, weil die methode legit nur zum exc thrown da ist
         transaktionsValidatorService.validateUeberweisung(anweisung);
@@ -110,6 +108,19 @@ return null;
         } catch (SQLException e) {
             throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR);
         }
+
+    }
+
+
+
+    public KontoId getKontoIdByUserName(UserName userName,int i) throws ServiceException {
+
+        KontoId kontoId =  kontoService.ermittelKontoIdByUserId(userService.ermittleUserByUserName(userName).getUserId());
+        //gucken ob ein konto für ein namen exsitiert
+        if (!kontoService.kontoExsist(kontoId)) {
+            throw new ValidateUeberweisungException(ValidateUeberweisungException.Message.KEIN_KONTO_FUER_DEN_NAMEN.addNamen(userName.toString()+ ", Fehler war in der:"+i+"ten Stelle"));
+        }
+        return kontoId;
 
     }
 

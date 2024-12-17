@@ -87,13 +87,14 @@ public class PinnwandManager extends ManagerBase {
         public void pinnwandVonUserAufrufen(User selector,User selectedUser) {
 
             try {
-                Pinnwand pinnwand = pinnwandService.getPinnwand(selectedUser.getUserId());
-                if (pinnwand.getPinnwandentries().isEmpty()) {
+                Pinnwand pinnwandVonUser = pinnwandService.getPinnwand(selectedUser.getUserId());
+                Pinnwand pinnwandSelector = pinnwandService.getPinnwand(selector.getUserId());
+                if (pinnwandVonUser.getPinnwandentries().isEmpty()) {
                     PINNWAND_DIALOG.PINNWAND_IST_LEER.print();
 
                 } else {
                     System.out.println("Pinnwand von " + selectedUser.getUsername());
-                    System.out.println(pinnwand);
+                    System.out.println(pinnwandVonUser);
                 }
 
                 System.out.println("1: Kommentar auf die Pinnwand von "+ selectedUser.getUsername() +" schreiben");
@@ -116,7 +117,7 @@ public class PinnwandManager extends ManagerBase {
                         pinnwandVonUserAufrufen(selector,selectedUser);
                         break;
                     case 2:
-                        exportPinnwandnachrichten(pinnwandService.filterafterAnforderung11(pinnwand,selector.getUserId(),selectedUser.getUserId()),selector,selectedUser);
+                        exportPinnwandnachrichten(pinnwandService.filterafterAnforderung11(pinnwandSelector,selector.getUserId(),selectedUser.getUserId()),selector,selectedUser);
                         pinnwandVonUserAufrufen(selector,selectedUser);
                     case 0:
                         personSucheManager.startWithSelectedUser(selector, selectedUser);
@@ -148,10 +149,8 @@ public class PinnwandManager extends ManagerBase {
             }
 
             try {
-
                 importExportService.exportPinnwandnachrichten(pinnwandEntries,zielPfad);
                 System.out.println("Es wurde ein Protokoll unter: " + zielPfad + " abgelegt");
-
             } catch (ServiceException e) {
                 System.out.println(e.getMessage());
                 exportPinnwandnachrichten(pinnwandEntries,selector,selectedUser);

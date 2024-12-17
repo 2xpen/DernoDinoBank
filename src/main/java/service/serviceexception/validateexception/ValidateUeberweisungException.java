@@ -10,13 +10,21 @@ public class ValidateUeberweisungException extends ValidateException {
     }
 
     public enum Message implements ServiceErrorMessageProvider {
-        BETRAG_UEBERZIEHT_SALDO("du hast nicht soviel kohle du trottel");
+        BETRAG_UEBERZIEHT_SALDO("Der Betrag überzieht ihr saldo"),
+        MASSENUEBERWEISUNG_LEER("Massenanweisung nach import leer"),
+        KEIN_KONTO_FUER_DEN_NAMEN("Es wurde kein Konto für folgenden Namen gefunden:");
 
-        private final String message;
+        private String message;
 
         Message(String message) {
             this.message = message;
         }
+
+        public Message addNamen(String namen){
+            this.message += " " + namen;
+            return this;
+        }
+
 
         @Override
         public String getServiceErrorMessage() {

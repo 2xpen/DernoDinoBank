@@ -2,29 +2,42 @@ package menu.konto.transaktion;
 
 import data.anweisungen.AbhebungsAnweisung;
 import data.anweisungen.UeberweisungsAnweisung;
+import data.anweisungen.UeberweisungsAnweisungParam;
 import data.user.User;
 import data.user.UserName;
+import helper.FileHelper;
 import menu.ManagerBase;
 import menu.Menufehlermeldungen;
 import menu.helper.CurrencyFormatter;
 import menu.konto.UserLogedInManager;
+import service.ImportExportService;
 import service.KontoService;
 import service.UserService;
+import service.serviceexception.DatenbankException;
+import service.serviceexception.ImportExportServiceException;
 import service.serviceexception.ServiceException;
 import service.ueberweisung.TransaktionsService;
+
+import java.io.FileNotFoundException;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
+import java.util.List;
+import java.util.Scanner;
 
 public class TransaktionsManager extends ManagerBase {
 
     private final UserLogedInManager userLogedInManager;
     private final KontoService kontoService;
     private final TransaktionsService transaktionsService;
+    private final ImportExportService  importExportService;
     private final UserService userService;
     private User user;
 
-    public TransaktionsManager(UserLogedInManager userLogedInManager, KontoService kontoService, TransaktionsService transaktionsService, UserService userService) {
+    public TransaktionsManager(UserLogedInManager userLogedInManager, KontoService kontoService, TransaktionsService transaktionsService, ImportExportService importExportService, UserService userService) {
         this.userLogedInManager = userLogedInManager;
         this.kontoService = kontoService;
         this.transaktionsService = transaktionsService;
+        this.importExportService = importExportService;
         this.userService = userService;
     }
 
@@ -71,7 +84,6 @@ public class TransaktionsManager extends ManagerBase {
                 Menufehlermeldungen.WAHLNUMMER_NICHT_KORREKT.print();
                 start(user);
         }
-
 
     }
 
@@ -143,6 +155,46 @@ public class TransaktionsManager extends ManagerBase {
 
     private void startMassenUberweisung() {
 
+
+        System.out.println("Bitte den Pfad angeben worunter die Anweisungen liegen sollen");
+
+
+
+        Path quellpfad = null;
+
+        try {
+            quellpfad = Path.of(scanner.nextLine());
+            FileHelper.isPathAccessible(quellpfad);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            Menufehlermeldungen.ERNEUT_VERSUCHEN.print();
+            if(scanner.nextLine().equals("y")) {
+            startMassenUberweisung();
+            } else start(user);
+        }
+
+        try {
+            transaktionsService.massenUeberweisung(quellpfad,kontoService.ermittelKontoIdByUserId(user.getUserId()));
+
+        } catch (ImportExportServiceException e) {
+            System.out.println(e.getMessage());
+            Menufehlermeldungen.ERNEUT_VERSUCHEN.print();
+            if(scanner.nextLine().equals("y")) {
+                startMassenUberweisung();
+            } else start(user);
+        } catch (ServiceException e) {
+            System.out.println(e.getMessage());
+            Menufehlermeldungen.ERNEUT_VERSUCHEN.print();
+            if(scanner.nextLine().equals("y")) {
+                startMassenUberweisung();
+            }start(user);
+
+        }
+
+        System.out.println("Massenüberweisung wurde durchgeführt!");
+
+        start(user);
+
     }
 
 
@@ -206,7 +258,6 @@ public class TransaktionsManager extends ManagerBase {
     private void Kontostandanzeigen() throws ServiceException {
         System.out.println(
                 "Aktueller Kontostand: " + CurrencyFormatter.formatCurrency(kontoService.kontostandErmitteln(user.getUserId())));
-
     }
 
 

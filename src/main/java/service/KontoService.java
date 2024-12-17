@@ -47,5 +47,14 @@ public class KontoService {
         }
     }
 
+    public boolean kontoExsist(KontoId id) throws DatenbankException {
+        try {
+            return repo.kontoExsist(id);
+        } catch (SQLException e) {
+            throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
 
 }

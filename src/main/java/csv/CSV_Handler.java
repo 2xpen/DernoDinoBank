@@ -1,5 +1,6 @@
 package csv;
 
+import data.KontoauszugWrapper;
 import data.anweisungen.UeberweisungsAnweisungParam;
 import data.geschaeftsvorfall.KontoauszugZeile;
 import data.nachricht.NachrichtView;
@@ -28,11 +29,19 @@ public class CSV_Handler implements ICSV_IMPORT_EXPORT {
         if (!scan.hasNext()) {
             throw new CSVException(CSVException.Message.FileIstEmpty);
         }
+
+        //skip header
+
+
+        scan.nextLine();
+        int zeilenIndex = 1;
         while (scan.hasNext()) {
-            int zeilenIndex = 0;
+
             List<String> tokens = List.of(scan.nextLine().split(";"));
-            if (tokens.size() < 3) {
-                throw new CSVException(CSVException.Message.CSFFormat.addZeile(zeilenIndex));
+            System.out.println(tokens.size());
+
+            if (tokens.size() != 3) {
+                throw new CSVException(CSVException.Message.CSVFormat.addZeile(zeilenIndex));
             }
             try {
                 rueckgabe.add(
@@ -41,11 +50,19 @@ public class CSV_Handler implements ICSV_IMPORT_EXPORT {
                                 , tokens.get(2)
                                 , Double.parseDouble(tokens.get(1)))
                 );
+
             } catch (NumberFormatException e) {
+                System.out.println(e.getMessage());
                 throw new CSVException(CSVException.Message.NumberFormat.addZeile(zeilenIndex).addInfo(tokens.get(2)));
             }
+            zeilenIndex++;
         }
         scan.close();
+
+        if(rueckgabe.isEmpty()) {
+            throw new CSVException(CSVException.Message.FileIstEmpty);
+        }
+
         return rueckgabe;
     }
 
@@ -70,15 +87,15 @@ public class CSV_Handler implements ICSV_IMPORT_EXPORT {
 
     }
 
-    public void exportKontoAuszuege(List<KontoauszugZeile> list, Path path) throws CSVException {
+    public void exportKontoAuszuege(KontoauszugWrapper kontowrapper, Path path) throws CSVException {
 
-         if(list.isEmpty()) {
+         if(kontowrapper.getKontauszugZeile().isEmpty()) {
              throw new CSVException(CSVException.Message.NichtsZumExportieren);
          }
 
                 //header
         String content = "Transaktionsdatum; Empfänger; Sender; Beschreibung; Betrag"+"\n";
-        for (KontoauszugZeile gz : list) {
+        for (KontoauszugZeile gz : kontowrapper.getKontauszugZeile()) {
             content += gz.getDatum() + ";";
             content += gz.getEmpfaenger() + ";";
             content += gz.getSender() + ";";
@@ -92,25 +109,22 @@ public class CSV_Handler implements ICSV_IMPORT_EXPORT {
 
     public void exportNachrichten(List<NachrichtView> nachrichtViews,Path path) throws CSVException {
 
-
         if(nachrichtViews.isEmpty()) {
             throw new CSVException(CSVException.Message.NichtsZumExportieren);
         }
 
         String content = "Datum;Sender;Empfänger;Nachricht+"+"\n";
+
         for (NachrichtView gz : nachrichtViews) {
             content += gz.getDate() + ";";
             content += gz.getSender() + ";";
             content += gz.getEmpfaenger() + ";";
             content += gz.getMessage()+ ";"+ "\n";
         }
-
             // todo hier noch die addInfo Methode einfügen und saren mit wem die convo war (falls es eine spezifische convo war...
         write(path,content, ExportTypes.NACHRICHTEN.addInfo(nachrichtViews.getFirst().getEmpfaenger()));
 
     }
-
-
 
 
     public void write(Path zielPfad,String content,ExportTypes type) throws CSVException {
