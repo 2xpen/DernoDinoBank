@@ -115,8 +115,6 @@ public class CSV_Handler implements ICSV_IMPORT_EXPORT {
             content += gz.getMessage()+ ";"+ "\n";
         }
 
-        System.out.println(content);
-
             // todo hier noch die addInfo Methode einfügen und saren mit wem die convo war (falls es eine spezifische convo war...
         write(path,content, ExportTypes.NACHRICHTEN.addInfo(nachrichtViews.getFirst().getEmpfaenger()));
 
