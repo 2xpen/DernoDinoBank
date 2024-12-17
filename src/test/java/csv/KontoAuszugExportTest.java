@@ -110,12 +110,12 @@ public class KontoAuszugExportTest {
                     ,zeilen.get(0));
 
             Assertions.assertEquals(
-                    "2024-12-10 23:11:32.0;l.sindermann@hsw-stud.de;r.heim@hsw-stud.de;xoxoxox;69.0"
+                    "2024-12-10;l.sindermann@hsw-stud.de;r.heim@hsw-stud.de;xoxoxox;69.00"
                     ,zeilen.get(1));
 
 
             Assertions.assertEquals(
-                    "2024-12-10 23:11:32.0;tom.ramos@hsw-stud.de;m.farwick@hsw-stud.de;ey kolleg;66.0"
+                    "2024-12-10;tom.ramos@hsw-stud.de;m.farwick@hsw-stud.de;ey kolleg;66.00"
                     ,zeilen.get(2));
 
         }catch (FileNotFoundException e) {

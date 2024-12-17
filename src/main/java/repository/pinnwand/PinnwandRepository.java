@@ -37,7 +37,7 @@ public class PinnwandRepository {
         return pinnwandEntryList;
     }
 
-    public void createPinnwandentry(String message, data.identifier.UserId autor_id, data.identifier.UserId besitzer_id, Timestamp date) throws SQLException {
+    public static void createPinnwandentry(String message, data.identifier.UserId autor_id, data.identifier.UserId besitzer_id, Timestamp date) throws SQLException {
 
         Connection conn = DataBaseConnection.getInstance();
         String createPinnwandEntry = """

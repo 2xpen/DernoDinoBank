@@ -20,14 +20,17 @@ class CSVHandlerTest {
     void setUp() {
         csvHandler = new CSV_Handler();
     }
-/*
+
+    /*
+
     @AfterEach
     void tearDown() {
         File file = new File(TEMP_FILE);
         if (file.exists()) {
             file.delete();
         }
-    }*/
+    }
+*/
 
     ///  POSITIV TEST
     @Test
@@ -58,7 +61,8 @@ class CSVHandlerTest {
     @Test
     void testMassenueberweisung_invalidFormat() {
         // Erstelle eine CSV-Datei mit falschem Format
-        createTestFile("Max Mustermann;123.45"); // Fehlende Beschreibung
+        createTestFile("Empfänger;Betrag;Beschreibung"
+                +"\nMax Mustermann;123.45"); // Fehlende Beschreibung
 
                 assertThrows(CSVException.class,
                 () -> csvHandler.importMassenueberweisung(Path.of(TEMP_FILE)));
@@ -68,7 +72,8 @@ class CSVHandlerTest {
     @Test
     void testMassenueberweisung_invalidNumber() {
         // Erstelle eine CSV-Datei mit ungültiger Zahl
-        createTestFile("Max Mustermann;ABC;Rechnung Januar");
+        createTestFile("Empfänger;Betrag;Beschreibung"+
+                "\nMax Mustermann;ABC;Rechnung Januar");
 
 
         //todo falls ich noch schaffe dann ÜBERALL auf die richtige message prüfen
