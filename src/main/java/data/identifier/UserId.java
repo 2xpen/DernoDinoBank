@@ -12,7 +12,8 @@ public class UserId extends IdentifierBase {
         super();
     }
 
-
-
-
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
 }

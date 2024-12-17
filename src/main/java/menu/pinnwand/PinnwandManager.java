@@ -116,7 +116,7 @@ public class PinnwandManager extends ManagerBase {
                         pinnwandVonUserAufrufen(selector,selectedUser);
                         break;
                     case 2:
-                        exportPinnwandnachrichten(pinnwandService.filterafterAnforderung11(pinnwand,selector.getUserId(),selectedUser.getUserId()));
+                        exportPinnwandnachrichten(pinnwandService.filterafterAnforderung11(pinnwand,selector.getUserId(),selectedUser.getUserId()),selector,selectedUser);
                         pinnwandVonUserAufrufen(selector,selectedUser);
                     case 0:
                         personSucheManager.startWithSelectedUser(selector, selectedUser);
@@ -131,7 +131,7 @@ public class PinnwandManager extends ManagerBase {
 
 
 
-        private void exportPinnwandnachrichten(List<PinnwandEntry> pinnwandEntries) {
+        private void exportPinnwandnachrichten(List<PinnwandEntry> pinnwandEntries,User selector,User selectedUser) {
 
             System.out.println("Bitte den Zielpfad angeben");
             Path zielPfad = Path.of(scanner.nextLine());
@@ -140,7 +140,11 @@ public class PinnwandManager extends ManagerBase {
                 FileHelper.isPathAccessible(zielPfad);
             } catch (FileNotFoundException e) {
                 System.out.println(e.getMessage());
-                exportPinnwandnachrichten(pinnwandEntries);
+                System.out.println("erneut Versuchen? (y)");
+                if(scanner.nextLine().equals("y")) {
+                    exportPinnwandnachrichten(pinnwandEntries,selector,selectedUser);
+                }pinnwandVonUserAufrufen(selector,selectedUser);
+
             }
 
             try {
@@ -150,7 +154,7 @@ public class PinnwandManager extends ManagerBase {
 
             } catch (ServiceException e) {
                 System.out.println(e.getMessage());
-                exportPinnwandnachrichten(pinnwandEntries);
+                exportPinnwandnachrichten(pinnwandEntries,selector,selectedUser);
             }
         }
 

@@ -50,6 +50,8 @@ public class PinnwandService {
     public List<PinnwandEntry> filterafterAnforderung11(Pinnwand pinnwand, UserId besitzer, UserId selectedUser){
         List<PinnwandEntry> filteredEntries = new ArrayList<>();
 
+
+        //so wie ich die anforderung 11 lese, sollen alle an den benutzer gerichteten pinnwandeinträge eines users(kontakts) exportierbar sein
             for (PinnwandEntry entry : pinnwand.getPinnwandentries()){
                 if(entry.getBesitzer_id().equals(besitzer)  && entry.getAutor_id().equals(selectedUser)){
                     filteredEntries.add(entry);
