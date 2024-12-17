@@ -229,7 +229,7 @@ public class TransaktionsManager extends ManagerBase {
                     , gewaehlterBetrag);
 
             transaktionsService.abheben(anweisung);
-            System.out.println("Es wurden: " + anweisung.getBetrag() + "€ von ihrem Kontoabgebucht");
+            System.out.println("Es wurden: " + anweisung.getBetrag() + "€ von ihrem Konto abgebucht");
             start(user);
 
         } catch (NumberFormatException e) {

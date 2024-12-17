@@ -98,7 +98,7 @@ public class PinnwandManager extends ManagerBase {
                 }
 
                 System.out.println("1: Kommentar auf die Pinnwand von "+ selectedUser.getUsername() +" schreiben");
-                System.out.println("2: Pinnwandnachrichten die "+ selectedUser.getUsername() +"an dich gesendet hat exportieren(Anforderung 11)");
+                System.out.println("2: Alle Pinnwandnachrichten, die "+ selectedUser.getUsername() +"an dich gesendet hat, exportieren. (Anforderung 11)");
                 System.out.println("0: Zurück");
                 String inputString = scanner.nextLine();
 
