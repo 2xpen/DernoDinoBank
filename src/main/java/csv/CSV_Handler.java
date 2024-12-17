@@ -1,5 +1,6 @@
 package csv;
 
+import data.KontoauszugWrapper;
 import data.anweisungen.UeberweisungsAnweisungParam;
 import data.geschaeftsvorfall.KontoauszugZeile;
 import data.nachricht.NachrichtView;
@@ -34,7 +35,7 @@ public class CSV_Handler implements ICSV_IMPORT_EXPORT {
             int zeilenIndex = 0;
             List<String> tokens = List.of(scan.nextLine().split(";"));
             if (tokens.size() < 3) {
-                throw new CSVException(CSVException.Message.CSFFormat.addZeile(zeilenIndex));
+                throw new CSVException(CSVException.Message.CSVFormat.addZeile(zeilenIndex));
             }
             try {
                 rueckgabe.add(
@@ -69,9 +70,9 @@ public class CSV_Handler implements ICSV_IMPORT_EXPORT {
         write(path,content, ExportTypes.NACHRICHTEN.addInfo(pinnwandEntryViews.getFirst().getEmpfaengerName().toString()));
     }
 
-    public void exportKontoAuszuege(List<KontoauszugZeile> list, Path path) throws CSVException {
+    public void exportKontoAuszuege(KontoauszugWrapper kontoauszugWrapper, Path path) throws CSVException {
 
-         if(list.isEmpty()) {
+         if(kontoauszugWrapper.getKontauszugZeile().isEmpty()) {
              throw new CSVException(CSVException.Message.NichtsZumExportieren);
          }
 
@@ -79,7 +80,7 @@ public class CSV_Handler implements ICSV_IMPORT_EXPORT {
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
                 //header
         String content = "Transaktionsdatum; Empfänger; Sender; Beschreibung; Betrag"+"\n";
-        for (KontoauszugZeile gz : list) {
+        for (KontoauszugZeile gz : kontoauszugWrapper.getKontauszugZeile()) {
 
             String formattedDate = formatDate(gz.getDatum(), dateFormatter);
 
