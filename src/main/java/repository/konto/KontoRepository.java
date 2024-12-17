@@ -1,12 +1,12 @@
 package repository.konto;
 
 import data.anweisungen.AbhebungsAnweisung;
+import data.anweisungen.UpdateAbhebenKontostand;
+import data.anweisungen.UpdateSenderEmpfaengerKontostaende;
 import data.identifier.KontoId;
 import data.identifier.UserId;
 import data.konto.Konto;
-import data.anweisungen.UeberweisungsAnweisung;
 import repository.dbConnection.DataBaseConnection;
-import service.serviceexception.DatenbankException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -144,12 +144,9 @@ public class KontoRepository {
     }
 */
 
-    public void abheben(AbhebungsAnweisung anweisung) throws SQLException {
+    public void abheben(UpdateAbhebenKontostand sardz) throws SQLException {
 
         Connection conn = DataBaseConnection.getInstance();
-
-        //todo calc auslagern
-        double neuerKontoStand = ladeKontoStandVonKonto(anweisung.getKontoId()) - anweisung.getBetrag();
 
         /// Befüllen Empfängerkonto
         String updateEmpfaengerKonto = """  
@@ -158,41 +155,30 @@ public class KontoRepository {
 
         PreparedStatement updateEmpfaengerKontoStatement = conn.prepareStatement(updateEmpfaengerKonto);
 
-        updateEmpfaengerKontoStatement.setDouble(1, neuerKontoStand);
-        updateEmpfaengerKontoStatement.setString(2, anweisung.getKontoId().toString());
+        updateEmpfaengerKontoStatement.setDouble(1, sardz.getNeuerKontostand());
+        updateEmpfaengerKontoStatement.setString(2, sardz.getKontoId().toString());
 
         updateEmpfaengerKontoStatement.executeUpdate();
     }
 
 
-    public void ueberweisen(UeberweisungsAnweisung anweisung) throws SQLException {
+
+
+    public void ueberweisen(UpdateSenderEmpfaengerKontostaende caculatedBalances) throws SQLException {
 
         Connection conn = DataBaseConnection.getInstance();
 
 
-/// todo Kalkulieren der neuen Kontostände BITTE AUSLAGERN!**************************************************************
 
-        /// calc für Empfänger
-        double neuerKontoStandEmpfaenger = ladeKontoStandVonKonto(anweisung.getEmpfaengerId()) + anweisung.getBetrag();
-
-        /// calc für Sender
-        double neuerKontoStandSender = ladeKontoStandVonKonto(anweisung.getSenderId()) - anweisung.getBetrag();
-
-
-///*********************************************************************************************************************
-
-
-/// Befüllen der SQL STATEMENTS*****************************************************************************************
-
-        /// Befüllen Empfängerkonto
         String updateEmpfaengerKonto = """  
                 UPDATE konto SET kontostand = ? WHERE konto_id = ?;
                 """;
 
         PreparedStatement updateEmpfaengerKontoStatement = conn.prepareStatement(updateEmpfaengerKonto);
 
-        updateEmpfaengerKontoStatement.setDouble(1, neuerKontoStandEmpfaenger);
-        updateEmpfaengerKontoStatement.setString(2, anweisung.getEmpfaengerId().toString());
+        updateEmpfaengerKontoStatement.setDouble(1, caculatedBalances.getNeuerEmpfeangerKontoStand());
+        updateEmpfaengerKontoStatement.setString(2, caculatedBalances.getEmpfaengerId().toString());
+
 
         /// Befüllen Senderkonto
         String updateSenderKonto = """        
@@ -201,24 +187,14 @@ public class KontoRepository {
 
         PreparedStatement updateSenderKontoStatement = conn.prepareStatement(updateSenderKonto);
 
-        updateSenderKontoStatement.setDouble(1, neuerKontoStandSender);
-        updateSenderKontoStatement.setString(2, anweisung.getSenderId().toString());
+        updateSenderKontoStatement.setDouble(1,caculatedBalances.getNeuerSenderKontoStand());
+        updateSenderKontoStatement.setString(2, caculatedBalances.getSenderId().toString());
 
-///*********************************************************************************************************************
 
-/// Statements an DB chicken *******************************************************************************************
+
         //todo executeUpdate gibt zurück wieviele zeilen betroffen sind, sollten die 0 sein(wie auch immer das möglich sein sollte) dann muss ja eigentlich alles re
         updateSenderKontoStatement.executeUpdate();
         updateEmpfaengerKontoStatement.executeUpdate();
-
-/*
-                                    VERALTET
-/// bauen der TransaktionSummary ***************************************************************************************
-        TransaktionSummary summary = new TransaktionSummary(
-                getUserNameOfByKontoId(anweisung.empfaengerId())
-                , anweisung.betrag()
-                , anweisung.beschreibung());
-*/
 
 
     }

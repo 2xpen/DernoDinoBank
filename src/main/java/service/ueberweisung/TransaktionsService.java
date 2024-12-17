@@ -1,7 +1,5 @@
 package service.ueberweisung;
-import data.anweisungen.AbhebungsAnweisung;
-import data.anweisungen.UeberweisungsAnweisung;
-import data.anweisungen.UeberweisungsAnweisungParam;
+import data.anweisungen.*;
 import data.identifier.KontoId;
 import data.user.UserName;
 import repository.konto.KontoRepository;
@@ -10,11 +8,10 @@ import service.ImportExportService;
 import service.KontoService;
 import service.UserService;
 import service.serviceexception.DatenbankException;
-import service.serviceexception.ImportExportServiceException;
 import service.serviceexception.ServiceException;
 import service.serviceexception.validateexception.ValidateUeberweisungException;
 import validator.Validator;
-import javax.swing.text.Style;
+
 import java.nio.file.Path;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -45,10 +42,13 @@ public class TransaktionsService {
 
         transaktionsValidatorService.validteAbhebungsAnweisung(anweisung);
 
+       UpdateAbhebenKontostand updateAbhebenKontostand = calculateNewBalanceWrapper(anweisung);
+
         try {
-            kontoRepository.abheben(anweisung);
+            kontoRepository.abheben(updateAbhebenKontostand);
             gevoService.doc(anweisung);
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR);
         }
 
@@ -100,15 +100,47 @@ public class TransaktionsService {
         /// todo das Erstellen von der Service-Exception wird hier vom UeberweisungValidator übernommen, ist irgendwie mega undurchsichtig, weil die methode legit nur zum exc thrown da ist
         transaktionsValidatorService.validateUeberweisung(anweisung);
 
+           UpdateSenderEmpfaengerKontostaende stmt = calculateNewBalancesWrapper(anweisung);
         try {
-            kontoRepository.ueberweisen(anweisung);
+            kontoRepository.ueberweisen(stmt);
             gevoService.doc(anweisung);
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR);
         }
 
     }
 
+
+    private UpdateSenderEmpfaengerKontostaende calculateNewBalancesWrapper(UeberweisungsAnweisung anweisung) throws ServiceException {
+
+        try {
+
+            double neuerKontoStandSender = kontoRepository.ladeKontoStandVonKonto(anweisung.getSenderId()) - anweisung.getBetrag();
+            double neuerKontoStandEmpfeanger = kontoRepository.ladeKontoStandVonKonto(anweisung.getEmpfaengerId()) + anweisung.getBetrag();
+
+            return new UpdateSenderEmpfaengerKontostaende(anweisung.getSenderId(),neuerKontoStandSender,anweisung.getEmpfaengerId(),neuerKontoStandEmpfeanger);
+        }
+        catch (SQLException e) {
+
+            throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+
+
+    private UpdateAbhebenKontostand calculateNewBalanceWrapper(AbhebungsAnweisung anweisung) throws ServiceException {
+
+        try {
+            double neuerKontostand = kontoRepository.ladeKontoStandVonKonto(anweisung.getKontoId())-anweisung.getBetrag();
+            return new UpdateAbhebenKontostand(anweisung.getKontoId(),neuerKontostand);
+        } catch (SQLException e) {
+
+            throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR);
+        }
+
+    }
 
 
     public KontoId getKontoIdByUserName(UserName userName,int i) throws ServiceException {

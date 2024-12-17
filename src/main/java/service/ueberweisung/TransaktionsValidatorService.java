@@ -54,6 +54,9 @@ TransaktionsValidatorService {
 
         ueberziehtSaldo(kontoId, ueberweisungsSumme);
 
+        for (UeberweisungsAnweisungParam param : paramList) {
+            Validator.isValidBetrag(param.getBetrag());
+        }
 
         }
 

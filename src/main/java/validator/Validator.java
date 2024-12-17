@@ -21,7 +21,7 @@ public class Validator {
 
     public static boolean isValidBetrag(double betrag) throws ValidateBetragException {
         String betragsString = String.valueOf(betrag);
-        if (REGEX.BETRAG.validate(betragsString)) {
+        if (REGEX.BETRAG.validate(betragsString) && (betrag > 0) ) {
             return true;
         } else
             throw new ValidateBetragException(ValidateBetragException.Message.BETRAG_NICHT_KORREKT.addBetrag(betragsString));

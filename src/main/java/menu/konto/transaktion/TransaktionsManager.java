@@ -2,7 +2,6 @@ package menu.konto.transaktion;
 
 import data.anweisungen.AbhebungsAnweisung;
 import data.anweisungen.UeberweisungsAnweisung;
-import data.anweisungen.UeberweisungsAnweisungParam;
 import data.user.User;
 import data.user.UserName;
 import helper.FileHelper;
@@ -13,16 +12,11 @@ import menu.konto.UserLogedInManager;
 import service.ImportExportService;
 import service.KontoService;
 import service.UserService;
-import service.serviceexception.DatenbankException;
 import service.serviceexception.ImportExportServiceException;
 import service.serviceexception.ServiceException;
 import service.ueberweisung.TransaktionsService;
 
-import java.io.FileNotFoundException;
-import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.Scanner;
 
 public class TransaktionsManager extends ManagerBase {
 
@@ -90,7 +84,7 @@ public class TransaktionsManager extends ManagerBase {
     private void startEinfacheUberweisung() {
 
         try {
-           Kontostandanzeigen();
+           kontostandanzeigen();
         } catch (ServiceException e) {
 
             System.out.println(e.getMessage());
@@ -129,11 +123,10 @@ public class TransaktionsManager extends ManagerBase {
             start(user);
 
         } catch (NumberFormatException e) {
-            System.out.println(e.getMessage());
             Menufehlermeldungen.BETRAG_FORMAT_FALSCH.print();
             System.out.println("Nochmal versuchen (y)?" +
                     "\nsonst anderes Zeichen wählen");
-            if (scanner.next().equals("y")) {
+            if (scanner.nextLine().equals("y")) {
                 startEinfacheUberweisung();
             } else start(user);
 
@@ -143,7 +136,7 @@ public class TransaktionsManager extends ManagerBase {
             System.out.println("Nochmal versuchen (y)?" +
                     "\nsonst anderes Zeichen wählen");
 
-            if (scanner.next().equals("y")) {
+            if (scanner.nextLine().equals("y")) {
                 startEinfacheUberweisung();
             } else start(user);
 
@@ -204,7 +197,7 @@ public class TransaktionsManager extends ManagerBase {
 
 
         try {
-            Kontostandanzeigen();
+            kontostandanzeigen();
         } catch (ServiceException e) {
             System.out.println(e.getMessage());
             System.out.println("Nochmal versuchen (y)?" +
@@ -255,7 +248,7 @@ public class TransaktionsManager extends ManagerBase {
 
     }
 
-    private void Kontostandanzeigen() throws ServiceException {
+    private void kontostandanzeigen() throws ServiceException {
         System.out.println(
                 "Aktueller Kontostand: " + CurrencyFormatter.formatCurrency(kontoService.kontostandErmitteln(user.getUserId())));
     }
