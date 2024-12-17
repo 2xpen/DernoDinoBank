@@ -3,9 +3,6 @@ package data.geschaeftsvorfall;
 import data.user.UserName;
 import menu.helper.CurrencyFormatter;
 
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.Format;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.Optional;
@@ -45,8 +42,8 @@ public class KontoauszugZeile {
                         + CurrencyFormatter.formatCurrency(betrag);
     }
 
-    public String getDatum() {
-        return datum.toString();
+    public Date getDatum() {
+        return datum;
     }
 
     public String getEmpfaenger() {
