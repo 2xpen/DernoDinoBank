@@ -1,6 +1,8 @@
 package csv;
 import service.serviceexception.ServiceErrorMessageProvider;
 
+import java.util.List;
+
 public class CSVException extends Exception {
 
     private final Message message;
@@ -34,6 +36,14 @@ public class CSVException extends Exception {
             this.message += " in Zeile: " + zeile;
             return this;
         }
+
+
+        public Message addZeilen(List<Integer> zeilen) {
+            this.message += " in den Zeilen: " + zeilen.toString();
+            return this;
+        }
+
+
 
         public Message addPath(String path) {
             this.message += " im Pfad: " + path;

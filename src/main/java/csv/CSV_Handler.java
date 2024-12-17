@@ -20,6 +20,9 @@ public class CSV_Handler implements ICSV_IMPORT_EXPORT {
         ArrayList<UeberweisungsAnweisungParam> rueckgabe = new ArrayList<>();
         Scanner scan;
 
+        boolean hasSyntaxError = false;
+        List<Integer> invalidRows = new ArrayList<>();
+
         try {
             scan = new Scanner(path);
         } catch (IOException e) {
@@ -29,12 +32,21 @@ public class CSV_Handler implements ICSV_IMPORT_EXPORT {
         if (!scan.hasNext()) {
             throw new CSVException(CSVException.Message.FileIstEmpty);
         }
+
+        scan.nextLine();
+
+        int zeilenIndex = 1;
+
         while (scan.hasNext()) {
-            int zeilenIndex = 0;
             List<String> tokens = List.of(scan.nextLine().split(";"));
-            if (tokens.size() < 3) {
-                throw new CSVException(CSVException.Message.CSVFormat.addZeile(zeilenIndex));
+
+            if (tokens.size() != 3) {
+                hasSyntaxError = true;
+                invalidRows.add(zeilenIndex);
+                zeilenIndex++;
+                continue;
             }
+
             try {
                 rueckgabe.add(
                         new UeberweisungsAnweisungParam(
@@ -42,11 +54,23 @@ public class CSV_Handler implements ICSV_IMPORT_EXPORT {
                                 , tokens.get(2)
                                 , Double.parseDouble(tokens.get(1)))
                 );
+
             } catch (NumberFormatException e) {
-                throw new CSVException(CSVException.Message.NumberFormat.addZeile(zeilenIndex).addInfo(tokens.get(2)));
+                hasSyntaxError = true;
+                invalidRows.add(zeilenIndex);
+                zeilenIndex++;
+                continue;
             }
+
+            zeilenIndex++;
         }
+
         scan.close();
+
+        if(hasSyntaxError) {
+        throw new CSVException(CSVException.Message.CSVFormat.addZeilen(invalidRows));
+        }
+
         return rueckgabe;
     }
 
