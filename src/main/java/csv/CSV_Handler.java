@@ -86,7 +86,7 @@ public class CSV_Handler implements ICSV_IMPORT_EXPORT {
             content += gz.getEmpfaenger() + ";";
             content += gz.getSender() + ";";
             content += gz.getBeschreibung() + ";";
-            content += CurrencyFormatter.formatCurrency(gz.getBetrag()) + "\n";
+            content += CurrencyFormatter.formatCurrencyForCSV(gz.getBetrag()) + "\n";
         }
         write(path,content,ExportTypes.KONTOAUSZUG);
     }

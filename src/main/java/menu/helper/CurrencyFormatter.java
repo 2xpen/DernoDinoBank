@@ -9,4 +9,10 @@ public class CurrencyFormatter {
         NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.GERMANY);
         return currencyFormat.format(amount);
     }
+
+    public static String formatCurrencyForCSV(double amount) {
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.GERMANY);
+        String formatted = currencyFormat.format(amount);
+        return formatted.replaceAll("\\p{Sc}", "").trim(); // Währungssymbol entfernen
+    }
 }

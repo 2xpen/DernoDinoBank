@@ -2,7 +2,6 @@ data\user\User.class
 service\serviceexception\UserServiceException.class
 menu\directMessages\DIRECT_MESSAGES_MENU_OPTION.class
 repository\pinnwand\PinnwandRepository.class
-service\ueberweisung\TransaktionsValidator.class
 service\serviceexception\RegistrierungException.class
 service\serviceexception\validateexception\ValidateException$Type.class
 repository\konto\TransaktionResponseWrapper.class
@@ -24,7 +23,6 @@ menu\ManagerBase.class
 repository\konto\KontoRepository.class
 service\serviceexception\validateexception\ValidateGevoException$Message.class
 data\geschaeftsvorfall\KontoauszugZeile.class
-menu\konto\KontoAnsichtManager.class
 repository\konto\TransaktionSummary.class
 csv\CSVService.class
 Main.class
@@ -33,7 +31,6 @@ data\identifier\KontoId.class
 menu\konto\transaktion\TransaktionOption.class
 data\geschaeftsvorfall\GevoZeile.class
 data\konto\Konto.class
-menu\directMessages\IMPORT_EXPORT_MENU_OPTION.class
 menu\MenuRunner.class
 data\anweisungen\AnweisungBase.class
 service\serviceexception\DatenbankException.class
@@ -59,7 +56,6 @@ data\pinnwand\PinnwandEntry.class
 service\KontoService.class
 repository\directmessages\DirectMessagesRepository.class
 service\serviceexception\validateexception\ValidatePasswortException.class
-menu\kontoauszug\KontoauszugMenuOption.class
 menu\anmeldung\ANMELDE_MENU_OPTION.class
 App.class
 data\identifier\UserId.class
