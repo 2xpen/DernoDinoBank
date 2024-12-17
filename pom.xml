@@ -8,32 +8,10 @@
     <version>1.0.0</version>
     <dependencies>
 
-        <dependency>
+    <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.18.1</version>
-        </dependency>
-
-
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>5.6.0</version> <!-- Aktuellste Version zum Zeitpunkt der Antwort -->
-            <scope>test</scope>
-        </dependency>
-
-        <!-- JUnit for testing (JUnit 5 in diesem Beispiel) -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.8.2</version> <!-- Aktuellste Version zum Zeitpunkt der Antwort -->
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.8.2</version> <!-- Aktuellste Version zum Zeitpunkt der Antwort -->
-            <scope>test</scope>
         </dependency>
 
 
@@ -43,29 +21,34 @@
             <version>42.7.2</version>
         </dependency>
 
+
+        <!-- Mockito für Unit-Tests -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>5.6.0</version> <!-- Neueste Version von Mockito -->
+            <scope>test</scope>
+        </dependency>
+
+        <!-- JUnit für Tests (JUnit 5) -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.8.2</version> <!-- Aktuelle Version von JUnit 5 -->
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.8.2</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>RELEASE</version>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>5.8.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>5.8.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>5.8.1</version>
-            <scope>test</scope>
         </dependency>
 
     </dependencies>
@@ -79,6 +62,32 @@
                     <target>21</target>
                 </configuration>
             </plugin>
+
+
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.8</version> <!-- Neueste Version von JaCoCo -->
+                <executions>
+                    <!-- Der JaCoCo Agent wird für die Code Coverage vorbereitet -->
+                    <execution>
+                        <id>prepare-agent</id> <!-- Eindeutige ID für diesen Execution-Block -->
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <!-- Generiere den Coverage-Bericht nach den Tests -->
+                    <execution>
+                        <id>generate-report</id> <!-- Eindeutige ID für diesen Execution-Block -->
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <phase>post-integration-test</phase>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
 </project>

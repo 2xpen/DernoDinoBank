@@ -1,1 +1,7 @@
 RegexTest.class
+csv\KontoAuszugExportTest.class
+serviceTest\RegistrierungServiceTest.class
+csv\DirectMessageCSVExportTest.class
+csv\CSVHandlerTest.class
+serviceTest\AnmeldeServiceTest.class
+serviceTest\KontoServiceTest.class

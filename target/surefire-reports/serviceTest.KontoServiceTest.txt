@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
-Test set: CSVHandlerTest
+Test set: serviceTest.KontoServiceTest
 -------------------------------------------------------------------------------
-Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.085 s -- in CSVHandlerTest
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.224 s -- in serviceTest.KontoServiceTest

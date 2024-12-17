@@ -39,15 +39,14 @@ class AnmeldeServiceTest {
         UserName userName = new UserName("t.ramos@hsw-stud.de");
         Passwort passwort = new Passwort("validPass");
 
-        // Erstelle ein mock-User-Objekt mit einer UserId und UserName
-        User mockUser = User.createUser(userName); // Benutzer mit der statischen Methode erstellen
+        User mockUser = User.createUser(userName);
         when(userRepository.anmelden(userName, passwort)).thenReturn(mockUser);
 
         User result = anmeldeService.anmelden(userName, passwort);
 
-        assertNotNull(result); // Sicherstellen, dass ein User zurückgegeben wird
-        assertEquals(mockUser, result); // Überprüfen, ob der richtige User zurückgegeben wird
-        verify(userRepository).anmelden(userName, passwort); // Sicherstellen, dass die Methode aufgerufen wurde
+        assertNotNull(result);
+        assertEquals(mockUser, result);
+        verify(userRepository).anmelden(userName, passwort);
     }
 
     @Test
@@ -92,8 +91,7 @@ class AnmeldeServiceTest {
         UserName userName = new UserName("t.ramos@hsw-stud.de");
         Passwort invalidPasswort = new Passwort("");
 
-
-            assertThrows(ValidatePasswortException.class, () -> anmeldeService.anmelden(userName, invalidPasswort));
+        assertThrows(ValidatePasswortException.class, () -> anmeldeService.anmelden(userName, invalidPasswort));
 
     }
 
