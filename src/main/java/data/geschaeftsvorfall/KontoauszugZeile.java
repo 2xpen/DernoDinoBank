@@ -45,8 +45,8 @@ public class KontoauszugZeile {
                         + CurrencyFormatter.formatCurrency(betrag);
     }
 
-    public String getDatum() {
-        return datum.toString();
+    public Date getDatum() {
+        return datum;
     }
 
     public String getEmpfaenger() {

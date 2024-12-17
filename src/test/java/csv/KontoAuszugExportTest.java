@@ -1,5 +1,6 @@
 package csv;
 
+import data.KontoauszugWrapper;
 import data.geschaeftsvorfall.GevoArt;
 import data.geschaeftsvorfall.KontoauszugZeile;
 import data.user.UserName;
@@ -52,7 +53,8 @@ public class KontoAuszugExportTest {
     @Test
     void testCSVExport_POSITIV() throws CSVException, IOException {
 
-        List<KontoauszugZeile> liste =
+
+        KontoauszugWrapper kontoauszugWrapper = new KontoauszugWrapper(
 
                 List.of(
                         new KontoauszugZeile(
@@ -86,9 +88,10 @@ public class KontoAuszugExportTest {
                                 , "poliwoli "
                                 , 66
                                 , GevoArt.UEBERWEISUNG)
-                );
+                )
+        );
 
-        csvHandler.exportKontoAuszuege(liste, Path.of("C:\\Projekte\\DernoDinoBank\\src\\test\\testdaten\\csvHandler"));
+        csvHandler.exportKontoAuszuege(kontoauszugWrapper, Path.of("C:\\Projekte\\DernoDinoBank\\src\\test\\testdaten\\csvHandler"));
 
         try {
             Scanner scanner = new Scanner(new File(testDatei));

@@ -8,11 +8,16 @@ import data.pinnwand.PinnwandEntryView;
 
 import java.io.*;
 import java.nio.file.Path;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
+import static jdk.jfr.internal.util.ValueFormatter.formatTimestamp;
 
 public class CSV_Handler implements ICSV_IMPORT_EXPORT {
 
@@ -38,7 +43,6 @@ public class CSV_Handler implements ICSV_IMPORT_EXPORT {
         while (scan.hasNext()) {
 
             List<String> tokens = List.of(scan.nextLine().split(";"));
-            System.out.println(tokens.size());
 
             if (tokens.size() != 3) {
                 throw new CSVException(CSVException.Message.CSVFormat.addZeile(zeilenIndex));
@@ -95,14 +99,27 @@ public class CSV_Handler implements ICSV_IMPORT_EXPORT {
 
                 //header
         String content = "Transaktionsdatum; Empfänger; Sender; Beschreibung; Betrag"+"\n";
+
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        // Datenzeilen
         for (KontoauszugZeile gz : kontowrapper.getKontauszugZeile()) {
-            content += gz.getDatum() + ";";
+            String formattedDate = formatTimestamp(gz.getDatum(), dateFormatter);
             content += gz.getEmpfaenger() + ";";
             content += gz.getSender() + ";";
             content += gz.getBeschreibung() + ";";
             content += gz.getBetrag() + "\n";
         }
         write(path,content,ExportTypes.KONTOAUSZUG);
+    }
+
+
+    private String formatTimestamp(Date date, DateTimeFormatter formatter) {
+        if (date == null) {
+            return "";
+        }
+        LocalDateTime localDateTime = date.toLocalDateTime();
+        return localDateTime.format(formatter);
     }
 
 
