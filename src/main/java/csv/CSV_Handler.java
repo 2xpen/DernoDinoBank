@@ -5,14 +5,12 @@ import data.anweisungen.UeberweisungsAnweisungParam;
 import data.geschaeftsvorfall.KontoauszugZeile;
 import data.nachricht.NachrichtView;
 import data.pinnwand.PinnwandEntryView;
+import menu.helper.CurrencyFormatter;
 
 import java.io.*;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -67,7 +65,7 @@ public class CSV_Handler implements ICSV_IMPORT_EXPORT {
             content += entry.getAutorName() + ";";
             content += entry.getNachricht() + ";" + "\n";
         }
-        write(path,content, ExportTypes.NACHRICHTEN.addInfo(pinnwandEntryViews.getFirst().getEmpfaengerName().toString()));
+        write(path,content, ExportTypes.PINNWANDEINTRAEGE.addInfo(pinnwandEntryViews.getFirst().getEmpfaengerName().toString()));
     }
 
     public void exportKontoAuszuege(KontoauszugWrapper kontoauszugWrapper, Path path) throws CSVException {
@@ -88,7 +86,7 @@ public class CSV_Handler implements ICSV_IMPORT_EXPORT {
             content += gz.getEmpfaenger() + ";";
             content += gz.getSender() + ";";
             content += gz.getBeschreibung() + ";";
-            content += gz.getBetrag() + "\n";
+            content += CurrencyFormatter.formatCurrency(gz.getBetrag()) + "\n";
         }
         write(path,content,ExportTypes.KONTOAUSZUG);
     }
@@ -116,6 +114,9 @@ public class CSV_Handler implements ICSV_IMPORT_EXPORT {
             content += gz.getEmpfaenger() + ";";
             content += gz.getMessage()+ ";"+ "\n";
         }
+
+        System.out.println(content);
+
             // todo hier noch die addInfo Methode einfügen und saren mit wem die convo war (falls es eine spezifische convo war...
         write(path,content, ExportTypes.NACHRICHTEN.addInfo(nachrichtViews.getFirst().getEmpfaenger()));
 

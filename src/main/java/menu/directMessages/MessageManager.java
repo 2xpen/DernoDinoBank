@@ -158,6 +158,7 @@ public class MessageManager extends ManagerBase {
     private void printConvo(User selector, User selectedUser) {
         try {
                 List<Nachricht> convo = messageService.getConvo(selector, selectedUser);
+
             try {
                 //todo @tom? idk ob du das warst oder das son autocomplet ding, ich kann irgendwie gar nicht rauskriegen was der Counter und der Builder soll
                 StringBuilder sb = new StringBuilder();

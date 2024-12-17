@@ -36,7 +36,7 @@ public class KontoauszugZeile {
                 datum.toInstant()
                         .atZone(ZoneId.systemDefault()) // Zeitzone definieren
                         .toLocalDate() + " | "
-                        + empfaenger.toString() + " | "
+                        + getEmpfaenger() + " | "
                         + sender.toString() + " | "
                         + beschreibung + " | "
                         + CurrencyFormatter.formatCurrency(betrag);
