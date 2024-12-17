@@ -4,6 +4,9 @@ import data.identifier.PinnwandEntryId;
 import data.identifier.UserId;
 import data.user.UserName;
 
+import java.sql.Timestamp;
+import java.time.format.DateTimeFormatter;
+
 public class PinnwandEntryView extends PinnwandEntry {
     private final UserName empfaengerName;
     private final UserName autorName;
@@ -27,6 +30,13 @@ public class PinnwandEntryView extends PinnwandEntry {
                 .append("Text: ").append(getNachricht()).append("\n") // Nachricht
                 .append("--------------------------"); // Trennlinie unten
         return sb.toString();
+    }
+
+
+
+    public String getFormattedTimestamp() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return getTimestamp().toLocalDateTime().format(formatter);
     }
 
 

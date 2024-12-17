@@ -4,6 +4,7 @@ import data.identifier.UserId;
 import data.user.UserName;
 
 import java.sql.Timestamp;
+import java.time.format.DateTimeFormatter;
 
 public class NachrichtView {
 
@@ -32,7 +33,8 @@ public class NachrichtView {
     }
 
     public String getDate() {
-        return date.toLocalDateTime().toString();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return date.toLocalDateTime().format(formatter);
     }
 
 }

@@ -41,4 +41,5 @@ public class PinnwandEntry {
     public Timestamp getTimestamp() {
         return timestamp;
     }
+
 }
