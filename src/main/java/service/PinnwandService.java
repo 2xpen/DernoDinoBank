@@ -13,6 +13,7 @@ import service.serviceexception.validateexception.ValidateBeschreibungException;
 import validator.Validator;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 
 public class PinnwandService {
@@ -38,7 +39,7 @@ public class PinnwandService {
         Validator.isValidBeschreibung(message);
 
         try {
-            PinnwandRepository.createPinnwandentry(message, autor_id, besitzer_id);
+            PinnwandRepository.createPinnwandentry(message, autor_id, besitzer_id,new Timestamp(System.currentTimeMillis()));
         } catch (SQLException e) {
             throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR);
         }
