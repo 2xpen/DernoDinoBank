@@ -1,6 +1,7 @@
 package menu.pinnwand;
 
 import data.pinnwand.Pinnwand;
+import data.pinnwand.PinnwandEntry;
 import data.user.User;
 import helper.FileHelper;
 import menu.ManagerBase;
@@ -14,8 +15,9 @@ import service.serviceexception.validateexception.ValidateBeschreibungException;
 
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
+import java.util.List;
 
-    public class PinnwandManager extends ManagerBase {
+public class PinnwandManager extends ManagerBase {
 
         private void aufPinnwandSchreiben(User autor, User empfaenger){
             System.out.println("Bitte gebe deine Nachricht ein:");
@@ -114,7 +116,8 @@ import java.nio.file.Path;
                         pinnwandVonUserAufrufen(selector,selectedUser);
                         break;
                     case 2:
-                        exportPinnwandnachrichten(pinnwand,selector);
+                        exportPinnwandnachrichten(pinnwandService.filterafterAnforderung11(pinnwand,selector.getUserId(),selectedUser.getUserId()));
+                        pinnwandVonUserAufrufen(selector,selectedUser);
                     case 0:
                         personSucheManager.startWithSelectedUser(selector, selectedUser);
                 }
@@ -128,11 +131,7 @@ import java.nio.file.Path;
 
 
 
-        private void exportPinnwandnachrichten(Pinnwand pinnwand, User selector) {
-
-
-            System.out.println("Bitte den Zielpfad angeben");
-
+        private void exportPinnwandnachrichten(List<PinnwandEntry> pinnwandEntries) {
 
             System.out.println("Bitte den Zielpfad angeben");
             Path zielPfad = Path.of(scanner.nextLine());
@@ -141,26 +140,25 @@ import java.nio.file.Path;
                 FileHelper.isPathAccessible(zielPfad);
             } catch (FileNotFoundException e) {
                 System.out.println(e.getMessage());
-                exportPinnwandnachrichten();
+                exportPinnwandnachrichten(pinnwandEntries);
             }
 
             try {
-                importExportService.;
+
+                importExportService.exportPinnwandnachrichten(pinnwandEntries,zielPfad);
                 System.out.println("Es wurde ein Protokoll unter: " + zielPfad + " abgelegt");
-                export(nachrichten, user);
+
             } catch (ServiceException e) {
                 System.out.println(e.getMessage());
-                export(nachrichten, user);
+                exportPinnwandnachrichten(pinnwandEntries);
             }
-
         }
 
 
     private void eigenePinnwandAnsehen(User user) {
-        try {
 
+            try {
             Pinnwand pinnwand = pinnwandService.getPinnwand(user.getUserId());
-
             //falls leer dann ja ne, wenn nicht halt printen
             if (pinnwand.getPinnwandentries().isEmpty()) {
                 System.out.println("Pinnwand ist leer");
@@ -169,8 +167,8 @@ import java.nio.file.Path;
                 System.out.println("Pinnwand von " + user.getUsername());
                 System.out.println(pinnwand);
 
-                System.out.println("Beliebiges Zeichen eingeben um zurück zu kehren");
-                if (scanner.hasNext()) {
+                System.out.println("Enter drücken um zurück zu kehren");
+                if (scanner.nextLine() != null) {
                     start(user);
                 }
             }
@@ -189,9 +187,3 @@ import java.nio.file.Path;
     }
 
 }
-
-
-
-
-
-

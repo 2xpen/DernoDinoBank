@@ -19,6 +19,7 @@ public class CSVException extends Exception {
 
     public enum Message implements ServiceErrorMessageProvider {
         FileIstEmpty("Die Datei ist leer"),
+        NichtsZumExportieren("es wurde nichts zum exportieren gefunden"),
         FileNotFound("Datei konnte nicht gefunden werden"),
         CSFFormat("Das format der Datei ist falsch"),
         ExportIsEmpty("Die zu exportierende Datei ist leer"),

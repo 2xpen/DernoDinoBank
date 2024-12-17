@@ -8,6 +8,8 @@ import data.geschaeftsvorfall.KontoauszugZeile;
 import data.identifier.UserId;
 import data.nachricht.Nachricht;
 import data.nachricht.NachrichtView;
+import data.pinnwand.PinnwandEntry;
+import data.pinnwand.PinnwandEntryView;
 import service.serviceexception.ImportExportServiceException;
 import service.serviceexception.ServiceException;
 import java.nio.file.Path;
@@ -42,25 +44,35 @@ public class ImportExportService {
 
     }
 
-    public void exportKontoauszuege(List<KontoauszugZeile> kontoauszugZeile, Path path) throws ServiceException {
 
+
+    public void exportPinnwandnachrichten(List<PinnwandEntry> pinnwandEntries, Path path) throws ServiceException {
         try {
-            csvHandler.exportKontoAuszuege(kontoauszugZeile,path);
+            csvHandler.exportPinnwandnachrichten(demaskPinnwandEntry(pinnwandEntries),path);
         } catch (CSVException e) {
             throw new ImportExportServiceException(e.getServiceErrorMessage());
         }
     }
 
-    public void exportPinnwandNachrichten(List<Nachricht> nachrichten, Path path) throws ServiceException {
 
-        try {
-            csvHandler.ex;
-        } catch (CSVException e) {
-            throw new ImportExportServiceException(e.getServiceErrorMessage());
+    private List<PinnwandEntryView> demaskPinnwandEntry(List<PinnwandEntry> pinnwandEntrys) throws ServiceException {
+
+        List<PinnwandEntryView> pinnwandEntryViewList = new ArrayList<>();
+        for (PinnwandEntry pinnwandEntry : pinnwandEntrys) {
+
+            pinnwandEntryViewList.add(
+                    new PinnwandEntryView(
+                    pinnwandEntry
+                    ,userService.ermittleUserByUserId(pinnwandEntry.getBesitzer_id()).getUsername()
+                    ,userService.ermittleUserByUserId(pinnwandEntry.getAutor_id()).getUsername()
+            )
+
+            );
+
         }
-
-
+        return pinnwandEntryViewList;
     }
+
 
     public List<NachrichtView> demaskNachrichten(List<Nachricht> nachrichten) throws ServiceException {
 

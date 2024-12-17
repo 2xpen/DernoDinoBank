@@ -11,7 +11,7 @@ import java.util.List;
 
 public class PinnwandRepository {
     //todo @TOM
-    public static List<PinnwandEntry> getPinnwandByUserId(data.identifier.UserId userId) throws SQLException {
+    public  List<PinnwandEntry> getPinnwandByUserId(data.identifier.UserId userId) throws SQLException {
         Connection conn = DataBaseConnection.getInstance();
         String selectPinnwandByUserId = """
                 SELECT * FROM pinnwandentry WHERE besitzer_id = ?
@@ -37,7 +37,7 @@ public class PinnwandRepository {
         return pinnwandEntryList;
     }
 
-    public static void createPinnwandentry(String message, data.identifier.UserId autor_id, data.identifier.UserId besitzer_id, Timestamp date) throws SQLException {
+    public void createPinnwandentry(String message, data.identifier.UserId autor_id, data.identifier.UserId besitzer_id, Timestamp date) throws SQLException {
 
         Connection conn = DataBaseConnection.getInstance();
         String createPinnwandEntry = """

@@ -54,18 +54,28 @@ public class CSV_Handler implements ICSV_IMPORT_EXPORT {
     public void exportPinnwandnachrichten(List<PinnwandEntryView> pinnwandEntryViews, Path path) throws CSVException {
         String content = "Datum;Sender;Empfänger;Nachricht+" + "\n";
 
+        if(pinnwandEntryViews.isEmpty()) {
+            throw new CSVException(CSVException.Message.NichtsZumExportieren);
+        }
+
         for (PinnwandEntryView entry : pinnwandEntryViews) {
-            content += entry.get + ";";
-            content += entry.get + ";";
+            content += entry.getTimestamp() + ";";
+            content += entry.getEmpfaengerName() + ";";
             content += entry.getAutorName() + ";";
             content += entry.getNachricht() + ";" + "\n";
 
         }
-        write(path,content, ExportTypes.NACHRICHTEN.addInfo(nachrichtViews.getFirst().getEmpfaenger()));
+
+        write(path,content, ExportTypes.NACHRICHTEN.addInfo(pinnwandEntryViews.getFirst().getEmpfaengerName().toString()));
 
     }
 
     public void exportKontoAuszuege(List<KontoauszugZeile> list, Path path) throws CSVException {
+
+         if(list.isEmpty()) {
+             throw new CSVException(CSVException.Message.NichtsZumExportieren);
+         }
+
                 //header
         String content = "Transaktionsdatum; Empfänger; Sender; Beschreibung; Betrag"+"\n";
         for (KontoauszugZeile gz : list) {
@@ -81,6 +91,12 @@ public class CSV_Handler implements ICSV_IMPORT_EXPORT {
 
 
     public void exportNachrichten(List<NachrichtView> nachrichtViews,Path path) throws CSVException {
+
+
+        if(nachrichtViews.isEmpty()) {
+            throw new CSVException(CSVException.Message.NichtsZumExportieren);
+        }
+
         String content = "Datum;Sender;Empfänger;Nachricht+"+"\n";
         for (NachrichtView gz : nachrichtViews) {
             content += gz.getDate() + ";";

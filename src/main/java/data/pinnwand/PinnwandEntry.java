@@ -38,4 +38,7 @@ public class PinnwandEntry {
         return eintragId;
     }
 
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
 }

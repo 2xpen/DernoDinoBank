@@ -9,7 +9,7 @@ public class PinnwandEntryView extends PinnwandEntry {
     private final UserName autorName;
 
     public PinnwandEntryView(PinnwandEntry entry, UserName empfaengerName,UserName autorName) {
-        super(entry.getNachricht(), entry.getBesitzer_id(),entry.getAutor_id());
+        super(entry.getNachricht(), entry.getBesitzer_id(),entry.getAutor_id(),entry.getTimestamp());
         this.empfaengerName = empfaengerName;
         this.autorName = autorName;
     }

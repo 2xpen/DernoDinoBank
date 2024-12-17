@@ -14,6 +14,7 @@ import validator.Validator;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PinnwandService {
@@ -28,7 +29,7 @@ public class PinnwandService {
 
     public Pinnwand getPinnwand(UserId userId) throws ServiceException {
         try {
-            return convertPinnwandEntriesToPinnwand(PinnwandRepository.getPinnwandByUserId(userId));
+            return convertPinnwandEntriesToPinnwand(pinnwandRepository.getPinnwandByUserId(userId));
         } catch (SQLException e) {
             throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR);
         }
@@ -39,10 +40,23 @@ public class PinnwandService {
         Validator.isValidBeschreibung(message);
 
         try {
-            PinnwandRepository.createPinnwandentry(message, autor_id, besitzer_id,new Timestamp(System.currentTimeMillis()));
+            pinnwandRepository.createPinnwandentry(message, autor_id, besitzer_id,new Timestamp(System.currentTimeMillis()));
         } catch (SQLException e) {
             throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR);
         }
+    }
+
+
+    public List<PinnwandEntry> filterafterAnforderung11(Pinnwand pinnwand, UserId besitzer, UserId selectedUser){
+        List<PinnwandEntry> filteredEntries = new ArrayList<>();
+
+            for (PinnwandEntry entry : pinnwand.getPinnwandentries()){
+                if(entry.getBesitzer_id().equals(besitzer)  && entry.getAutor_id().equals(selectedUser)){
+                    filteredEntries.add(entry);
+                }
+            }
+
+        return filteredEntries;
     }
 
 
