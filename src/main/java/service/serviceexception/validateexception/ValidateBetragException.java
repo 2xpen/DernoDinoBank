@@ -10,7 +10,14 @@ public class ValidateBetragException extends ValidateException {
 
 
     public enum Message implements ServiceErrorMessageProvider {
-        BETRAG_NICHT_KORREKT("Folgender Betrag fehlerhaft: %s" + "\nmaximal 2 nachkommastellen und nicht mehr als 18stellen nach dem komma");
+        BETRAG_NICHT_KORREKT("""
+                Folgender Betrag fehlerhaft: %s\
+                
+                -maximal 2 nachkommastellen\
+                
+                - nicht mehr als 18 Stellen nach dem Komma\
+                
+                - größer als 0""");
 
         private String message;
 
