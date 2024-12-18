@@ -36,7 +36,6 @@ public class AnmeldeServiceTest {
     void setUp() {
          userRepository = mock(UserRepository.class);
          anmeldeService = new AnmeldeService(userRepository);
-
     }
 
 

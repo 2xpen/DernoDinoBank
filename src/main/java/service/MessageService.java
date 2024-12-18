@@ -49,5 +49,4 @@ public class MessageService {
             throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR);
         }
     }
-
 }
