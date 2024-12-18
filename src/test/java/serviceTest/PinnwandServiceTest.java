@@ -21,6 +21,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class PinnwandServiceTest {
     private PinnwandRepository pinnwandRepository;
@@ -161,7 +162,13 @@ public class PinnwandServiceTest {
         expectedPinnwand.add(pinnwandEntryView6);
         expectedPinnwand.add(pinnwandEntryView7);
 
-        assertEquals(expectedPinnwand, pinnwandService.convertPinnwandEntriesToPinnwand(pinnwandEntries));
+        when(userService.ermittleUserByUserId(user1.getUserId())).thenReturn(user1);
+        when(userService.ermittleUserByUserId(user2.getUserId())).thenReturn(user2);
+        when(userService.ermittleUserByUserId(user3.getUserId())).thenReturn(user3);
+        when(userService.ermittleUserByUserId(user4.getUserId())).thenReturn(user4);
+        when(userService.ermittleUserByUserId(user5.getUserId())).thenReturn(user5);
+
+        assertEquals(expectedPinnwand.toString(), pinnwandService.convertPinnwandEntriesToPinnwand(pinnwandEntries).toString());
     }
 }
 
