@@ -58,7 +58,7 @@ public class RegistrierungManger extends ManagerBase {
             registrierungService.registrieren(name, passwort);
         } catch (ServiceException e) {
             System.out.println(e.getMessage());
-            System.out.println("erneut versuchen? (y/n)");
+            System.out.println("Erneut versuchen? (y/n)");
 
             if (scanner.next().equalsIgnoreCase("y")) {
                 printFooter();
@@ -66,7 +66,7 @@ public class RegistrierungManger extends ManagerBase {
             } else start();
 
         }
-        System.out.println("Registrierung erfolgreich, es wurde für: " + name + " ein Konto erstellt");
+        System.out.println("Registrierung erfolgreich, es wurde für: " + name + " ein Konto erstellt!");
         printFooter();
         startseiteManager.start();
     }

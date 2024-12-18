@@ -59,7 +59,7 @@ public class PersonSucheManager extends ManagerBase {
                     userLogedInManager.start(selector);
                     break;
                 case null:
-                    System.out.println("Erneut versuchen? (y) sonst anderes Zeichen wählen");
+                    System.out.println("Erneut versuchen? (y/n)");
                     if (scanner.nextLine().equals("y")) {
                         startWithSelectedUser(selector, selectedUser);
                     }

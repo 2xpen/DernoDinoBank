@@ -50,7 +50,7 @@ public class PinnwandManager extends ManagerBase {
         String message = scanner.nextLine();
         try {
             pinnwandService.schreibenAufAnderePinnwand(message, autor.getUserId() ,empfaenger.getUserId());
-            System.out.println("Ihr Pinnwand eintrag wurde erstellt");
+            System.out.println("Ihr Pinnwand eintrag wurde erstellt!");
             pinnwandVonUserAufrufen(autor,empfaenger);
         } catch (ServiceException e) {
             System.out.println(e.getMessage());
