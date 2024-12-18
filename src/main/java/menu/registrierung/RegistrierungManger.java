@@ -7,8 +7,6 @@ import menu.Menufehlermeldungen;
 import menu.startseite.StartseiteManager;
 import service.RegistrierungService;
 import service.serviceexception.ServiceException;
-import service.serviceexception.validateexception.ValidateUsernameException;
-import validator.Validator;
 
 public class RegistrierungManger extends ManagerBase {
     private final StartseiteManager startseiteManager;
@@ -28,7 +26,7 @@ public class RegistrierungManger extends ManagerBase {
         printBitteWahlnummerWaehlenFooter();
 
         try {
-            decider(RegistrierungMenuOption.ofWahlnummer(Integer.parseInt(scanner.next())));
+            decider(RegistrierungMenuOption.ofWahlnummer(Integer.parseInt(scanner.nextLine())));
         } catch (NumberFormatException e) {
             Menufehlermeldungen.WAHLNUMMER_NICHT_KORREKT.print();
             start();
@@ -50,9 +48,9 @@ public class RegistrierungManger extends ManagerBase {
 
     public void registrieren() {
         REGISTRIERUNG_DIALOG.NAME_EINGEBEN.print();
-        UserName name = new UserName(scanner.next());
+        UserName name = new UserName(scanner.nextLine());
         REGISTRIERUNG_DIALOG.PASSWORT.print();
-        Passwort passwort = new Passwort(scanner.next());
+        Passwort passwort = new Passwort(scanner.nextLine());
 
         try {
             registrierungService.registrieren(name, passwort);
@@ -60,7 +58,7 @@ public class RegistrierungManger extends ManagerBase {
             System.out.println(e.getMessage());
             System.out.println("Erneut versuchen? (y/n)");
 
-            if (scanner.next().equalsIgnoreCase("y")) {
+            if (scanner.nextLine().equalsIgnoreCase("y")) {
                 printFooter();
                 registrieren();
             } else start();
