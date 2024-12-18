@@ -6,7 +6,6 @@ import data.identifier.KontoId;
 import data.identifier.UserId;
 
 public class AbhebungGevo extends GeschaeftsVorfall {
-
     private final double betrag;
     private final String beschreibung = "abhebung";
 
@@ -22,5 +21,4 @@ public class AbhebungGevo extends GeschaeftsVorfall {
     public String getBeschreibung() {
         return beschreibung;
     }
-
 }

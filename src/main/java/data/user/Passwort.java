@@ -8,8 +8,6 @@ public class Passwort {
         this.passwort = passwort;
     }
 
-    //todo @leo passwort hashen
-
     @Override
     public String toString() {
         return passwort;

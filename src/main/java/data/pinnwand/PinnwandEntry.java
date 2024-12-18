@@ -1,6 +1,5 @@
 package data.pinnwand;
 
-
 import data.identifier.PinnwandEntryId;
 import data.identifier.UserId;
 
@@ -41,5 +40,4 @@ public class PinnwandEntry {
     public Timestamp getTimestamp() {
         return timestamp;
     }
-
 }

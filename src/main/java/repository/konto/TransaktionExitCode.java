@@ -17,5 +17,4 @@ public enum TransaktionExitCode {
     public String getMessage() {
         return message;
     }
-
 }

@@ -10,14 +10,12 @@ public class UpdateSenderEmpfaengerKontostaende {
     private final KontoId empfaengerId;
     private final double neuerEmpfeangerKontoStand;
 
-
     public UpdateSenderEmpfaengerKontostaende(KontoId senderId, double neuerSenderKontoStand, KontoId empfaengerId, double neuerEmpfeangerKontoStand) {
         this.senderId = senderId;
         this.neuerSenderKontoStand = neuerSenderKontoStand;
         this.empfaengerId = empfaengerId;
         this.neuerEmpfeangerKontoStand = neuerEmpfeangerKontoStand;
     }
-
 
     public KontoId getEmpfaengerId() {
         return empfaengerId;
@@ -26,7 +24,6 @@ public class UpdateSenderEmpfaengerKontostaende {
     public KontoId getSenderId() {
         return senderId;
     }
-
 
     public double getNeuerEmpfeangerKontoStand() {
         return neuerEmpfeangerKontoStand;

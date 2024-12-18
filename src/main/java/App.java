@@ -20,26 +20,12 @@ import service.ueberweisung.TransaktionsValidatorService;
 
 
 public class App {
-
-    /// besser wäre es quasi hier mit interfaces matroschka mäßig alle sachen austauschbar in einander zu stecken
-    ///  das hier wär auch anderes lösbar, ich kann nur besser schlafen wenn man das programm konfigurierbar machen KÖNNTE
-    ///  wenn man es wollte, also das man plug and play mäßig die komponenten austauschen könnte,
-    ///  quasi würde hier dann eine methode sein die Startparamter entgegen nimmt welches frontend man haben will oder
-    ///  oder warum auch immer andere services / repo klassen einsetzen könnte
-
     public static void start() {
-
-
-        /// hier jetzt schichten weise sich nach und nach das backend und dann die services und dann das frontend zusammen
-        ///  basteln
-
-
         UserRepository userRepository = new UserRepository();
         KontoRepository kontoRepository = new KontoRepository();
         PinnwandRepository pinnwandRepository = new PinnwandRepository();
         DirectMessagesRepository directMessagesRepository = new DirectMessagesRepository();
         GevoRepository gevoRepository = new GevoRepository();
-
 
         UserService userService = new UserService(userRepository);
         KontoService kontoService = new KontoService(kontoRepository);
@@ -53,9 +39,7 @@ public class App {
         TransaktionsService transaktionsService = new TransaktionsService(kontoRepository, gevoService,importExportService, transaktionsValidatorService,kontoService,userService);
         MessageService messageService = new MessageService(directMessagesRepository,userService);
 
-
         CSV_Handler csvHandler = new CSV_Handler();
-
 
         StartseiteManager startseiteManager = new StartseiteManager();
         AnmeldungsManager anmeldungsManager = new AnmeldungsManager(startseiteManager, anmeldeService);
@@ -66,7 +50,6 @@ public class App {
         MessageManager messageManager = new MessageManager(userLogedInManager, messageService, userService,importExportService);
         KontoauszugManager kontoauszugManager = new KontoauszugManager(kontoService, gevoService, userService, userLogedInManager,importExportService);
         PersonSucheManager personSucheManager = new PersonSucheManager(userLogedInManager,pinnwandManager,messageManager,userService);
-
 
         startseiteManager.setAnmeldungsManager(anmeldungsManager);
         startseiteManager.setRegistrierungManger(registrierungManger);
@@ -82,8 +65,6 @@ public class App {
         messageManager.setPersonSucheManager(personSucheManager);
         pinnwandManager.setPersonSucheManager(personSucheManager);
 
-
         startseiteManager.start();
     }
-
 }

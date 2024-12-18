@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class ImportExportService {
-
     private final UserService userService;
     private final KontoService kontoService;
 
@@ -50,8 +49,6 @@ public class ImportExportService {
 
     }
 
-
-
     public void exportKontobewegungen(KontoauszugWrapper gevos, Path path) throws ServiceException {
         try {
             csvHandler.exportKontoAuszuege(gevos,path);
@@ -68,28 +65,22 @@ public class ImportExportService {
         }
     }
 
-
     private List<PinnwandEntryView> demaskPinnwandEntry(List<PinnwandEntry> pinnwandEntrys) throws ServiceException {
-
         List<PinnwandEntryView> pinnwandEntryViewList = new ArrayList<>();
         for (PinnwandEntry pinnwandEntry : pinnwandEntrys) {
 
             pinnwandEntryViewList.add(
-                    new PinnwandEntryView(
+                new PinnwandEntryView(
                     pinnwandEntry
                     ,userService.ermittleUserByUserId(pinnwandEntry.getBesitzer_id()).getUsername()
                     ,userService.ermittleUserByUserId(pinnwandEntry.getAutor_id()).getUsername()
-            )
-
+                )
             );
-
         }
         return pinnwandEntryViewList;
     }
 
-
     public List<NachrichtView> demaskNachrichten(List<Nachricht> nachrichten) throws ServiceException {
-
         List<NachrichtView> nachrichtenView = new ArrayList<>();
 
         for(Nachricht nachricht: nachrichten){
@@ -105,16 +96,10 @@ public class ImportExportService {
         return nachrichtenView;
     }
 
-
-
-
-
     public List<KontoauszugZeile> demaskGevo(List<GevoZeile> gevos) throws ServiceException {
-
         List<KontoauszugZeile> kontoauszugZeilen = new ArrayList<>();
 
         for (GevoZeile gevo : gevos) {
-            /// das hier ist highlight
             UserName empfaenger = gevo.getEmpfaenger().isPresent() ? userService.ermittleUserByUserId(kontoService.ermittelUserIdByKontoId(gevo.getEmpfaenger().get())).getUsername() : null;
             UserName sender = userService.ermittleUserByUserId(kontoService.ermittelUserIdByKontoId(gevo.getSender())).getUsername();
 
@@ -130,8 +115,6 @@ public class ImportExportService {
             )
             );
         }
-return kontoauszugZeilen;
+    return kontoauszugZeilen;
     }
 }
-
-

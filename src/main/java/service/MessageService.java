@@ -24,7 +24,6 @@ public class MessageService {
         this.userService = userService;
     }
 
-
     public List<Nachricht> getConvo(User selector, User selectedUser) throws ServiceException {
         try {
             return directMessagesRepository.getConvo(selector.getUserId(),selectedUser.getUserId());
@@ -42,7 +41,6 @@ public class MessageService {
     }
 
     public boolean sendMessage(Timestamp date, UserId sender, UserId empfaenger, String message) throws DatenbankException, ValidateBeschreibungException {
-
         Validator.isValidBeschreibung(message);
 
         try {
@@ -52,8 +50,4 @@ public class MessageService {
             throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR);
         }
     }
-
-
-
-
 }

@@ -8,7 +8,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -20,12 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class KontoAuszugExportTest {
-
-
     private String testDatei = "C:\\Projekte\\DernoDinoBank\\src\\test\\testdaten\\csvHandler\\%s";
     private CSV_Handler csvHandler;
 
@@ -48,14 +43,9 @@ public class KontoAuszugExportTest {
         }
     }
 
-
-
     @Test
     void testCSVExport_POSITIV() throws CSVException, IOException {
-
-
         KontoauszugWrapper kontoauszugWrapper = new KontoauszugWrapper(
-
                 List.of(
                         new KontoauszugZeile(
                                 Timestamp.valueOf("2024-12-10 23:11:32.0")
@@ -97,14 +87,9 @@ public class KontoAuszugExportTest {
             Scanner scanner = new Scanner(new File(testDatei));
             List<String> zeilen = new ArrayList<>();
 
-
             while (scanner.hasNextLine()) {
                 zeilen.add(scanner.nextLine());
             }
-
-            //dreckig drauf getestet ob die anzahl der eintraege stimmt, liste ist eins größer als das reingegebene wegen dem Header
-/*            assert eintrag.size() == liste.size();*/
-
             Assertions.assertEquals(
                     "Transaktionsdatum; Empfänger; Sender; Beschreibung; Betrag"
                     ,zeilen.get(0));
@@ -113,7 +98,6 @@ public class KontoAuszugExportTest {
                     "2024-12-10;l.sindermann@hsw-stud.de;r.heim@hsw-stud.de;xoxoxox;69.00"
                     ,zeilen.get(1));
 
-
             Assertions.assertEquals(
                     "2024-12-10;tom.ramos@hsw-stud.de;m.farwick@hsw-stud.de;ey kolleg;66.00"
                     ,zeilen.get(2));
@@ -121,16 +105,5 @@ public class KontoAuszugExportTest {
         }catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-
-
-
     }
-
-
-    @Test
-    void testCSVExport_NEGATIV() throws CSVException {
-        //kann eigentlich nur failen wenn dann in zukunft man noch den pfad angeben kann in dem das gespeichert werden soll nicht gibt
-    }
-
-
 }

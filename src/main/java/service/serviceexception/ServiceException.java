@@ -1,7 +1,6 @@
 package service.serviceexception;
 
 public abstract class ServiceException extends Exception {
-
     private final ServiceErrorArt art;
 
     public ServiceException(ServiceErrorArt art, ServiceErrorMessageProvider message) {
@@ -12,5 +11,4 @@ public abstract class ServiceException extends Exception {
     public ServiceErrorArt getArt() {
         return art;
     }
-
 }

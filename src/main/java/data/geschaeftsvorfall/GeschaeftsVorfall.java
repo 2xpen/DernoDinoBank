@@ -7,7 +7,6 @@ import data.identifier.UserId;
 import java.sql.Timestamp;
 
 public abstract class GeschaeftsVorfall {
-
     private final GevoId gevoId;
     private final GevoArt art;
     private final KontoId senderId;
@@ -35,5 +34,4 @@ public abstract class GeschaeftsVorfall {
     public Timestamp getTimestamp() {
         return timestamp;
     }
-
 }

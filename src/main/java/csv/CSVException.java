@@ -12,7 +12,6 @@ public class CSVException extends Exception {
         this.message = message;
     }
 
-    // todo hier bitte mal diskutieren wie man die strukur hier besser halten könnte
     public Message getServiceErrorMessage() {
         return message;
     }
@@ -37,13 +36,10 @@ public class CSVException extends Exception {
             return this;
         }
 
-
         public Message addZeilen(List<Integer> zeilen) {
             this.message += " in den Zeilen: " + zeilen.toString();
             return this;
         }
-
-
 
         public Message addPath(String path) {
             this.message += " im Pfad: " + path;
@@ -55,11 +51,8 @@ public class CSVException extends Exception {
             return this;
         }
 
-
         public String getServiceErrorMessage() {
             return message;
         }
     }
-
-
 }

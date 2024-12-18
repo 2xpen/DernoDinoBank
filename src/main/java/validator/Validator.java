@@ -1,15 +1,10 @@
 package validator;
 
-import data.anweisungen.UeberweisungsAnweisungParam;
-import data.identifier.UserId;
 import data.user.Passwort;
 import data.user.UserName;
 import service.serviceexception.validateexception.*;
 
-import java.util.List;
-
 public class Validator {
-
     public static boolean isValidUserName(UserName name) throws ValidateUsernameException {
         if (REGEX.BENUTZERNAME.validate(name.toString())) {
             return true;
@@ -17,7 +12,6 @@ public class Validator {
             throw new ValidateUsernameException(ValidateUsernameException.Message.USERNAME_INVALID.addInfo(name));
         }
     }
-
 
     public static boolean isValidBetrag(double betrag) throws ValidateBetragException {
         String betragsString = String.valueOf(betrag);
@@ -40,6 +34,4 @@ public class Validator {
             return true;
         } else throw new ValidatePasswortException(ValidatePasswortException.Message.PASSWORT);
     }
-
-
 }

@@ -1,11 +1,9 @@
 package service.serviceexception;
 
 public class DatenbankException extends ServiceException {
-
     public DatenbankException(Message dbErrorMessages) {
         super(ServiceErrorArt.DATENBANKERROR, dbErrorMessages);
     }
-
 
     public enum Message implements ServiceErrorMessageProvider {
         KONTOSTAND_VON_SENDER_LADEN("Das laden vom Kontostand des Sender ist fehlgeschlagen"),
@@ -30,8 +28,5 @@ public class DatenbankException extends ServiceException {
             fehlerMessage += info;
             return this;
         }
-
     }
-
-
 }

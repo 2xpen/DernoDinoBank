@@ -9,8 +9,7 @@ public class ValidateBeschreibungException extends ValidateException {
     }
 
     public enum Message implements ServiceErrorMessageProvider {
-
-        BESCHREIBUNG("Mindestens ein zeichen, maximal 200 für eine Beschreibung");
+        BESCHREIBUNG("Mindestens ein Zeichen, maximal 200 für eine Beschreibung");
         private final String message;
 
         Message(String message) {
@@ -22,6 +21,4 @@ public class ValidateBeschreibungException extends ValidateException {
             return message;
         }
     }
-
-
 }

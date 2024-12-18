@@ -2,7 +2,6 @@ package repository.konto;
 
 import data.user.UserName;
 
-
 public class TransaktionSummary {
     private final UserName empfaenger;
     private final double betrag;
@@ -15,13 +14,10 @@ public class TransaktionSummary {
     }
 
     public void print() {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("Transaktionszusammenfassung").append("\n");
-        sb.append("Empfänger: " + empfaenger.toString()).append("\n");
-        sb.append("Betrag: " + betrag).append("\n");
-        sb.append("Beschreibung: " + beschreibung).append("\n");
-
+        String sb = "Transaktionszusammenfassung" + "\n" +
+                "Empfänger: " + empfaenger.toString() + "\n" +
+                "Betrag: " + betrag + "\n" +
+                "Beschreibung: " + beschreibung + "\n";
         System.out.println(sb);
     }
 

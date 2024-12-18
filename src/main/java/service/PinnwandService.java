@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PinnwandService {
-
     private final PinnwandRepository pinnwandRepository;
     private final UserService userService;
 
@@ -35,32 +34,25 @@ public class PinnwandService {
         }
     }
 
-    public void schreibenAufAnderePinnwand(String message, UserId autor_id, UserId besitzer_id) throws ValidateBeschreibungException, ServiceException {
-
+    public void schreibenAufAnderePinnwand(String message, UserId autor_id, UserId besitzer_id) throws ServiceException {
         Validator.isValidBeschreibung(message);
 
         try {
-            pinnwandRepository.createPinnwandentry(message, autor_id, besitzer_id,new Timestamp(System.currentTimeMillis()));
+            PinnwandRepository.createPinnwandentry(message, autor_id, besitzer_id,new Timestamp(System.currentTimeMillis()));
         } catch (SQLException e) {
             throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR);
         }
     }
 
-
     public List<PinnwandEntry> filterafterAnforderung11(Pinnwand pinnwand, UserId besitzer, UserId selectedUser){
         List<PinnwandEntry> filteredEntries = new ArrayList<>();
-
-
-        //so wie ich die anforderung 11 lese, sollen alle an den benutzer gerichteten pinnwandeinträge eines users(kontakts) exportierbar sein
             for (PinnwandEntry entry : pinnwand.getPinnwandentries()){
                 if(entry.getBesitzer_id().equals(besitzer)  && entry.getAutor_id().equals(selectedUser)){
                     filteredEntries.add(entry);
                 }
             }
-
         return filteredEntries;
     }
-
 
     public Pinnwand convertPinnwandEntriesToPinnwand(List<PinnwandEntry> pinnwandEntries) throws ServiceException {
         Pinnwand pinnwand = new Pinnwand();
@@ -72,6 +64,4 @@ public class PinnwandService {
         }
         return pinnwand;
     }
-
-
 }

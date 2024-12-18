@@ -7,7 +7,7 @@ public enum IMPORT_EXPORT_DIRECTMESSAGE_MENU_OPTION {
     ZURUECK("Zurück", 0);
     private final String text;
     private final int wahlnummer;
-    private Runnable action;
+    private final Runnable action;
 
     IMPORT_EXPORT_DIRECTMESSAGE_MENU_OPTION(String text, int wahlnummer) {
         this.text = text;

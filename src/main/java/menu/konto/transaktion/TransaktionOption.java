@@ -8,7 +8,6 @@ public enum TransaktionOption {
     GELD_ABHEBEN("Geld abheben", 3),
     Zurueck("zurück", 0);
 
-
     private final String text;
     private final int wahlNummer;
     private final Runnable action;
@@ -18,7 +17,6 @@ public enum TransaktionOption {
         this.wahlNummer = wahlNummer;
         this.action = () -> System.out.println(wahlNummer + ": " + text);
     }
-
 
     public static TransaktionOption ofWahlNummer(int nummer) {
         return Arrays.stream(TransaktionOption.values())

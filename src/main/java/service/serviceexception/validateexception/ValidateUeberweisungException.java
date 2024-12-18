@@ -3,8 +3,6 @@ package service.serviceexception.validateexception;
 import service.serviceexception.ServiceErrorMessageProvider;
 
 public class ValidateUeberweisungException extends ValidateException {
-
-
     public ValidateUeberweisungException(Message message) {
         super(message, Type.UEBERWEISUNG);
     }
@@ -25,12 +23,9 @@ public class ValidateUeberweisungException extends ValidateException {
             return this;
         }
 
-
         @Override
         public String getServiceErrorMessage() {
             return message;
         }
     }
-
-
 }

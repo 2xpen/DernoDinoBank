@@ -1,11 +1,8 @@
 package menu.pinnwand;
 
-import menu.konto.KONTO_MENU_OPTION;
-
 import java.util.Arrays;
 
 public enum PINNWAND_MENU_OPTION {
-
     PINNWAND_ANSEHEN("eigene Pinnwand ansehen", 1),
     ZURUECK("zurück", 0);
 
@@ -26,7 +23,6 @@ public enum PINNWAND_MENU_OPTION {
     }
 
     public static PINNWAND_MENU_OPTION ofWahlNummer(int nummer) {
-
         return Arrays.stream(PINNWAND_MENU_OPTION.values())
                 .filter(e -> e.wahlNummer == nummer)
                 .findFirst()

@@ -1,7 +1,5 @@
 package menu.pinnwand;
 
-import menu.directMessages.DIRECT_MESSAGES_MENU_OPTION;
-
 import java.util.Arrays;
 
 public enum PINNWAND_KOMMENTAR_MENU {
@@ -22,7 +20,6 @@ public enum PINNWAND_KOMMENTAR_MENU {
         }
     }
     public static PINNWAND_KOMMENTAR_MENU ofWahlNummer(int nummer) {
-
         return Arrays.stream(PINNWAND_KOMMENTAR_MENU.values())
                 .filter(e -> e.wahlNummer == nummer)
                 .findFirst()

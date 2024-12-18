@@ -12,17 +12,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class RegexTest {
-
     @Test
     void testBenutzernameValidationNegativ() {
-
         List<String> negativTest = List.of(
                 "takatukaland"
                 , "simens-de"
                 , "hakara.com@d"
                 , "tom.ramostom.ramostom.ramostom.ramostom.ramostom.ramostom.ramostom.ramostom.ramostom.ramostom.ramostom.ramostom.ramostom.ramostom.ramostom.ramostom.ramostom.ramostom.ramostom.ramostom.ramostom.ramostom.ramostom.ramostom.ramostom.ramostom.ramostom.ramostom.ramostom.ramostom.ramostom.ramostom.ramostom.ramostom.ramostom.ramos@hsw-stud.de"
         );
-
 
         for (String s : negativTest) {
             ValidateUsernameException exception = assertThrows(ValidateUsernameException.class,
@@ -31,15 +28,11 @@ public class RegexTest {
             assertTrue(exception.getMessage().contains(
                     ValidateUsernameException.Message.USERNAME_INVALID.addInfo(new UserName(s)).getServiceErrorMessage()
             ));
-
         }
-
-
     }
 
     @Test
     void testBenutzerNameValidationPositiv() throws ValidateUsernameException {
-
         List<String> positivTest = List.of(
                 "tom.ramos@hsw-stud.de"
                 , "rebi.heim@gmail.com"
@@ -52,9 +45,7 @@ public class RegexTest {
         for (String s : positivTest) {
             assertTrue(Validator.isValidUserName(new UserName(s)));
         }
-
     }
-
 
     @Test
     void testBetragValidationNegativ() {
@@ -64,12 +55,9 @@ public class RegexTest {
                 , 9999999999999999999999999999999999999999999999999999999999999999999999.0
                 , -12.222};
 
-
         for (double z : zahlenreihe) {
             assertThrows(ValidateBetragException.class, () -> Validator.isValidBetrag(z));
         }
-
-
     }
 
     @Test
@@ -78,14 +66,13 @@ public class RegexTest {
                 22.33
                 , 00.01
                 , 33
-
         };
 
         for (double z : zahlenreihe) {
             assertTrue(Validator.isValidBetrag(z));
         }
-
     }
+
     @Test
     void testPasswordValidationNegativ() {
         List < Passwort > negativePasswortListe = List.of(
@@ -97,6 +84,7 @@ public class RegexTest {
             assertThrows(ValidatePasswortException.class, () -> Validator.isValidPasswort(p));
         }
     }
+
     @Test
     void testPasswordValidationPositive() throws ValidatePasswortException {
         List < Passwort > positivePasswortListe = List.of(

@@ -1,7 +1,6 @@
 package data.identifier;
 
 public class GevoId extends IdentifierBase {
-
     public GevoId() {
         super();
     }

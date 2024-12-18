@@ -3,7 +3,6 @@ package data.user;
 import data.identifier.UserId;
 
 public class User {
-
     private final UserId userId;
     private UserName username;
 
@@ -11,7 +10,6 @@ public class User {
         this.userId = userId;
         this.username = username;
     }
-
 
     public static User createUser(UserName userName) {
         return new User(
@@ -31,6 +29,4 @@ public class User {
     public UserId getUserId() {
         return userId;
     }
-
-
 }

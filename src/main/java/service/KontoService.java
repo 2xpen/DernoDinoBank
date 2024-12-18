@@ -9,9 +9,7 @@ import service.serviceexception.ServiceException;
 import java.sql.SQLException;
 
 public class KontoService {
-
     private final KontoRepository repo;
-
 
     public KontoService(KontoRepository repo) {
         this.repo = repo;
@@ -25,7 +23,6 @@ public class KontoService {
         }
     }
 
-
     public double kontostandErmitteln(UserId userId) throws ServiceException {
         try {
             return repo.ladeKontoStandVonKonto(
@@ -35,9 +32,7 @@ public class KontoService {
             throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR) {
             };
         }
-
     }
-
 
     public UserId ermittelUserIdByKontoId(KontoId id) throws DatenbankException {
         try {
@@ -54,7 +49,4 @@ public class KontoService {
             throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR);
         }
     }
-
-
-
 }

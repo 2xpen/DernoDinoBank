@@ -6,7 +6,6 @@ import data.geschaeftsvorfall.AbhebungGevo;
 import data.geschaeftsvorfall.UeberweisungGevo;
 import data.identifier.KontoId;
 import repository.dbConnection.DataBaseConnection;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,13 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GevoRepository {
-
-
     private static PreparedStatement getPreparedStatement() throws SQLException {
         Connection conn = DataBaseConnection.getInstance();
-
         var insertgevo = """
-                
                     INSERT INTO geschaeftsvorfaelle (
                       gevo_id
                     , gevo_art
@@ -39,11 +34,7 @@ public class GevoRepository {
         return stmt;
     }
 
-    /**
-     * mit dieser Methode wird jeder Ueberweisungsgevo abgehandelt, gut wie last -schrift es ist ja nur die art verschieden
-     */
     public void createUeberweisungsGevo(UeberweisungGevo gevo) throws SQLException {
-
         var stmt = getPreparedStatement();
         stmt.setString(1, gevo.getGevoId().toString());
         stmt.setString(2, gevo.getArt().toString());
@@ -53,12 +44,10 @@ public class GevoRepository {
         stmt.setString(6, gevo.getBeschreibung());
         stmt.setDouble(7, gevo.getBetrag());
 
-
         stmt.execute();
     }
 
     public void createAbhebungsGevo(AbhebungGevo gevo) throws SQLException {
-
         Connection conn = DataBaseConnection.getInstance();
 
         var insertgevo = """
@@ -83,12 +72,10 @@ public class GevoRepository {
         stmt.setString(5, gevo.getBeschreibung());
         stmt.setDouble(6, gevo.getBetrag());
 
-
         stmt.execute();
     }
 
     public List<GevoZeile> fetchGevosOfKonto(KontoId id) throws SQLException {
-
         Connection conn = DataBaseConnection.getInstance();
 
         String select = """
@@ -119,6 +106,4 @@ public class GevoRepository {
         }
         return gevos;
     }
-
-
 }

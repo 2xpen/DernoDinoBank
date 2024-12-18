@@ -1,7 +1,6 @@
 package repository.konto;
 
 public class TransaktionResponseWrapper {
-
     private final TransaktionExitCode exitCode;
     private final TransaktionSummary transaktionsSummary;
 
@@ -17,6 +16,4 @@ public class TransaktionResponseWrapper {
     public TransaktionSummary getTransaktionSummary() {
         return transaktionsSummary;
     }
-
-
 }

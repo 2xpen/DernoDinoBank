@@ -1,7 +1,5 @@
 package menu.directMessages;
 
-import menu.pinnwand.PINNWAND_MENU_OPTION;
-
 import java.util.Arrays;
 
 public enum DIRECT_MESSAGES_MENU_OPTION {
@@ -18,21 +16,18 @@ public enum DIRECT_MESSAGES_MENU_OPTION {
 
     }
 
-
     public static void printAll() {
         for (DIRECT_MESSAGES_MENU_OPTION option : DIRECT_MESSAGES_MENU_OPTION.values()) {
             option.action.run();
         }
     }
 
-
     public static DIRECT_MESSAGES_MENU_OPTION ofWahlNummer(int nummer) {
-
         return Arrays.stream(DIRECT_MESSAGES_MENU_OPTION.values())
                 .filter(e -> e.wahlnummer == nummer)
                 .findFirst()
                 .orElse(null);
-}
+    }
 
     public String getText() {
         return text;

@@ -1,7 +1,6 @@
 package service.serviceexception;
 
 public class RegistrierungException extends ServiceException {
-
     public RegistrierungException(ServiceErrorMessageProvider message) {
         super(ServiceErrorArt.REGISTRATIONERROR, message);
     }
@@ -20,6 +19,4 @@ public class RegistrierungException extends ServiceException {
             return message;
         }
     }
-
-
 }

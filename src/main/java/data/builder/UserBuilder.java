@@ -6,8 +6,4 @@ public class UserBuilder {
     private UserId userId;
     private String username;
     private String password;
-
-
-
-
 }
