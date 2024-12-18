@@ -70,7 +70,6 @@ public class GevoService {
         try {
             gevoRepository.createAbhebungsGevo(gevo);
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
             throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR);
         }
     }

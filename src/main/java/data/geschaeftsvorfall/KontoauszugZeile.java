@@ -48,7 +48,7 @@ public class KontoauszugZeile {
         if (empfaenger.isPresent()) {
             return empfaenger.get().toString();
         }
-        return "";
+        return "kein Empfaenger";
     }
 
     public String getSender() {

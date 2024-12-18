@@ -12,7 +12,6 @@ import service.KontoService;
 import service.UserService;
 import service.serviceexception.ServiceException;
 
-import java.io.FileNotFoundException;
 import java.nio.file.Path;
 
 public class KontoauszugManager extends ManagerBase {
@@ -46,26 +45,27 @@ public class KontoauszugManager extends ManagerBase {
 
             switch (wahlnummer) {
                 case 1:
-                 printAllTransaktions(kontoauszugWrapper);
-                 start(user);
-                 break;
-                 case 2:
-                     exportTransaktionen(kontoauszugWrapper);
-                     break;
-                 case 0:
-                     userLogedInManager.start(user);
-                     break;
-                 default:
-                     Menufehlermeldungen.WAHLNUMMER_NICHT_KORREKT.print();
-                     start(user);
+                    printAllTransaktions(kontoauszugWrapper);
+                    start(user);
+                    break;
+                case 2:
+                    exportTransaktionen(kontoauszugWrapper);
+                    break;
+                case 0:
+                    userLogedInManager.start(user);
+                    break;
+                default:
+                    Menufehlermeldungen.WAHLNUMMER_NICHT_KORREKT.print();
+                    start(user);
             }
 
         } catch (NumberFormatException e) {
             Menufehlermeldungen.WAHLNUMMER_NICHT_KORREKT.print();
             Menufehlermeldungen.ERNEUT_VERSUCHEN.print();
-            if(scanner.nextLine().equals("y")){
+            if (scanner.nextLine().equals("y")) {
                 start(user);
-            }userLogedInManager.start(user);
+            }
+            userLogedInManager.start(user);
         } catch (ServiceException e) {
             throw new RuntimeException(e);
         }
@@ -89,13 +89,14 @@ public class KontoauszugManager extends ManagerBase {
         try {
             Path zielpfad = Path.of(scanner.nextLine());
             FileHelper.isPathAccessible(zielpfad);
-            importExportService.exportKontobewegungen(kontoauszugWrapper,zielpfad);
-            System.out.println("Es wurde ein CSV Dokument mit ihren Kontobewegungen unter "+zielpfad+" abgelegt.");
+            importExportService.exportKontobewegungen(kontoauszugWrapper, zielpfad);
+            System.out.println("Es wurde ein CSV Dokument mit ihren Kontobewegungen unter " + zielpfad + " abgelegt.");
             start(user);
-        } catch (FileNotFoundException | ServiceException e) {
+        } catch (Exception e) {
+            // hier eigentlich die pathof exceptions bla bla behandeln, also iwie sagen EY SON PFAD SIEHT ANDERS AUS es ist schon wieder viel zu spät
             System.out.println(e.getMessage());
             Menufehlermeldungen.ERNEUT_VERSUCHEN.print();
-            if(scanner.nextLine().equals("y")){
+            if (scanner.nextLine().equals("y")) {
                 exportTransaktionen(kontoauszugWrapper);
             }
             start(user);

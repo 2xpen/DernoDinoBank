@@ -4,10 +4,11 @@ import data.user.Passwort;
 import data.user.User;
 import data.user.UserName;
 import repository.UserRepository;
+import service.serviceexception.AnmeldeServiceException;
 import service.serviceexception.DatenbankException;
 import service.serviceexception.ServiceException;
-import service.serviceexception.AnmeldeServiceException;
 import validator.Validator;
+
 import java.sql.SQLException;
 
 public class AnmeldeService {
@@ -33,7 +34,6 @@ public class AnmeldeService {
                 return user;
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
             throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR);
         }
     }

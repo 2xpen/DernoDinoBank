@@ -6,6 +6,7 @@ import data.user.User;
 import data.user.UserName;
 import repository.UserRepository;
 import repository.konto.KontoRepository;
+import service.serviceexception.DatenbankException;
 import service.serviceexception.RegistrierungException;
 import service.serviceexception.ServiceException;
 import validator.Validator;
@@ -35,7 +36,7 @@ public class RegistrierungService {
             userRepository.createUser(createdUser, passwort);
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR);
         }
 
         try {

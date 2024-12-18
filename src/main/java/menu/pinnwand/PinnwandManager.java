@@ -110,6 +110,9 @@ public class PinnwandManager extends ManagerBase {
                     pinnwandVonUserAufrufen(selector, selectedUser);
                 case 0:
                     personSucheManager.startWithSelectedUser(selector, selectedUser);
+                default:
+                    Menufehlermeldungen.WAHLNUMMER_NICHT_KORREKT.print();
+                    pinnwandVonUserAufrufen(selector, selectedUser);
             }
 
         } catch (ServiceException serviceException) {
@@ -133,11 +136,17 @@ public class PinnwandManager extends ManagerBase {
             pinnwandVonUserAufrufen(selector, selectedUser);
         }
         try {
-            importExportService.exportPinnwandnachrichten(pinnwandEntries, zielPfad);
+            importExportService.exportPinnwandnachrichten(pinnwandEntries, zielPfad, selector);
             System.out.println("Es wurde ein Protokoll unter: " + zielPfad + " abgelegt");
         } catch (ServiceException e) {
             System.out.println(e.getMessage());
-            exportPinnwandnachrichten(pinnwandEntries, selector, selectedUser);
+            Menufehlermeldungen.ERNEUT_VERSUCHEN.print();
+            if (scanner.nextLine().equals("y")) {
+
+                exportPinnwandnachrichten(pinnwandEntries, selector, selectedUser);
+            }
+            pinnwandVonUserAufrufen(selector, selectedUser);
+
         }
     }
 

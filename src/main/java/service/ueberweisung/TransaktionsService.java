@@ -12,6 +12,7 @@ import service.serviceexception.DatenbankException;
 import service.serviceexception.ServiceException;
 import service.serviceexception.validateexception.ValidateUeberweisungException;
 import validator.Validator;
+
 import java.nio.file.Path;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -45,7 +46,6 @@ public class TransaktionsService {
             kontoRepository.abheben(updateAbhebenKontostand);
             gevoService.doc(anweisung);
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
             throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR);
         }
     }
@@ -53,15 +53,15 @@ public class TransaktionsService {
     public void massenUeberweisung(Path quellpfad, KontoId senderId) throws ServiceException {
         List<UeberweisungsAnweisungParam> ueberweisungsAnweisungParams = importExportService.importMassenUeberweisung(quellpfad);
 
-        transaktionsValidatorService.isValidMassenueberweisungen(ueberweisungsAnweisungParams,senderId);
+        transaktionsValidatorService.isValidMassenueberweisungen(ueberweisungsAnweisungParams, senderId);
 
-        List<UeberweisungsAnweisung> ueberweisungsAnweisungen = convertMassenUeberweisung(ueberweisungsAnweisungParams,senderId);
+        List<UeberweisungsAnweisung> ueberweisungsAnweisungen = convertMassenUeberweisung(ueberweisungsAnweisungParams, senderId);
 
-        if(ueberweisungsAnweisungen.isEmpty()) {
+        if (ueberweisungsAnweisungen.isEmpty()) {
             throw new ValidateUeberweisungException(ValidateUeberweisungException.Message.MASSENUEBERWEISUNG_LEER);
         }
 
-        for (UeberweisungsAnweisung anweisung :ueberweisungsAnweisungen ){
+        for (UeberweisungsAnweisung anweisung : ueberweisungsAnweisungen) {
             einzelUeberweisung(anweisung);
 
         }
@@ -72,15 +72,15 @@ public class TransaktionsService {
 
         int i = 0;
         for (UeberweisungsAnweisungParam param : paramList) {
-                i++;
+            i++;
             anweisungen.add(
-                new UeberweisungsAnweisung(
-                    senderId
-                    ,getKontoIdByUserName(new UserName(param.getEmpfeanger()),i)
-                    ,param.getBeschreibung()
-                    ,param.getBetrag()
+                    new UeberweisungsAnweisung(
+                            senderId
+                            , getKontoIdByUserName(new UserName(param.getEmpfeanger()), i)
+                            , param.getBeschreibung()
+                            , param.getBetrag()
 
-                )
+                    )
             );
         }
         return anweisungen;
@@ -93,7 +93,6 @@ public class TransaktionsService {
             kontoRepository.ueberweisen(stmt);
             gevoService.doc(anweisung);
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
             throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR);
         }
     }
@@ -103,9 +102,8 @@ public class TransaktionsService {
             double neuerKontoStandSender = kontoRepository.ladeKontoStandVonKonto(anweisung.getSenderId()) - anweisung.getBetrag();
             double neuerKontoStandEmpfeanger = kontoRepository.ladeKontoStandVonKonto(anweisung.getEmpfaengerId()) + anweisung.getBetrag();
 
-            return new UpdateSenderEmpfaengerKontostaende(anweisung.getSenderId(),neuerKontoStandSender,anweisung.getEmpfaengerId(),neuerKontoStandEmpfeanger);
-        }
-        catch (SQLException e) {
+            return new UpdateSenderEmpfaengerKontostaende(anweisung.getSenderId(), neuerKontoStandSender, anweisung.getEmpfaengerId(), neuerKontoStandEmpfeanger);
+        } catch (SQLException e) {
 
             throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR);
 
@@ -114,17 +112,17 @@ public class TransaktionsService {
 
     private UpdateAbhebenKontostand calculateNewBalanceWrapper(AbhebungsAnweisung anweisung) throws ServiceException {
         try {
-            double neuerKontostand = kontoRepository.ladeKontoStandVonKonto(anweisung.getKontoId())-anweisung.getBetrag();
-            return new UpdateAbhebenKontostand(anweisung.getKontoId(),neuerKontostand);
+            double neuerKontostand = kontoRepository.ladeKontoStandVonKonto(anweisung.getKontoId()) - anweisung.getBetrag();
+            return new UpdateAbhebenKontostand(anweisung.getKontoId(), neuerKontostand);
         } catch (SQLException e) {
             throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR);
         }
     }
 
-    public KontoId getKontoIdByUserName(UserName userName,int i) throws ServiceException {
-        KontoId kontoId =  kontoService.ermittelKontoIdByUserId(userService.ermittleUserByUserName(userName).getUserId());
+    public KontoId getKontoIdByUserName(UserName userName, int i) throws ServiceException {
+        KontoId kontoId = kontoService.ermittelKontoIdByUserId(userService.ermittleUserByUserName(userName).getUserId());
         if (!kontoService.kontoExsist(kontoId)) {
-            throw new ValidateUeberweisungException(ValidateUeberweisungException.Message.KEIN_KONTO_FUER_DEN_NAMEN.addNamen(userName.toString()+ ", Fehler war in der:"+i+"ten Stelle"));
+            throw new ValidateUeberweisungException(ValidateUeberweisungException.Message.KEIN_KONTO_FUER_DEN_NAMEN.addNamen(userName.toString() + ", Fehler war in der:" + i + "ten Stelle"));
         }
         return kontoId;
     }

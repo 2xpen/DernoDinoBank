@@ -22,7 +22,7 @@ public class TransaktionsManager extends ManagerBase {
     private final UserLogedInManager userLogedInManager;
     private final KontoService kontoService;
     private final TransaktionsService transaktionsService;
-    private final ImportExportService  importExportService;
+    private final ImportExportService importExportService;
     private final UserService userService;
     private User user;
 
@@ -75,7 +75,7 @@ public class TransaktionsManager extends ManagerBase {
 
     private void startEinfacheUberweisung() {
         try {
-           kontostandanzeigen();
+            kontostandanzeigen();
         } catch (ServiceException e) {
             System.out.println(e.getMessage());
             System.out.println("Erneut versuchen (y/n)?");
@@ -136,28 +136,28 @@ public class TransaktionsManager extends ManagerBase {
             quellpfad = Path.of(scanner.nextLine());
             FileHelper.isPathAccessible(quellpfad);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             Menufehlermeldungen.ERNEUT_VERSUCHEN.print();
-            if(scanner.nextLine().equals("y")) {
-            startMassenUberweisung();
+            if (scanner.nextLine().equals("y")) {
+                startMassenUberweisung();
             } else start(user);
         }
 
         try {
-            transaktionsService.massenUeberweisung(quellpfad,kontoService.ermittelKontoIdByUserId(user.getUserId()));
+            transaktionsService.massenUeberweisung(quellpfad, kontoService.ermittelKontoIdByUserId(user.getUserId()));
 
         } catch (ImportExportServiceException e) {
             System.out.println(e.getMessage());
             Menufehlermeldungen.ERNEUT_VERSUCHEN.print();
-            if(scanner.nextLine().equals("y")) {
+            if (scanner.nextLine().equals("y")) {
                 startMassenUberweisung();
             } else start(user);
         } catch (ServiceException e) {
             System.out.println(e.getMessage());
             Menufehlermeldungen.ERNEUT_VERSUCHEN.print();
-            if(scanner.nextLine().equals("y")) {
+            if (scanner.nextLine().equals("y")) {
                 startMassenUberweisung();
-            }start(user);
+            }
+            start(user);
         }
 
         System.out.println("Massenüberweisung wurde durchgeführt!");

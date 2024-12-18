@@ -46,12 +46,15 @@ public class DirectMessagesRepository {
 
     public List<Nachricht> getNachrichtenByUserId(UserId userId) throws SQLException {
         Connection conn = DataBaseConnection.getInstance();
+
+
         String selectAlleNachrichtenByUserId = """
-                        SELECT * FROM directmessages WHERE empfaenger = ?
+                        SELECT * FROM directmessages WHERE empfaenger = ? OR sender = ?
                 """;
 
         PreparedStatement preparedStatement = conn.prepareStatement(selectAlleNachrichtenByUserId);
         preparedStatement.setString(1, userId.toString());
+        preparedStatement.setString(2, userId.toString());
 
         ResultSet resultSet = preparedStatement.executeQuery();
         List<Nachricht> alleNachrichten = new ArrayList<>();
@@ -66,10 +69,11 @@ public class DirectMessagesRepository {
                     )
             );
         }
+        
         return alleNachrichten;
     }
 
-    public void     createDirectMessage(Timestamp date, UserId sender, UserId empfaenger, String message) throws SQLException {
+    public void createDirectMessage(Timestamp date, UserId sender, UserId empfaenger, String message) throws SQLException {
         Connection conn = DataBaseConnection.getInstance();
         String createDirectMessage = """
                 INSERT INTO directmessages(date, sender, empfaenger, message)

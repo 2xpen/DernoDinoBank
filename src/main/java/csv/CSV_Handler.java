@@ -7,12 +7,17 @@ import data.nachricht.NachrichtView;
 import data.pinnwand.PinnwandEntryView;
 import menu.helper.CurrencyFormatter;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
-import java.util.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Scanner;
 
 public class CSV_Handler implements ICSV_IMPORT_EXPORT {
 
@@ -67,39 +72,38 @@ public class CSV_Handler implements ICSV_IMPORT_EXPORT {
 
         scan.close();
 
-        if(hasSyntaxError) {
-        throw new CSVException(CSVException.Message.CSVFormat.addZeilen(invalidRows));
+        if (hasSyntaxError) {
+            throw new CSVException(CSVException.Message.CSVFormat.addZeilen(invalidRows));
         }
 
         return rueckgabe;
     }
 
 
-
     public void exportPinnwandnachrichten(List<PinnwandEntryView> pinnwandEntryViews, Path path) throws CSVException {
         String content = "Zeitpunkt der Nachricht;Sender;Empfänger;Nachricht" + "\n";
 
-        if(pinnwandEntryViews.isEmpty()) {
+        if (pinnwandEntryViews.isEmpty()) {
             throw new CSVException(CSVException.Message.NichtsZumExportieren);
         }
 
         for (PinnwandEntryView entry : pinnwandEntryViews) {
             content += entry.getFormattedTimestamp() + ";";
-            content += entry.getEmpfaengerName() + ";";
             content += entry.getAutorName() + ";";
+            content += entry.getEmpfaengerName() + ";";
             content += entry.getNachricht() + ";" + "\n";
         }
-        write(path,content, ExportTypes.PINNWANDEINTRAEGE.addInfo(pinnwandEntryViews.getFirst().getEmpfaengerName().toString()));
+        write(path, content, ExportTypes.PINNWANDEINTRAEGE);
     }
 
     public void exportKontoAuszuege(KontoauszugWrapper kontoauszugWrapper, Path path) throws CSVException {
 
-         if(kontoauszugWrapper.getKontauszugZeile().isEmpty()) {
-             throw new CSVException(CSVException.Message.NichtsZumExportieren);
-         }
+        if (kontoauszugWrapper.getKontauszugZeile().isEmpty()) {
+            throw new CSVException(CSVException.Message.NichtsZumExportieren);
+        }
 
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
-        String content = "Transaktionsdatum; Empfänger; Sender; Beschreibung; Betrag"+"\n";
+        String content = "Transaktionsdatum; Empfänger; Sender; Beschreibung; Betrag" + "\n";
         for (KontoauszugZeile gz : kontoauszugWrapper.getKontauszugZeile()) {
             String formattedDate = formatDate(gz.getDatum(), dateFormatter);
 
@@ -109,7 +113,7 @@ public class CSV_Handler implements ICSV_IMPORT_EXPORT {
             content += gz.getBeschreibung() + ";";
             content += CurrencyFormatter.formatCurrencyForCSV(gz.getBetrag()) + "\n";
         }
-        write(path,content,ExportTypes.KONTOAUSZUG);
+        write(path, content, ExportTypes.KONTOAUSZUG);
     }
 
     private String formatDate(Date date, SimpleDateFormat formatter) {
@@ -119,29 +123,29 @@ public class CSV_Handler implements ICSV_IMPORT_EXPORT {
         return formatter.format(date);
     }
 
-    public void exportNachrichten(List<NachrichtView> nachrichtViews,Path path) throws CSVException {
-        if(nachrichtViews.isEmpty()) {
+    public void exportNachrichten(List<NachrichtView> nachrichtViews, Path path) throws CSVException {
+        if (nachrichtViews.isEmpty()) {
             throw new CSVException(CSVException.Message.NichtsZumExportieren);
         }
 
-        String content = "Zeitpunkt der Nachricht;Sender;Empfänger;Nachricht"+"\n";
+        String content = "Zeitpunkt der Nachricht;Sender;Empfänger;Nachricht" + "\n";
         for (NachrichtView gz : nachrichtViews) {
             content += gz.getDate() + ";";
             content += gz.getSender() + ";";
             content += gz.getEmpfaenger() + ";";
-            content += gz.getMessage()+ ";"+ "\n";
+            content += gz.getMessage() + ";" + "\n";
         }
-        write(path,content, ExportTypes.NACHRICHTEN.addInfo(nachrichtViews.getFirst().getEmpfaenger()));
+        write(path, content, ExportTypes.NACHRICHTEN);
     }
 
-    public void write(Path zielPfad,String content,ExportTypes type) throws CSVException {
+    public void write(Path zielPfad, String content, ExportTypes type) throws CSVException {
 
         LocalDate aktuellesDatum = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         String formatiertesDatum = aktuellesDatum.format(formatter);
 
         try {
-            FileWriter writer = new FileWriter(zielPfad+"\\"+type.getName() + formatiertesDatum+ ".csv",true);
+            FileWriter writer = new FileWriter(zielPfad + "\\" + type.getName() + formatiertesDatum + ".csv", true);
             BufferedWriter bw = new BufferedWriter(writer);
             bw.write(content);
             bw.close();

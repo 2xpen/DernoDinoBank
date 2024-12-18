@@ -3,8 +3,8 @@ package csv;
 public enum ExportTypes {
 
     KONTOAUSZUG("Kontoauszug "),
-    NACHRICHTEN("Nachrichten mit "),
-    PINNWANDEINTRAEGE("Pinnwandnachrichten von ");
+    NACHRICHTEN("Nachrichten "),
+    PINNWANDEINTRAEGE("Pinnwandnachrichten ");
 
     private String name;
 
@@ -13,7 +13,7 @@ public enum ExportTypes {
     }
 
     public ExportTypes addInfo(String info) {
-        this.name = this.name.formatted(info);
+        this.name = getName() + info;
         return this;
     }
 

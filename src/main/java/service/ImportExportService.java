@@ -11,6 +11,7 @@ import data.nachricht.Nachricht;
 import data.nachricht.NachrichtView;
 import data.pinnwand.PinnwandEntry;
 import data.pinnwand.PinnwandEntryView;
+import data.user.User;
 import data.user.UserName;
 import service.serviceexception.ImportExportServiceException;
 import service.serviceexception.ServiceException;
@@ -57,7 +58,7 @@ public class ImportExportService {
         }
     }
 
-    public void exportPinnwandnachrichten(List<PinnwandEntry> pinnwandEntries, Path path) throws ServiceException {
+    public void exportPinnwandnachrichten(List<PinnwandEntry> pinnwandEntries, Path path, User selector) throws ServiceException {
 
         try {
             csvHandler.exportPinnwandnachrichten(demaskPinnwandEntry(pinnwandEntries), path);

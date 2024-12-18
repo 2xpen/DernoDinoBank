@@ -1,11 +1,11 @@
 package menu.anmeldung;
 
-import data.user.UserName;
 import data.user.Passwort;
+import data.user.UserName;
 import menu.ManagerBase;
-import menu.startseite.StartseiteManager;
 import menu.Menufehlermeldungen;
 import menu.konto.UserLogedInManager;
+import menu.startseite.StartseiteManager;
 import service.AnmeldeService;
 import service.serviceexception.ServiceException;
 
@@ -31,7 +31,6 @@ public class AnmeldungsManager extends ManagerBase {
             int wahlNummer = Integer.parseInt(scanner.nextLine());
             deciderAnmeldeMenuOption(ANMELDE_MENU_OPTION.ofWahlNummer(wahlNummer));
         } catch (NumberFormatException e) {
-            System.out.println(e.getMessage());
             Menufehlermeldungen.WAHLNUMMER_NICHT_KORREKT.print();
             start();
         }
