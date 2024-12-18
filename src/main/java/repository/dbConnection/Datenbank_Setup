@@ -27,8 +27,8 @@ CREATE TABLE geschaeftsvorfaelle(
 CREATE TABLE pinnwandentry(
                               besitzer_id         VARCHAR(30) NOT NULL,
                               autor_id            VARCHAR(30) NOT NULL,
-                              nachricht           VARCHAR(200),
-                              date                 TIMESTAMP
+                              nachricht           VARCHAR(200) NOT NULL,
+                              date                TIMESTAMP NOT NULL
 );
 
 CREATE TABLE directMessages(
