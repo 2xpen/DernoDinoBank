@@ -1,6 +1,7 @@
 import data.user.Passwort;
 import data.user.UserName;
 import org.junit.jupiter.api.Test;
+import service.serviceexception.validateexception.ValidateBeschreibungException;
 import service.serviceexception.validateexception.ValidateBetragException;
 import service.serviceexception.validateexception.ValidatePasswortException;
 import service.serviceexception.validateexception.ValidateUsernameException;
@@ -8,8 +9,7 @@ import validator.Validator;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ValidatorTest {
     @Test
@@ -95,6 +95,31 @@ public class ValidatorTest {
         );
         for (Passwort p : positivePasswortListe) {
             assertTrue(Validator.isValidPasswort(p));
+        }
+    }
+
+    @Test
+    void testBeschreibungPositiv() throws ValidateBeschreibungException {
+        List<String> stringList = List.of(
+                "HUHUHUHUH"
+                ,"!???=)=)(&/(("
+                ,"78997654132132123"
+        );
+        for (String beschreibung : stringList) {
+            assertTrue(Validator.isValidBeschreibung(beschreibung));
+        }
+    }
+
+    @Test
+    void testBeschreibungNegativ(){
+        List<String> stringList = List.of(
+                ""
+                ,"djhhhhhhddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        );
+        for (String beschreibung : stringList) {
+            ValidateBeschreibungException e =
+            assertThrows(ValidateBeschreibungException.class, () -> Validator.isValidBeschreibung(beschreibung));
+            assertEquals(ValidateBeschreibungException.Message.BESCHREIBUNG.getServiceErrorMessage(), e.getMessage());
         }
     }
 }
