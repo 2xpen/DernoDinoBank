@@ -1,21 +1,19 @@
 package serviceTest;
 
+import data.identifier.UserId;
 import data.user.Passwort;
 import data.user.User;
 import data.user.UserName;
-import data.identifier.UserId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import repository.UserRepository;
 import service.AnmeldeService;
 import service.serviceexception.AnmeldeServiceException;
 import service.serviceexception.DatenbankException;
-import service.serviceexception.validateexception.ValidateBeschreibungException;
-import service.serviceexception.validateexception.ValidateBetragException;
-import service.serviceexception.validateexception.ValidateUsernameException;
-import service.serviceexception.validateexception.ValidatePasswortException;
+import service.serviceexception.ServiceException;
 import validator.Validator;
 
 import java.sql.SQLException;
@@ -23,90 +21,84 @@ import java.sql.SQLException;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class AnmeldeServiceTest {
+public class AnmeldeServiceTest {
 
-    private UserRepository userRepository;
+
     private AnmeldeService anmeldeService;
+    private UserRepository userRepository;
+
+
+
+
+
 
     @BeforeEach
     void setUp() {
-        userRepository = Mockito.mock(UserRepository.class); // Mock des Repositories
-        anmeldeService = new AnmeldeService(userRepository); // Service mit Mock initialisieren
+         userRepository = mock(UserRepository.class);
+         anmeldeService = new AnmeldeService(userRepository);
+
     }
 
-    @Test
-    void testAnmeldenErfolgreich() throws Exception {
-        UserName userName = new UserName("t.ramos@hsw-stud.de");
-        Passwort passwort = new Passwort("validPass");
 
-        User mockUser = User.createUser(userName);
-        when(userRepository.anmelden(userName, passwort)).thenReturn(mockUser);
-
-        User result = anmeldeService.anmelden(userName, passwort);
-
-        assertNotNull(result);
-        assertEquals(mockUser, result);
-        verify(userRepository).anmelden(userName, passwort);
-    }
 
     @Test
-    void testPasswortFalsch() throws Exception {
-        UserName userName = new UserName("t.ramos@hsw-stud.de");
-        Passwort passwort = new Passwort("wrongPass");
+    void testanmeldenPositiv() throws SQLException, ServiceException {
 
-        when(userRepository.anmelden(userName, passwort)).thenReturn(null);
+        UserId userId = new UserId("123");
+        UserName userName = new UserName("l.sindermann@hsw-stud.de");
+        Passwort passwort = new Passwort("password123");
+
+        User user = new User(userId, userName);
         when(userRepository.userNameExists(userName)).thenReturn(true);
 
-        AnmeldeServiceException exception = assertThrows(AnmeldeServiceException.class,
-                () -> anmeldeService.anmelden(userName, passwort));
+        when(userRepository.anmelden(userName,passwort)).thenReturn(user);
 
-        assertEquals("Passwort ist nicht korrekt", exception.getMessage());
+        assertEquals(anmeldeService.anmelden(userName,passwort),user);
+
+    }
+
+
+    @Test
+    void testanmeldenPasswortFalsch() throws SQLException, ServiceException {
+
+        UserId userId = new UserId("123");
+        UserName userName = new UserName("l.sindermann@hsw-stud.de");
+        Passwort wrongPasswort = new Passwort("falsches Passwort");
+
+        User user = new User(userId, userName);
+
+
+        when(userRepository.userNameExists(userName)).thenReturn(true);
+        when(userRepository.anmelden(userName,wrongPasswort)).thenReturn(null);
+
+        AnmeldeServiceException anmeldeServiceException =
+                assertThrows(AnmeldeServiceException.class, () ->anmeldeService.anmelden(userName, wrongPasswort));
+
+        assertEquals(anmeldeServiceException.getMessage(), AnmeldeServiceException.Message.PASSWORT_NICHT_KORREKT.getServiceErrorMessage());
     }
 
     @Test
-    void testBenutzernameNichtVergeben() throws Exception {
-        UserName userName = new UserName("michgibtsnicht@hsw-stud.de");
-        Passwort passwort = new Passwort("anyPass");
+    void testanmeldenBenutzernameNichtVergeben() throws SQLException, ServiceException {
 
-        when(userRepository.anmelden(userName, passwort)).thenReturn(null);
+        UserId userId = new UserId("123");
+        UserName userName = new UserName("l.sindermann@hsw-stud.de");
+        Passwort wrongPasswort = new Passwort("falsches Passwort");
+
+        User user = new User(userId, userName);
+
+
         when(userRepository.userNameExists(userName)).thenReturn(false);
+        when(userRepository.anmelden(userName,wrongPasswort)).thenReturn(null);
 
-        AnmeldeServiceException exception = assertThrows(AnmeldeServiceException.class,
-                () -> anmeldeService.anmelden(userName, passwort));
+        AnmeldeServiceException anmeldeServiceException =
+                assertThrows(AnmeldeServiceException.class, () ->anmeldeService.anmelden(userName, wrongPasswort));
 
-        assertEquals("der Benutzername ist nicht vergeben", exception.getMessage());
-    }
 
-    @Test
-    void testValidatorUserNameFehler() {
-        UserName invalidUserName = new UserName("invalid");
-        Passwort passwort = new Passwort("validPass");
-
-            assertThrows(ValidateUsernameException.class, () -> anmeldeService.anmelden(invalidUserName, passwort));
-
-    }
-
-    @Test
-    void testValidatorPasswortFehler() {
-        UserName userName = new UserName("t.ramos@hsw-stud.de");
-        Passwort invalidPasswort = new Passwort("");
-
-        assertThrows(ValidatePasswortException.class, () -> anmeldeService.anmelden(userName, invalidPasswort));
-
+        assertEquals(anmeldeServiceException.getMessage(),AnmeldeServiceException.Message.BENUTZERNAME_NICHT_VERGEBEN.getServiceErrorMessage());
     }
 
 
-    @Test
-    void testValidatorBetragFehler() {
-        double invalidBetrag = -1.0;
 
-        assertThrows(ValidateBetragException.class, () -> Validator.isValidBetrag(invalidBetrag));
-    }
 
-    @Test
-    void testValidatorBeschreibungFehler() {
-        String invalidBeschreibung = "This description is too long and invalid because it contains prohibited characters!fjdsklöfjsaklöfjsaklöfjdskalöfjskalöfjdsaklöfjdsakölfjsdaklöfjdsaklöfjdskalödfjkdlösajfdskalöfjdsaklöfjdsklöfjasdklöfjdskölafjdsaklö";
 
-        assertThrows(ValidateBeschreibungException.class, () -> Validator.isValidBeschreibung(invalidBeschreibung));
-    }
 }

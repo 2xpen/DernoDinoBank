@@ -124,6 +124,7 @@ public class TransaktionsService {
         catch (SQLException e) {
 
             throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR);
+
         }
 
     }
