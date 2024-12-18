@@ -36,7 +36,6 @@ public class PinnwandService {
 
     public void schreibenAufAnderePinnwand(String message, UserId autor_id, UserId besitzer_id) throws ServiceException {
         Validator.isValidBeschreibung(message);
-
         try {
             PinnwandRepository.createPinnwandentry(message, autor_id, besitzer_id,new Timestamp(System.currentTimeMillis()));
         } catch (SQLException e) {

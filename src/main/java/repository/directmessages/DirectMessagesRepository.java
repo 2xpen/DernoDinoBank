@@ -69,7 +69,7 @@ public class DirectMessagesRepository {
         return alleNachrichten;
     }
 
-    public void createDirectMessage(Timestamp date, UserId sender, UserId empfaenger, String message) throws SQLException {
+    public void     createDirectMessage(Timestamp date, UserId sender, UserId empfaenger, String message) throws SQLException {
         Connection conn = DataBaseConnection.getInstance();
         String createDirectMessage = """
                 INSERT INTO directmessages(date, sender, empfaenger, message)

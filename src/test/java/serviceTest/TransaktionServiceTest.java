@@ -72,9 +72,12 @@ public class TransaktionServiceTest {
     }
 
 
+
+
+
     @Test
     void testSaldoUeberzogen() throws ServiceException, SQLException {
-
+        /// testdaten erzeugen
         KontoId kontoIdSENDER = new KontoId("senderID");
         KontoId kontoIdEMPFEANGER = new KontoId("empfeangerID");
 
@@ -137,6 +140,8 @@ public class TransaktionServiceTest {
         assertEquals(ValidateBeschreibungException.Message.BESCHREIBUNG.getServiceErrorMessage(), e.getMessage());
 
     }
+
+
 
 
 

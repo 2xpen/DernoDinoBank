@@ -42,7 +42,6 @@ public class MessageService {
 
     public boolean sendMessage(Timestamp date, UserId sender, UserId empfaenger, String message) throws DatenbankException, ValidateBeschreibungException {
         Validator.isValidBeschreibung(message);
-
         try {
             directMessagesRepository.createDirectMessage(date, sender, empfaenger, message);
             return true;
@@ -50,4 +49,5 @@ public class MessageService {
             throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR);
         }
     }
+
 }
