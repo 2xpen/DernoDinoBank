@@ -1,12 +1,15 @@
 package repository;
 
 import data.identifier.UserId;
-import data.user.UserName;
 import data.user.Passwort;
 import data.user.User;
+import data.user.UserName;
 import repository.dbConnection.DataBaseConnection;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class UserRepository {
     public User anmelden(UserName userName, Passwort password) throws SQLException {
@@ -50,7 +53,7 @@ public class UserRepository {
         stmt.executeUpdate();
     }
 
-    public boolean userNameExists(UserName userId) throws SQLException {
+    public boolean userNameExists(UserName userName) throws SQLException {
         Connection conn = DataBaseConnection.getInstance();
 
         var selectUser = """
@@ -60,14 +63,14 @@ public class UserRepository {
 
         PreparedStatement preparedStatement = conn.prepareStatement(selectUser);
 
-        preparedStatement.setString(1, userId.toString());
+        preparedStatement.setString(1, userName.toString());
 
         ResultSet resultSet = preparedStatement.executeQuery();
 
         return resultSet.next();
     }
 
-    public User findUserByName(UserName userId) throws SQLException {
+    public User findUserByName(UserName userName) throws SQLException {
         Connection conn = DataBaseConnection.getInstance();
 
         var selectUser = """
@@ -77,7 +80,7 @@ public class UserRepository {
 
         PreparedStatement preparedStatement = conn.prepareStatement(selectUser);
 
-        preparedStatement.setString(1, userId.toString());
+        preparedStatement.setString(1, userName.toString());
 
         ResultSet resultSet = preparedStatement.executeQuery();
 

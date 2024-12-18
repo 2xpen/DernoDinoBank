@@ -6,7 +6,7 @@ public class UserServiceException extends ServiceException {
     }
 
     public enum Message implements ServiceErrorMessageProvider {
-        USER_NICHT_GEFUNDEN("der angegeben User konnte nicht gefunden werden1");
+        USER_NICHT_GEFUNDEN("der angegeben User konnte nicht gefunden werden!");
 
         private final String message;
 

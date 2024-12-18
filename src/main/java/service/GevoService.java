@@ -1,11 +1,11 @@
 package service;
 
 import data.KontoauszugWrapper;
-import data.geschaeftsvorfall.GevoZeile;
 import data.anweisungen.AbhebungsAnweisung;
 import data.anweisungen.AnweisungBase;
 import data.anweisungen.UeberweisungsAnweisung;
 import data.geschaeftsvorfall.AbhebungGevo;
+import data.geschaeftsvorfall.GevoZeile;
 import data.geschaeftsvorfall.KontoauszugZeile;
 import data.geschaeftsvorfall.UeberweisungGevo;
 import data.identifier.KontoId;
@@ -40,6 +40,7 @@ public class GevoService {
         }
     }
 
+
     public void doc(AnweisungBase anweisung) throws ServiceException {
         if (anweisung instanceof AbhebungsAnweisung) {
             docAbhebungGevo(
@@ -54,7 +55,9 @@ public class GevoService {
         }
     }
 
-    private void docUeberweisungGevo(UeberweisungGevo gevo) throws ServiceException {
+
+    //nur fürs testen public
+    public void docUeberweisungGevo(UeberweisungGevo gevo) throws ServiceException {
         try {
             gevoRepository.createUeberweisungsGevo(gevo);
         } catch (SQLException e) {
@@ -62,7 +65,8 @@ public class GevoService {
         }
     }
 
-    private void docAbhebungGevo(AbhebungGevo gevo) throws ServiceException {
+    //nur fürs testen public
+    public void docAbhebungGevo(AbhebungGevo gevo) throws ServiceException {
         try {
             gevoRepository.createAbhebungsGevo(gevo);
         } catch (SQLException e) {

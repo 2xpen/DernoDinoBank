@@ -7,7 +7,6 @@ import data.KontoauszugWrapper;
 import data.anweisungen.UeberweisungsAnweisungParam;
 import data.geschaeftsvorfall.GevoZeile;
 import data.geschaeftsvorfall.KontoauszugZeile;
-import data.identifier.UserId;
 import data.nachricht.Nachricht;
 import data.nachricht.NachrichtView;
 import data.pinnwand.PinnwandEntry;
@@ -15,6 +14,7 @@ import data.pinnwand.PinnwandEntryView;
 import data.user.UserName;
 import service.serviceexception.ImportExportServiceException;
 import service.serviceexception.ServiceException;
+
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ public class ImportExportService {
     }
 
     public List<UeberweisungsAnweisungParam> importMassenUeberweisung(Path path) throws ImportExportServiceException {
-        try{
+        try {
             return csvHandler.importMassenueberweisung(path);
         } catch (CSVException e) {
             throw new ImportExportServiceException(e.getServiceErrorMessage());
@@ -42,7 +42,7 @@ public class ImportExportService {
 
     public void exportDirectMessages(List<Nachricht> nachrichten, Path path) throws ServiceException {
         try {
-            csvHandler.exportNachrichten(demaskNachrichten(nachrichten),path);
+            csvHandler.exportNachrichten(demaskNachrichten(nachrichten), path);
         } catch (CSVException e) {
             throw new ImportExportServiceException(e.getServiceErrorMessage());
         }
@@ -51,18 +51,20 @@ public class ImportExportService {
 
     public void exportKontobewegungen(KontoauszugWrapper gevos, Path path) throws ServiceException {
         try {
-            csvHandler.exportKontoAuszuege(gevos,path);
+            csvHandler.exportKontoAuszuege(gevos, path);
         } catch (CSVException e) {
             throw new ImportExportServiceException(e.getServiceErrorMessage());
         }
     }
 
     public void exportPinnwandnachrichten(List<PinnwandEntry> pinnwandEntries, Path path) throws ServiceException {
+
         try {
-            csvHandler.exportPinnwandnachrichten(demaskPinnwandEntry(pinnwandEntries),path);
+            csvHandler.exportPinnwandnachrichten(demaskPinnwandEntry(pinnwandEntries), path);
         } catch (CSVException e) {
             throw new ImportExportServiceException(e.getServiceErrorMessage());
         }
+
     }
 
     private List<PinnwandEntryView> demaskPinnwandEntry(List<PinnwandEntry> pinnwandEntrys) throws ServiceException {
@@ -70,11 +72,11 @@ public class ImportExportService {
         for (PinnwandEntry pinnwandEntry : pinnwandEntrys) {
 
             pinnwandEntryViewList.add(
-                new PinnwandEntryView(
-                    pinnwandEntry
-                    ,userService.ermittleUserByUserId(pinnwandEntry.getBesitzer_id()).getUsername()
-                    ,userService.ermittleUserByUserId(pinnwandEntry.getAutor_id()).getUsername()
-                )
+                    new PinnwandEntryView(
+                            pinnwandEntry
+                            , userService.ermittleUserByUserId(pinnwandEntry.getBesitzer_id()).getUsername()
+                            , userService.ermittleUserByUserId(pinnwandEntry.getAutor_id()).getUsername()
+                    )
             );
         }
         return pinnwandEntryViewList;
@@ -83,7 +85,7 @@ public class ImportExportService {
     public List<NachrichtView> demaskNachrichten(List<Nachricht> nachrichten) throws ServiceException {
         List<NachrichtView> nachrichtenView = new ArrayList<>();
 
-        for(Nachricht nachricht: nachrichten){
+        for (Nachricht nachricht : nachrichten) {
             nachrichtenView.add(
                     new NachrichtView(
                             nachricht.getDate(),
@@ -104,7 +106,7 @@ public class ImportExportService {
             UserName sender = userService.ermittleUserByUserId(kontoService.ermittelUserIdByKontoId(gevo.getSender())).getUsername();
 
             kontoauszugZeilen.add(
-            new KontoauszugZeile(
+                    new KontoauszugZeile(
                             gevo.getDatum()
                             , Optional.ofNullable(empfaenger)
                             , sender
@@ -112,9 +114,9 @@ public class ImportExportService {
                             , gevo.getBetrag()
                             , gevo.getArt()
 
-            )
+                    )
             );
         }
-    return kontoauszugZeilen;
+        return kontoauszugZeilen;
     }
 }
