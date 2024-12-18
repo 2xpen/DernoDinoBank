@@ -63,31 +63,19 @@
                 </configuration>
             </plugin>
 
-
-
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.8</version> <!-- Neueste Version von JaCoCo -->
+                <version>0.8.7</version> <!-- Achte darauf, die neueste Version zu verwenden -->
                 <executions>
-                    <!-- Der JaCoCo Agent wird für die Code Coverage vorbereitet -->
                     <execution>
-                        <id>prepare-agent</id> <!-- Eindeutige ID für diesen Execution-Block -->
                         <goals>
                             <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <!-- Generiere den Coverage-Bericht nach den Tests -->
-                    <execution>
-                        <id>generate-report</id> <!-- Eindeutige ID für diesen Execution-Block -->
-                        <goals>
                             <goal>report</goal>
                         </goals>
-                        <phase>post-integration-test</phase>
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
     </build>
 </project>

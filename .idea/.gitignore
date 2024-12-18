@@ -7,6 +7,5 @@
 /dataSources/
 /dataSources.local.xml
 ../target/
-
-../target/
+../src/test/testdaten/testMassenUeberweisung.csv
 

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CSVHandlerTest {
-    private static final String TEMP_FILE = "C:\\Projekte\\DernoDinoBank\\src\\test\\testdaten\\testMassenUeberweisung.csv";
+    private static final String TEMP_FILE = "src\\test\\testdaten\\testMassenUeberweisung.csv";
     private CSV_Handler csvHandler;
 
     @BeforeEach
@@ -20,7 +20,7 @@ class CSVHandlerTest {
 
     @Test
     void testMassenueberweisung_validFile() throws Exception {
-        createTestFile("""
+         createTestFile("""
                 Empfänger;Betrag;Beschreibung
                 Max Mustermann;123.45;Rechnung Januar
                 Erika Musterfrau;678.90;Rechnung Februar
