@@ -8,7 +8,6 @@ public class ValidateBetragException extends ValidateException {
         super(messageProvider, Type.BETRAG);
     }
 
-
     public enum Message implements ServiceErrorMessageProvider {
         BETRAG_NICHT_KORREKT("""
                 Folgender Betrag fehlerhaft: %s\
@@ -35,6 +34,4 @@ public class ValidateBetragException extends ValidateException {
             return message;
         }
     }
-
-
 }

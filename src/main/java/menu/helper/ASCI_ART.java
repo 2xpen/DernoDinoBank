@@ -2,7 +2,6 @@ package menu.helper;
 
 public enum ASCI_ART {
 
-
     SCHIGGY("SCHIGGY SAGT TSCHAAAAAUUUUUUUUU!!!!\n\n\n" +
             "               _,........__\n" +
             "            ,-'            \"`-.\n" +
@@ -91,5 +90,4 @@ public enum ASCI_ART {
     public void print(){
         action.run();
     }
-
 }

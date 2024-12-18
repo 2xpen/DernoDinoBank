@@ -1,8 +1,6 @@
 package service.serviceexception;
 
 public class AnmeldeServiceException extends ServiceException {
-
-
     public AnmeldeServiceException(ServiceErrorMessageProvider messageProvider) {
         super(ServiceErrorArt.VALIDATEERROR, messageProvider);
     }
@@ -22,5 +20,4 @@ public class AnmeldeServiceException extends ServiceException {
             return message;
         }
     }
-
 }

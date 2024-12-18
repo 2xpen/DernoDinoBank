@@ -11,7 +11,6 @@ public class Nachricht {
     private final UserId empfaenger;
     private final String message;
 
-
     public Nachricht(Timestamp date, UserId sender, UserId empfaenger, String message) {
         this.date = date;
         this.sender = sender;

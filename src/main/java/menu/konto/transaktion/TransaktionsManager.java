@@ -19,7 +19,6 @@ import service.ueberweisung.TransaktionsService;
 import java.nio.file.Path;
 
 public class TransaktionsManager extends ManagerBase {
-
     private final UserLogedInManager userLogedInManager;
     private final KontoService kontoService;
     private final TransaktionsService transaktionsService;
@@ -34,7 +33,6 @@ public class TransaktionsManager extends ManagerBase {
         this.importExportService = importExportService;
         this.userService = userService;
     }
-
 
     public void start(User user) {
         this.user = user;
@@ -53,14 +51,10 @@ public class TransaktionsManager extends ManagerBase {
             Menufehlermeldungen.WAHLNUMMER_NICHT_KORREKT.print();
             start(user);
         }
-
     }
 
-
     private void decider(TransaktionOption option) {
-
         switch (option) {
-
             case GELD_ABHEBEN:
                 abheben();
                 break;
@@ -73,36 +67,29 @@ public class TransaktionsManager extends ManagerBase {
             case Zurueck:
                 userLogedInManager.start(user);
                 break;
-
             case null:
                 Menufehlermeldungen.WAHLNUMMER_NICHT_KORREKT.print();
                 start(user);
         }
-
     }
 
     private void startEinfacheUberweisung() {
-
         try {
            kontostandanzeigen();
         } catch (ServiceException e) {
-
             System.out.println(e.getMessage());
-            System.out.println("Nochmal versuchen (y)?" +
-                    "\nsonst anderes Zeichen wählen");
+            System.out.println("Nochmal versuchen (y/n)?");
             if (scanner.nextLine().equals("y")) {
                 startEinfacheUberweisung();
             } else start(user);
-
         }
 
         try {
-
             System.out.println("An wen wollen Sie Geld schicken?");
 
             UserName name = new UserName(scanner.nextLine());
 
-            System.out.println("Wie viel wollen sie überweisen?");
+            System.out.println("Wie viel wollen Sie überweisen?");
             System.out.println("\nBetrag angeben!");
 
             double gewaehlterBetrag = Double.parseDouble(scanner.nextLine());
@@ -124,34 +111,24 @@ public class TransaktionsManager extends ManagerBase {
 
         } catch (NumberFormatException e) {
             Menufehlermeldungen.BETRAG_FORMAT_FALSCH.print();
-            System.out.println("Nochmal versuchen (y)?" +
-                    "\nsonst anderes Zeichen wählen");
+            System.out.println("Nochmal versuchen (y/n)?");
             if (scanner.nextLine().equals("y")) {
                 startEinfacheUberweisung();
             } else start(user);
-
 
         } catch (ServiceException e) {
             System.out.println(e.getMessage());
-            System.out.println("Nochmal versuchen (y)?" +
-                    "\nsonst anderes Zeichen wählen");
+            System.out.println("Nochmal versuchen (y/n)?");
 
             if (scanner.nextLine().equals("y")) {
                 startEinfacheUberweisung();
             } else start(user);
-
         }
-
         start(user);
     }
 
-
     private void startMassenUberweisung() {
-
-
-        System.out.println("Bitte den Pfad angeben worunter die Anweisungen liegen sollen");
-
-
+        System.out.println("Bitte den Pfad angeben, worunter die Anweisungen liegen sollen");
 
         Path quellpfad = null;
 
@@ -181,27 +158,21 @@ public class TransaktionsManager extends ManagerBase {
             if(scanner.nextLine().equals("y")) {
                 startMassenUberweisung();
             }start(user);
-
         }
 
         System.out.println("Massenüberweisung wurde durchgeführt!");
 
         start(user);
-
     }
 
-
     public void abheben() {
-
         printHead();
-
 
         try {
             kontostandanzeigen();
         } catch (ServiceException e) {
             System.out.println(e.getMessage());
-            System.out.println("Nochmal versuchen (y)?" +
-                    "\nsonst anderes Zeichen wählen");
+            System.out.println("Nochmal versuchen (y/n)?");
             if (scanner.nextLine().equals("y")) {
                 abheben();
             } else start(user);
@@ -214,8 +185,6 @@ public class TransaktionsManager extends ManagerBase {
         try {
             double gewaehlterBetrag = Double.parseDouble(scanner.nextLine());
 
-
-            //die anweisung erstellen sollte glaub auch ein service sein
             AbhebungsAnweisung anweisung = new AbhebungsAnweisung(
                     kontoService.ermittelKontoIdByUserId(
                             user.getUserId())
@@ -227,31 +196,21 @@ public class TransaktionsManager extends ManagerBase {
 
         } catch (NumberFormatException e) {
             Menufehlermeldungen.BETRAG_FORMAT_FALSCH.print();
-            System.out.println("Nochmal versuchen (y)?" +
-                    "\nsonst anderes Zeichen wählen");
+            System.out.println("Nochmal versuchen (y/n)?");
             if (scanner.nextLine().equals("y")) {
                 abheben();
             } else start(user);
-
-
         } catch (ServiceException e) {
             System.out.println(e.getMessage());
-            System.out.println("Nochmal versuchen (y)?" +
-                    "\nsonst anderes Zeichen wählen");
-
+            System.out.println("Nochmal versuchen (y/n)?");
             if (scanner.nextLine().equals("y")) {
                 abheben();
             } else start(user);
-
         }
-
-
     }
 
     private void kontostandanzeigen() throws ServiceException {
         System.out.println(
                 "Aktueller Kontostand: " + CurrencyFormatter.formatCurrency(kontoService.kontostandErmitteln(user.getUserId())));
     }
-
-
 }

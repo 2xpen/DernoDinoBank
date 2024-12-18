@@ -1,10 +1,8 @@
 package repository;
 
 public enum Fehlermeldung_DBConnection {
-
     CONNECTION_LOST("Verbindung zum Server verloren"),
-    CREDENTIALS_INCORRECT("Verbindungsaufbau zum Server fehlgeschlagen ");
-
+    CREDENTIALS_INCORRECT("Verbindungsaufbau zum Server fehlgeschlagen");
 
     private final String text;
     private final Runnable action;
@@ -17,5 +15,4 @@ public enum Fehlermeldung_DBConnection {
     public void print(){
         action.run();
     }
-
 }

@@ -16,8 +16,6 @@ public class UeberweisungsAnweisung extends AnweisungBase {
         this.betrag = betrag;
     }
 
-
-
     public KontoId getSenderId() {
         return senderId;
     }

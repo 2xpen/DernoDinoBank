@@ -11,7 +11,6 @@ import service.serviceexception.validateexception.ValidateUsernameException;
 import validator.Validator;
 
 public class RegistrierungManger extends ManagerBase {
-
     private final StartseiteManager startseiteManager;
     private final RegistrierungService registrierungService;
 
@@ -21,7 +20,6 @@ public class RegistrierungManger extends ManagerBase {
         this.registrierungService = registrierungService;
     }
 
-
     public void start() {
         printHead();
 
@@ -30,13 +28,11 @@ public class RegistrierungManger extends ManagerBase {
         printBitteWahlnummerWaehlenFooter();
 
         try {
-
             decider(RegistrierungMenuOption.ofWahlnummer(Integer.parseInt(scanner.next())));
         } catch (NumberFormatException e) {
             Menufehlermeldungen.WAHLNUMMER_NICHT_KORREKT.print();
             start();
         }
-
     }
 
     public void decider(RegistrierungMenuOption option) {
@@ -49,7 +45,6 @@ public class RegistrierungManger extends ManagerBase {
             case null:
                 Menufehlermeldungen.WAHLNUMMER_NICHT_KORREKT.print();
                 start();
-
         }
     }
 
@@ -58,12 +53,12 @@ public class RegistrierungManger extends ManagerBase {
         UserName name = new UserName(scanner.next());
         REGISTRIERUNG_DIALOG.PASSWORT.print();
         Passwort passwort = new Passwort(scanner.next());
+
         try {
             registrierungService.registrieren(name, passwort);
         } catch (ServiceException e) {
             System.out.println(e.getMessage());
-            System.out.println("erneut versuchen? (y) " +
-                    "\nsonst anderes zeichen wählen");
+            System.out.println("erneut versuchen? (y/n)");
 
             if (scanner.next().equalsIgnoreCase("y")) {
                 printFooter();
@@ -71,12 +66,8 @@ public class RegistrierungManger extends ManagerBase {
             } else start();
 
         }
-
         System.out.println("Registrierung erfolgreich, es wurde für: " + name + " ein Konto erstellt");
         printFooter();
         startseiteManager.start();
-
     }
-
-
 }

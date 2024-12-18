@@ -3,7 +3,6 @@ package menu.registrierung;
 import java.util.Arrays;
 
 public enum RegistrierungMenuOption {
-
     REGISTRIEREN("Registrierung starten", 1),
     ZURUECK("Zurück zum Startmenü", 0);
 
@@ -33,6 +32,4 @@ public enum RegistrierungMenuOption {
     public int getWahlnummer() {
         return wahlnummer;
     }
-
-
 }

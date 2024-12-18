@@ -9,7 +9,6 @@ public class ValidateGevoException extends ValidateException {
     }
 
     public enum Message implements ServiceErrorMessageProvider {
-
         GEVOERSTELLEN_FEHLSCHLAG("der Vorgang konnte leider nicht dokumentiert werden," +
                 " sie sollten diese Meldung niemals sehen, melden sie diesen Fehler bitte an das Entwickler-Team" +
                 "wir bitten vielmals um entschuldigung");
@@ -25,5 +24,4 @@ public class ValidateGevoException extends ValidateException {
             return message;
         }
     }
-
 }

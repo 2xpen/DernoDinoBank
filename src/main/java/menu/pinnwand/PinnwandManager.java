@@ -18,24 +18,6 @@ import java.nio.file.Path;
 import java.util.List;
 
 public class PinnwandManager extends ManagerBase {
-
-        private void aufPinnwandSchreiben(User autor, User empfaenger){
-            System.out.println("Bitte gebe deine Nachricht ein:");
-            String message = scanner.nextLine();
-            try {
-                pinnwandService.schreibenAufAnderePinnwand(message, autor.getUserId() ,empfaenger.getUserId());
-                System.out.println("Ihr Pinnwand eintrag wurde erstellt");
-                pinnwandVonUserAufrufen(autor,empfaenger);
-
-            } catch (ServiceException e) {
-                System.out.println(e.getMessage());
-                System.out.println("Erneut versuchen? (y) sonst anderes zeichen wählen");
-                if(scanner.nextLine().equals("y")){
-                    aufPinnwandSchreiben(autor,empfaenger);
-                }
-            }
-        }
-
         private final UserLogedInManager userLogedInManager;
         private final PinnwandService pinnwandService;
         private PersonSucheManager personSucheManager;
@@ -48,8 +30,6 @@ public class PinnwandManager extends ManagerBase {
         }
 
         public void start(User user) {
-
-
             printHead();
 
             PINNWAND_MENU_OPTION.printAll();
@@ -65,8 +45,21 @@ public class PinnwandManager extends ManagerBase {
             }
         }
 
-
-
+    private void aufPinnwandSchreiben(User autor, User empfaenger){
+        System.out.println("Bitte gebe deine Nachricht ein:");
+        String message = scanner.nextLine();
+        try {
+            pinnwandService.schreibenAufAnderePinnwand(message, autor.getUserId() ,empfaenger.getUserId());
+            System.out.println("Ihr Pinnwand eintrag wurde erstellt");
+            pinnwandVonUserAufrufen(autor,empfaenger);
+        } catch (ServiceException e) {
+            System.out.println(e.getMessage());
+            System.out.println("Erneut versuchen? (y/n)");
+            if(scanner.nextLine().equals("y")){
+                aufPinnwandSchreiben(autor,empfaenger);
+            }
+        }
+    }
 
         private void deciderPinnwandMenuOption(PINNWAND_MENU_OPTION option,User selector) {
             switch (option) {
@@ -85,13 +78,11 @@ public class PinnwandManager extends ManagerBase {
         }
 
         public void pinnwandVonUserAufrufen(User selector,User selectedUser) {
-
             try {
                 Pinnwand pinnwandVonUser = pinnwandService.getPinnwand(selectedUser.getUserId());
                 Pinnwand pinnwandSelector = pinnwandService.getPinnwand(selector.getUserId());
                 if (pinnwandVonUser.getPinnwandentries().isEmpty()) {
                     PINNWAND_DIALOG.PINNWAND_IST_LEER.print();
-
                 } else {
                     System.out.println("Pinnwand von " + selectedUser.getUsername());
                     System.out.println(pinnwandVonUser);
@@ -106,10 +97,9 @@ public class PinnwandManager extends ManagerBase {
                 try {
                     input = Integer.parseInt(inputString);
                 } catch (NumberFormatException n) {
-                    System.out.println("Ungültige Eingabe, es sind nur Ganzzahlen erlaubt");
+                    System.out.println("Ungültige Eingabe, es sind nur Ganzzahlen erlaubt!");
                     pinnwandVonUserAufrufen(selector, selectedUser);
                 }
-
 
                 switch (input) {
                     case 1:
@@ -123,31 +113,25 @@ public class PinnwandManager extends ManagerBase {
                         personSucheManager.startWithSelectedUser(selector, selectedUser);
                 }
 
-
             } catch (ServiceException serviceException) {
                 System.out.println(serviceException.getMessage());
                 pinnwandVonUserAufrufen(selector,selectedUser);
             }
         }
 
-
-
         private void exportPinnwandnachrichten(List<PinnwandEntry> pinnwandEntries,User selector,User selectedUser) {
-
-            System.out.println("Bitte den Zielpfad angeben");
+            System.out.println("Bitte den Zielpfad angeben.");
             Path zielPfad = Path.of(scanner.nextLine());
 
             try {
                 FileHelper.isPathAccessible(zielPfad);
             } catch (FileNotFoundException e) {
                 System.out.println(e.getMessage());
-                System.out.println("erneut Versuchen? (y)");
+                System.out.println("erneut Versuchen? (y/n)");
                 if(scanner.nextLine().equals("y")) {
                     exportPinnwandnachrichten(pinnwandEntries,selector,selectedUser);
                 }pinnwandVonUserAufrufen(selector,selectedUser);
-
             }
-
             try {
                 importExportService.exportPinnwandnachrichten(pinnwandEntries,zielPfad);
                 System.out.println("Es wurde ein Protokoll unter: " + zielPfad + " abgelegt");
@@ -157,36 +141,27 @@ public class PinnwandManager extends ManagerBase {
             }
         }
 
-
     private void eigenePinnwandAnsehen(User user) {
-
             try {
-            Pinnwand pinnwand = pinnwandService.getPinnwand(user.getUserId());
-            //falls leer dann ja ne, wenn nicht halt printen
+                Pinnwand pinnwand = pinnwandService.getPinnwand(user.getUserId());
             if (pinnwand.getPinnwandentries().isEmpty()) {
                 System.out.println("Pinnwand ist leer");
                 start(user);
             } else {
                 System.out.println("Pinnwand von " + user.getUsername());
                 System.out.println(pinnwand);
-
-                System.out.println("Enter drücken um zurück zu kehren");
+                System.out.println("Enter drücken um zurückzukehren");
                 if (scanner.nextLine() != null) {
                     start(user);
                 }
             }
-
-
-        } catch (ServiceException serviceException) {
-            System.out.println(serviceException.getMessage());
-            start(user);
-        }
+            } catch (ServiceException serviceException) {
+                System.out.println(serviceException.getMessage());
+                start(user);
+            }
     }
-
-
 
     public void setPersonSucheManager(PersonSucheManager personSucheManager) {
         this.personSucheManager = personSucheManager;
     }
-
 }

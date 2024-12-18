@@ -13,7 +13,6 @@ import validator.Validator;
 import java.sql.SQLException;
 
 public class RegistrierungService {
-
     private final UserRepository userRepository;
     private final KontoRepository kontoRepository;
 
@@ -23,7 +22,6 @@ public class RegistrierungService {
     }
 
     public void registrieren(UserName userName, Passwort passwort) throws ServiceException {
-
         Validator.isValidUserName(userName);
         Validator.isValidPasswort(passwort);
 
@@ -38,20 +36,13 @@ public class RegistrierungService {
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            /*throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR);*/
         }
-
 
         try {
             kontoRepository.createKonto(new Konto(
                     createdUser.getUserId()));
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-
     }
-
-
 }

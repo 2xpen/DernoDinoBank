@@ -9,7 +9,6 @@ public class UeberweisungGevo extends GeschaeftsVorfall {
     private final double betrag;
     private final String beschreibung;
 
-
     public UeberweisungGevo(UeberweisungsAnweisung anweisung) {
         super(GevoArt.UEBERWEISUNG, anweisung.getSenderId());
         this.empfaengerId = anweisung.getEmpfaengerId();
@@ -28,5 +27,4 @@ public class UeberweisungGevo extends GeschaeftsVorfall {
     public KontoId getEmpfaengerId() {
         return empfaengerId;
     }
-
 }

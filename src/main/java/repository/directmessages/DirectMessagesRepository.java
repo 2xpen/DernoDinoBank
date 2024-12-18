@@ -9,13 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DirectMessagesRepository {
-
-    //todo @TOM
-
-
-
     public List<Nachricht> getConvo(UserId selector, UserId selectedUser) throws SQLException {
-
         Connection conn = DataBaseConnection.getInstance();
 
         String selectAlleNachrichtenByUserId = """
@@ -75,7 +69,6 @@ public class DirectMessagesRepository {
         return alleNachrichten;
     }
 
-    //todo wrapperklasse für createDirectMessage anweisung
     public void createDirectMessage(Timestamp date, UserId sender, UserId empfaenger, String message) throws SQLException {
         Connection conn = DataBaseConnection.getInstance();
         String createDirectMessage = """
@@ -87,7 +80,6 @@ public class DirectMessagesRepository {
         preparedStatement.setString(2, sender.toString());
         preparedStatement.setString(3, empfaenger.toString());
         preparedStatement.setString(4, message);
-        //todo auswertung affected rows
         preparedStatement.execute();
     }
 }

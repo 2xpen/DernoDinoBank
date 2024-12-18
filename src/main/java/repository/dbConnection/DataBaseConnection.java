@@ -8,7 +8,6 @@ import java.util.Properties;
 public class DataBaseConnection {
     private static Connection instance;
     public static Connection getInstance() throws SQLException {
-
         if(instance == null){
             String constr = "jdbc:postgresql://kdb.sh:6082/ckawka";
             String user = "ckawka";
@@ -22,5 +21,4 @@ public class DataBaseConnection {
         }
         return instance;
     }
-
 }

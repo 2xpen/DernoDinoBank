@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PinnwandRepository {
-    //todo @TOM
     public  List<PinnwandEntry> getPinnwandByUserId(data.identifier.UserId userId) throws SQLException {
         Connection conn = DataBaseConnection.getInstance();
         String selectPinnwandByUserId = """
@@ -51,7 +50,5 @@ public class PinnwandRepository {
         preparedStatement.setTimestamp(4,date);
 
         preparedStatement.execute();
-
-        //todo return createte Pinnwandentry
     }
 }

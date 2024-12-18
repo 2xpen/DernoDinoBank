@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public class KontoauszugZeile {
 
-//die klasse klasse ist nur zum angucken, quasi das view objekt von Kontauszugszeile
+//Die Klasse ist nur zum Angucken, quasi das view Objekt von Kontauszugszeile
 
 
     private final Date datum;
@@ -30,8 +30,6 @@ public class KontoauszugZeile {
 
     @Override
     public String toString() {
-        // ob das so geil ist mit der zeitzone definieren?
-        //todo @tom mit Numberformat gucken das son double immer mit zwei nachkommastellen anzeigen
         return
                 datum.toInstant()
                         .atZone(ZoneId.systemDefault()) // Zeitzone definieren
@@ -51,7 +49,6 @@ public class KontoauszugZeile {
             return empfaenger.get().toString();
         }
         return "";
-
     }
 
     public String getSender() {

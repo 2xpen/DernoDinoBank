@@ -4,7 +4,6 @@ public enum REGISTRIERUNG_DIALOG {
     NAME_EINGEBEN("Bitte namen angeben"),
     PASSWORT("Bitte passwort angeben");
 
-
     private final String text;
     private final Runnable action;
 
@@ -16,6 +15,4 @@ public enum REGISTRIERUNG_DIALOG {
     public void print() {
         action.run();
     }
-
-
 }

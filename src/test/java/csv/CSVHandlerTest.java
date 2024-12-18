@@ -2,8 +2,6 @@ package csv;
 
 import data.anweisungen.UeberweisungsAnweisungParam;
 import org.junit.jupiter.api.*;
-
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -12,7 +10,6 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CSVHandlerTest {
-
     private static final String TEMP_FILE = "C:\\Projekte\\DernoDinoBank\\src\\test\\testdaten\\testMassenUeberweisung.csv";
     private CSV_Handler csvHandler;
 
@@ -21,21 +18,8 @@ class CSVHandlerTest {
         csvHandler = new CSV_Handler();
     }
 
-    /*
-
-    @AfterEach
-    void tearDown() {
-        File file = new File(TEMP_FILE);
-        if (file.exists()) {
-            file.delete();
-        }
-    }
-*/
-
-    ///  POSITIV TEST
     @Test
     void testMassenueberweisung_validFile() throws Exception {
-        // Erstelle eine temporäre CSV-Datei mit gültigen Daten
         createTestFile("""
                 Empfänger;Betrag;Beschreibung
                 Max Mustermann;123.45;Rechnung Januar
@@ -60,36 +44,24 @@ class CSVHandlerTest {
 
     @Test
     void testMassenueberweisung_invalidFormat() {
-        // Erstelle eine CSV-Datei mit falschem Format
         createTestFile("Empfänger;Betrag;Beschreibung"
-                +"\nMax Mustermann;123.45"); // Fehlende Beschreibung
+                +"\nMax Mustermann;123.45");
 
                 assertThrows(CSVException.class,
                 () -> csvHandler.importMassenueberweisung(Path.of(TEMP_FILE)));
-
     }
 
     @Test
     void testMassenueberweisung_invalidNumber() {
-        // Erstelle eine CSV-Datei mit ungültiger Zahl
         createTestFile("Empfänger;Betrag;Beschreibung"+
                 "\nMax Mustermann;ABC;Rechnung Januar");
 
-
-        //todo falls ich noch schaffe dann ÜBERALL auf die richtige message prüfen
-    /*    CSVException exception = assertThrows(CSVException.class,
-                () -> csvHandler.importMassenueberweisung(Path.of(TEMP_FILE)));
-
-        assertTrue(exception.getMessage().contains("Der Betrag ist keine gültige Zahl"),
-                "Die Fehlermeldung sollte auf eine ungültige Zahl hinweisen");
-    */
                 assertThrows(CSVException.class,
                 () -> csvHandler.importMassenueberweisung(Path.of(TEMP_FILE)));
     }
 
     @Test
     void testMassenueberweisung_fileNotFound() {
-
          assertThrows(CSVException.class,
                 () -> csvHandler.importMassenueberweisung(Path.of("nicht_existierende_datei.csv")));
     }

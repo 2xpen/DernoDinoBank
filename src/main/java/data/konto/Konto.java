@@ -1,11 +1,9 @@
 package data.konto;
 
-
 import data.identifier.KontoId;
 import data.identifier.UserId;
 
 public class Konto {
-
     private final KontoId kontoID;
     private final UserId userId;
     private double kontostand;

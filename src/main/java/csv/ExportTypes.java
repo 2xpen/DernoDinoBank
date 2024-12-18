@@ -6,7 +6,6 @@ public enum ExportTypes {
     NACHRICHTEN("Nachrichten mit "),
     PINNWANDEINTRAEGE("Pinnwandnachrichten von ");
 
-
     private String name;
 
     ExportTypes(String name) {

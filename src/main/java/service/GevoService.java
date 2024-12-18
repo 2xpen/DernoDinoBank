@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class GevoService {
-
     private final GevoRepository gevoRepository;
     private final UserService userService;
     private final KontoService kontoService;
@@ -34,17 +33,14 @@ public class GevoService {
     }
 
     public KontoauszugWrapper fetchTransaktionsHistorie(UserId id) throws ServiceException {
-
         try {
             return demaskGevoZeile(gevoRepository.fetchGevosOfKonto(kontoService.ermittelKontoIdByUserId(id)));
         } catch (SQLException e) {
             throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR);
         }
-
     }
 
     public void doc(AnweisungBase anweisung) throws ServiceException {
-        //evaluation welche art von anweisung das ist
         if (anweisung instanceof AbhebungsAnweisung) {
             docAbhebungGevo(
                     new AbhebungGevo((AbhebungsAnweisung) anweisung));
@@ -54,10 +50,8 @@ public class GevoService {
                     new UeberweisungGevo((UeberweisungsAnweisung) anweisung));
 
         } else {
-            //todo hier dem user mitteilen was passiert anstatt sich zu entschuldigen
             throw new ValidateGevoException(ValidateGevoException.Message.GEVOERSTELLEN_FEHLSCHLAG);
         }
-
     }
 
     private void docUeberweisungGevo(UeberweisungGevo gevo) throws ServiceException {
@@ -69,7 +63,6 @@ public class GevoService {
     }
 
     private void docAbhebungGevo(AbhebungGevo gevo) throws ServiceException {
-
         try {
             gevoRepository.createAbhebungsGevo(gevo);
         } catch (SQLException e) {
@@ -84,17 +77,12 @@ public class GevoService {
                 .getUsername();
     }
 
-
     public KontoauszugWrapper demaskGevoZeile(List<GevoZeile> gevos) throws ServiceException {
-
         List<KontoauszugZeile> kontoauszugZeilen = new ArrayList<>();
 
         for (GevoZeile gevo : gevos) {
-            /// hilfe
             UserName empfaenger = gevo.getEmpfaenger().isPresent() ? ermittleUserNameByKontoId(gevo.getEmpfaenger().get()) : null;
-
             UserName sender = ermittleUserNameByKontoId(gevo.getSender());
-
             kontoauszugZeilen.add(
                     new KontoauszugZeile(
                             gevo.getDatum()
@@ -106,10 +94,6 @@ public class GevoService {
                     )
             );
         }
-
         return new KontoauszugWrapper(kontoauszugZeilen);
     }
-
-
 }
-

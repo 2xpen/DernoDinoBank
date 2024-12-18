@@ -1,6 +1,5 @@
 package menu.anmeldung;
 
-
 import data.user.UserName;
 import data.user.Passwort;
 import menu.ManagerBase;
@@ -10,9 +9,7 @@ import menu.konto.UserLogedInManager;
 import service.AnmeldeService;
 import service.serviceexception.ServiceException;
 
-
 public class AnmeldungsManager extends ManagerBase {
-
     private final AnmeldeService anmeldeService;
     private final StartseiteManager startseiteManager;
     private UserLogedInManager userLogedInManager;
@@ -22,7 +19,6 @@ public class AnmeldungsManager extends ManagerBase {
         this.startseiteManager = startseiteManager;
         this.anmeldeService = anmeldeService;
     }
-
 
     public void start() {
         printHead();
@@ -41,7 +37,6 @@ public class AnmeldungsManager extends ManagerBase {
         }
     }
 
-
     private void deciderAnmeldeMenuOption(ANMELDE_MENU_OPTION option) {
         switch (option) {
             case ANMELDEN:
@@ -54,12 +49,9 @@ public class AnmeldungsManager extends ManagerBase {
                 Menufehlermeldungen.WAHLNUMMER_NICHT_KORREKT.print();
                 start();
         }
-
     }
 
-
     private void anmeldunginput() {
-
         printHead();
 
         ANMELDE_DIALOG.ANMELDE_FENSTER.print();
@@ -74,31 +66,15 @@ public class AnmeldungsManager extends ManagerBase {
             Passwort password = new Passwort(scanner.nextLine());
 
             userLogedInManager.start(anmeldeService.anmelden(
-
                     benutzername,
                     password));
-
         } catch (ServiceException sf) {
             System.out.println(sf.getMessage());
             start();
         }
-
-
     }
-
 
     public void setKontoansichtsmanager(UserLogedInManager k) {
         this.userLogedInManager = k;
     }
-
-    // GENAU DAS HIER GEHT IN DIE SERVICE STRUKTUR ÜBER, DIE MANAGER-KLASSEN SIND NUR FÜR DEN DIALOG MIT DEM NUTZER ZUSTÄNDIG
-//
-
-    //ersetzt durch anmeldeService.anmelden();
-
-//    public User userlogin(String benutzername, String password){
-//        return new User(new UserId(),benutzername,password,new KontoId());
-//    }
-
-
 }

@@ -6,9 +6,6 @@ import java.sql.Timestamp;
 import java.util.Optional;
 
 public class GevoZeile {
-
-    //die klasse hält die nötigen meta daten was einen gevo wirklich aus macht
-
     private final Timestamp datum;
     private final Optional<KontoId> empfaenger;
     private final KontoId sender;
@@ -24,7 +21,6 @@ public class GevoZeile {
         this.betrag = betrag;
         this.art = art;
     }
-
 
     public double getBetrag() {
         return betrag;
@@ -60,12 +56,4 @@ public class GevoZeile {
                 ", betrag=" + betrag +
                 '}';
     }
-
-
 }
-
-
-
-
-
-

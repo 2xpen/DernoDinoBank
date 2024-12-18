@@ -1,6 +1,5 @@
 package menu.startseite;
 
-import data.user.User;
 import menu.ManagerBase;
 import menu.helper.ASCI_ART;
 import menu.registrierung.RegistrierungManger;
@@ -8,7 +7,6 @@ import menu.anmeldung.AnmeldungsManager;
 import menu.Menufehlermeldungen;
 
 public class StartseiteManager extends ManagerBase {
-
     private AnmeldungsManager anmeldungsManager;
     private RegistrierungManger registrierungManger;
 
@@ -16,7 +14,6 @@ public class StartseiteManager extends ManagerBase {
     }
 
     public void start() {
-
         printHead();
         System.out.println("Willkommen bei Ihrem OnlineBanking, wie können wir Ihnen helfen?");
 
@@ -35,10 +32,7 @@ public class StartseiteManager extends ManagerBase {
 
     }
 
-
     private void deciderStartseiteMenuOption(STARTSEITE_MENU_OPTION option) {
-
-
         switch (option) {
             case ANMELDEN:
                 anmeldungsManager.start();
@@ -52,15 +46,10 @@ public class StartseiteManager extends ManagerBase {
                 Menufehlermeldungen.WAHLNUMMER_NICHT_KORREKT.print();
                 start();
         }
-
-
     }
 
-
     public void programmSchliessen() {
-
         try {
-
             ASCI_ART.PIKACHU.print();
 
             Thread.sleep(3000);
@@ -84,7 +73,4 @@ public class StartseiteManager extends ManagerBase {
     public void setRegistrierungManger(RegistrierungManger registrierungManger) {
         this.registrierungManger = registrierungManger;
     }
-
 }
-
-

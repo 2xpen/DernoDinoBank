@@ -1,13 +1,10 @@
 package data.nachricht;
 
-import data.identifier.UserId;
 import data.user.UserName;
-
 import java.sql.Timestamp;
 import java.time.format.DateTimeFormatter;
 
 public class NachrichtView {
-
     private final Timestamp date;
     private final UserName sender;
     private final UserName empfaenger;
@@ -36,5 +33,4 @@ public class NachrichtView {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         return date.toLocalDateTime().format(formatter);
     }
-
 }

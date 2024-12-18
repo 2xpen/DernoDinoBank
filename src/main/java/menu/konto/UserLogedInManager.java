@@ -36,30 +36,23 @@ public class UserLogedInManager extends ManagerBase {
     }
 
     private void eingeloggtBildschirm() {
-
         printHead();
         System.out.println("Herzlich Willkommen " + user.getUsername() + ", viel Spaß bei Ihrem OnlineBanking");
-        //printet alle Optionen aus
 
         KONTO_MENU_OPTION.printAll();
 
         printFooter();
 
         try {
-
             int wahlNummer = Integer.parseInt(scanner.nextLine());
             auswahlDecider(KONTO_MENU_OPTION.ofWahlNummer(wahlNummer));
-
         } catch (NumberFormatException e) {
             Menufehlermeldungen.WAHLNUMMER_NICHT_KORREKT.print();
             eingeloggtBildschirm();
         }
-
     }
 
-
     private void auswahlDecider(KONTO_MENU_OPTION option) {
-
         switch (option) {
             case OPTION_TRANSAKTION:
                 transaktionsManager.start(user);
@@ -84,13 +77,10 @@ public class UserLogedInManager extends ManagerBase {
             case null:
                 Menufehlermeldungen.WAHLNUMMER_NICHT_KORREKT.print();
                 eingeloggtBildschirm();
-
         }
-
     }
 
     public void kontostandAnsehen() {
-
         printHead();
         try {
             System.out.println("Kontostand: " + CurrencyFormatter.formatCurrency(kontoService.kontostandErmitteln(user.getUserId())));
@@ -98,9 +88,7 @@ public class UserLogedInManager extends ManagerBase {
             System.out.println(e.getMessage());
         }
         start(user);
-
     }
-
 
     public UserLogedInManager setPinnwandManager(PinnwandManager pinnwandManager) {
         this.pinnwandManager = pinnwandManager;
@@ -123,7 +111,4 @@ public class UserLogedInManager extends ManagerBase {
     public UserLogedInManager setPersonSucheManager(PersonSucheManager personSucheManager) {
         this.personSucheManager = personSucheManager;return this;
     }
-
 }
-
-

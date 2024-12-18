@@ -5,7 +5,6 @@ import service.serviceexception.ServiceErrorMessageProvider;
 import service.serviceexception.ServiceException;
 
 public abstract class ValidateException extends ServiceException {
-
     private final Type type;
 
     public ValidateException(ServiceErrorMessageProvider messageProvider, Type type) {
@@ -20,8 +19,6 @@ public abstract class ValidateException extends ServiceException {
         GEVO,
         BESCHREIBUNG,
         PASSWORT,
-        ANMELDUNG;
+        ANMELDUNG
     }
-
-
 }

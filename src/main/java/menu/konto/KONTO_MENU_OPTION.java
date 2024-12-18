@@ -1,11 +1,8 @@
 package menu.konto;
 
-import menu.directMessages.DIRECT_MESSAGES_MENU_OPTION;
-
 import java.util.Arrays;
 
 public enum KONTO_MENU_OPTION {
-
     OPTION_TRANSAKTION("Transaktion", 1),
     OPTION_KONTOSTAND_ANSEHEN("Kontostand ansehen", 2),
     OPTION_PINNWAND("Pinnwand", 3),
@@ -13,7 +10,6 @@ public enum KONTO_MENU_OPTION {
     OPTION_KONTOBEWEGUNGEN("Kontobewegungen", 5),
     OPTION_PERSONSUCHE("Personensuche",6),
     AUSLOGGEN("ausloggen", 0);
-
 
     private final String text;
     private final int wahlNummer;
@@ -37,7 +33,6 @@ public enum KONTO_MENU_OPTION {
             option.action.run();
         }
     }
-
 
     public String getText() {
         return text;

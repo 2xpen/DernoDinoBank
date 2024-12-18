@@ -98,12 +98,9 @@ public class CSV_Handler implements ICSV_IMPORT_EXPORT {
              throw new CSVException(CSVException.Message.NichtsZumExportieren);
          }
 
-
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
-                //header
         String content = "Transaktionsdatum; Empfänger; Sender; Beschreibung; Betrag"+"\n";
         for (KontoauszugZeile gz : kontoauszugWrapper.getKontauszugZeile()) {
-
             String formattedDate = formatDate(gz.getDatum(), dateFormatter);
 
             content += formattedDate + ";";
@@ -115,7 +112,6 @@ public class CSV_Handler implements ICSV_IMPORT_EXPORT {
         write(path,content,ExportTypes.KONTOAUSZUG);
     }
 
-    // Hilfsmethode zur Formatierung eines Date-Objekts
     private String formatDate(Date date, SimpleDateFormat formatter) {
         if (date == null) {
             return "";
@@ -123,10 +119,7 @@ public class CSV_Handler implements ICSV_IMPORT_EXPORT {
         return formatter.format(date);
     }
 
-
     public void exportNachrichten(List<NachrichtView> nachrichtViews,Path path) throws CSVException {
-
-
         if(nachrichtViews.isEmpty()) {
             throw new CSVException(CSVException.Message.NichtsZumExportieren);
         }
@@ -138,14 +131,8 @@ public class CSV_Handler implements ICSV_IMPORT_EXPORT {
             content += gz.getEmpfaenger() + ";";
             content += gz.getMessage()+ ";"+ "\n";
         }
-
-            // todo hier noch die addInfo Methode einfügen und saren mit wem die convo war (falls es eine spezifische convo war...
         write(path,content, ExportTypes.NACHRICHTEN.addInfo(nachrichtViews.getFirst().getEmpfaenger()));
-
     }
-
-
-
 
     public void write(Path zielPfad,String content,ExportTypes type) throws CSVException {
 
@@ -154,8 +141,6 @@ public class CSV_Handler implements ICSV_IMPORT_EXPORT {
         String formatiertesDatum = aktuellesDatum.format(formatter);
 
         try {
-            //todo kann jmd mir (leo) mal erklären wie man das anständig macht, keine lust das jetzt rauszusuchen
-            //der Writer appended die date falls der datei name im dir  schon vergeben ist
             FileWriter writer = new FileWriter(zielPfad+"\\"+type.getName() + formatiertesDatum+ ".csv",true);
             BufferedWriter bw = new BufferedWriter(writer);
             bw.write(content);
@@ -163,8 +148,5 @@ public class CSV_Handler implements ICSV_IMPORT_EXPORT {
         } catch (IOException e) {
             throw new CSVException(CSVException.Message.WriteFailed.addInfo(e.getMessage()));
         }
-
     }
-
-
 }

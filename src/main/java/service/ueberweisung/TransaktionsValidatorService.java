@@ -4,28 +4,17 @@ import data.anweisungen.AbhebungsAnweisung;
 import data.anweisungen.UeberweisungsAnweisung;
 import data.anweisungen.UeberweisungsAnweisungParam;
 import data.identifier.KontoId;
-import data.user.UserName;
 import repository.konto.KontoRepository;
 import service.KontoService;
 import service.UserService;
 import service.serviceexception.DatenbankException;
-import service.serviceexception.ImportExportServiceException;
 import service.serviceexception.ServiceException;
-import service.serviceexception.validateexception.ValidateBeschreibungException;
-import service.serviceexception.validateexception.ValidateBetragException;
 import service.serviceexception.validateexception.ValidateUeberweisungException;
 import validator.Validator;
-
 import java.sql.SQLException;
 import java.util.List;
 
-
-
-public class
-TransaktionsValidatorService {
-
-//todo ueberweisung und abhebung zusammenfassen / durch interface der anweisung zb
-
+public class TransaktionsValidatorService {
     private final KontoRepository kontoRepository;
     private final UserService userService;
     private final KontoService kontoService;
@@ -36,7 +25,6 @@ TransaktionsValidatorService {
         this.kontoService = kontoService;
     }
 
-    /// also bisher wird nur validiert ob genug geld aufm konto liegt
     public void validateUeberweisung(UeberweisungsAnweisung anweisung) throws ServiceException {
 
         Validator.isValidBetrag(anweisung.getBetrag());
@@ -46,25 +34,16 @@ TransaktionsValidatorService {
     }
 
     public void isValidMassenueberweisungen(List<UeberweisungsAnweisungParam> paramList, KontoId kontoId) throws ServiceException {
-
         double ueberweisungsSumme = paramList.stream()
                 .mapToDouble(
                         UeberweisungsAnweisungParam::getBetrag)
                 .sum();
-
         ueberziehtSaldo(kontoId, ueberweisungsSumme);
 
         for (UeberweisungsAnweisungParam param : paramList) {
             Validator.isValidBetrag(param.getBetrag());
         }
-
-        }
-
-
-
-
-
-
+    }
 
     public void validteAbhebungsAnweisung(AbhebungsAnweisung anweisung) throws ServiceException {
         Validator.isValidBetrag(anweisung.getBetrag());
@@ -80,5 +59,4 @@ TransaktionsValidatorService {
             throw new DatenbankException(DatenbankException.Message.KONTOSTAND_LADEN_FEHLGESCHLAGEN);
         }
     }
-
 }

@@ -8,13 +8,8 @@ import repository.dbConnection.DataBaseConnection;
 
 import java.sql.*;
 
-
 public class UserRepository {
-
-
-    //todo @DBCONNECTION hier werden zwei technische prozesse gebraucht,
     public User anmelden(UserName userName, Passwort password) throws SQLException {
-
         Connection conn = DataBaseConnection.getInstance();
 
         var selectUser = """
@@ -38,15 +33,7 @@ public class UserRepository {
         return null;
     }
 
-    /**
-     * todo @DBCONNECTION bei registrieren muss noch ein zusammenhängendes Konto in "konto" erstellt werden,
-     * sinnvoll wär es das es zwei methoden gibt für user erstellen und für konto erstellen,
-     * registrieren würde dann nur die beiden methoden zusammenführen
-     */
-
-
     public void createUser(User user, Passwort passwort) throws SQLException {
-
         Connection conn = DataBaseConnection.getInstance();
 
         var insertPerson = """
@@ -64,15 +51,12 @@ public class UserRepository {
     }
 
     public boolean userNameExists(UserName userId) throws SQLException {
-
         Connection conn = DataBaseConnection.getInstance();
-
 
         var selectUser = """
                 
                         SELECT * FROM benutzer WHERE username = ?
                 """;
-
 
         PreparedStatement preparedStatement = conn.prepareStatement(selectUser);
 
@@ -84,7 +68,6 @@ public class UserRepository {
     }
 
     public User findUserByName(UserName userId) throws SQLException {
-
         Connection conn = DataBaseConnection.getInstance();
 
         var selectUser = """
@@ -127,37 +110,4 @@ public class UserRepository {
             );
         } else throw new SQLException("User nicht gefunden");
     }
-/*
-    public Konto getKontoById(KontoId id) throws SQLException {
-
-        Connection conn = DataBaseConnection.getInstance();
-
-        var select = """
-                
-                    SELECT * FROM konto where konto_id = ?
-                
-                """;
-
-        var stmt = conn.prepareStatement(select);
-        stmt.setString(1, id.toString());
-
-        ResultSet resultSet = stmt.executeQuery();
-
-        if (resultSet.next()) {
-
-            KontoBuilder builder = new KontoBuilder();
-
-            return new Konto(
-                    builder
-                            .setKontoID(new KontoId(resultSet.getString("konto_id")))
-                            .setUserId(new UserId(resultSet.getString("user_id")))
-                            .setKontostand(resultSet.getDouble(resultSet.getString("kontostand")))
-            );
-
-        } else
-            return null;
-
-    }
-*/
-
 }
