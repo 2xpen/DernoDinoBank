@@ -11,7 +11,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class RegexTest {
+public class ValidatorTest {
     @Test
     void testBenutzernameValidationNegativ() {
         List<String> negativTest = List.of(
@@ -75,7 +75,7 @@ public class RegexTest {
 
     @Test
     void testPasswordValidationNegativ() {
-        List < Passwort > negativePasswortListe = List.of(
+        List<Passwort> negativePasswortListe = List.of(
                 new Passwort("DiesisteinnegativesPasswortweileszuvieleZeichenhat")
                 , new Passwort("")
 
@@ -87,7 +87,7 @@ public class RegexTest {
 
     @Test
     void testPasswordValidationPositive() throws ValidatePasswortException {
-        List < Passwort > positivePasswortListe = List.of(
+        List<Passwort> positivePasswortListe = List.of(
                 new Passwort("PassswortmitäöüÄÖÜ")
                 , new Passwort("1234568790")
                 , new Passwort("!§$%&/()=")

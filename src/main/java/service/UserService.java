@@ -11,6 +11,7 @@ import validator.Validator;
 import java.sql.SQLException;
 
 public class UserService {
+
     private final UserRepository repo;
 
     public UserService(UserRepository userRepository) {

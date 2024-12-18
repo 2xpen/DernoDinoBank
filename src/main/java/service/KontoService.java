@@ -28,7 +28,6 @@ public class KontoService {
             return repo.ladeKontoStandVonKonto(
                     repo.kontoIdErmittelnByUserId(userId));
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
             throw new DatenbankException(DatenbankException.Message.INTERNAL_SERVER_ERROR) {
             };
         }
