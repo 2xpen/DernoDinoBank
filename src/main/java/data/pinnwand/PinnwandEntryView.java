@@ -2,6 +2,7 @@ package data.pinnwand;
 
 import data.user.UserName;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class PinnwandEntryView extends PinnwandEntry {
     private final UserName empfaengerName;
@@ -31,4 +32,6 @@ public class PinnwandEntryView extends PinnwandEntry {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         return getTimestamp().toLocalDateTime().format(formatter);
     }
+
+
 }

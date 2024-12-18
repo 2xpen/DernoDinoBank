@@ -1,15 +1,20 @@
 package data.pinnwand;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Pinnwand {
 
     private final List<PinnwandEntryView> pinnwandentries = new ArrayList<>();
 
-    public void add(PinnwandEntryView p) {
-        pinnwandentries.add(p);
+    public void add(PinnwandEntryView ... p) {
+        List<PinnwandEntryView> ps = List.of(p);
+
+        pinnwandentries.addAll(ps);
+
     }
+
 
     public List<PinnwandEntryView> getPinnwandentries() {
         return pinnwandentries;
