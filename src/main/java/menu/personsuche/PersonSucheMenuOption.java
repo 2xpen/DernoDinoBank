@@ -7,7 +7,7 @@ import java.util.Arrays;
 public enum PersonSucheMenuOption {
     PINNWAND("Pinnwand von %s",1),
     CHAT("Chat mit %s",2),
-    ZURUECK("zurück",0);
+    ZURUECK("Zurück",0);
 
     private final int wahlnummer;
     private final String text;
