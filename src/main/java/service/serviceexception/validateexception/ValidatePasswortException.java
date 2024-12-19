@@ -8,7 +8,7 @@ public class ValidatePasswortException extends ValidateException {
     }
 
     public enum Message implements ServiceErrorMessageProvider {
-        PASSWORT("Ein passwort brauch mindestens 1 Zeichen und darf maximal 30 Zeichen haben");
+        PASSWORT("Ein Passwort braucht mindestens 1 Zeichen und maximal 30");
         private final String message;
 
         Message(String message) {

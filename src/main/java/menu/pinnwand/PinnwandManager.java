@@ -45,11 +45,11 @@ public class PinnwandManager extends ManagerBase {
     }
 
     private void aufPinnwandSchreiben(User autor, User empfaenger) {
-        System.out.println("Bitte gebe deine Nachricht ein:");
+        System.out.println("Bitte gib deine Nachricht ein:");
         String message = scanner.nextLine();
         try {
             pinnwandService.schreibenAufAnderePinnwand(message, autor.getUserId(), empfaenger.getUserId());
-            System.out.println("Ihr Pinnwand eintrag wurde erstellt!");
+            System.out.println("Ihr Pinnwandeintrag wurde erstellt!");
             pinnwandVonUserAufrufen(autor, empfaenger);
         } catch (ServiceException e) {
             System.out.println(e.getMessage());
@@ -129,7 +129,7 @@ public class PinnwandManager extends ManagerBase {
             FileHelper.isPathAccessible(zielPfad);
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
-            System.out.println("erneut Versuchen? (y/n)");
+            System.out.println("Erneut Versuchen? (y/n)");
             if (scanner.nextLine().equals("y")) {
                 exportPinnwandnachrichten(pinnwandEntries, selector, selectedUser);
             }

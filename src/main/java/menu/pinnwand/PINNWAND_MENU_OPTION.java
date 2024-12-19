@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public enum PINNWAND_MENU_OPTION {
     PINNWAND_ANSEHEN("eigene Pinnwand ansehen", 1),
-    ZURUECK("zurück", 0);
+    ZURUECK("Zurück", 0);
 
     private final String text;
     private final int wahlNummer;

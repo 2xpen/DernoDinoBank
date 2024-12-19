@@ -9,7 +9,7 @@ public enum KONTO_MENU_OPTION {
     OPTION_DIRECTMESSAGE("Direktnachrichten", 4),
     OPTION_KONTOBEWEGUNGEN("Kontobewegungen", 5),
     OPTION_PERSONSUCHE("Personensuche",6),
-    AUSLOGGEN("ausloggen", 0);
+    AUSLOGGEN("Ausloggen", 0);
 
     private final String text;
     private final int wahlNummer;

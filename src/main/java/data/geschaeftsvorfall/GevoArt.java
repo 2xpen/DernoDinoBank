@@ -3,8 +3,8 @@ package data.geschaeftsvorfall;
 import java.util.Arrays;
 
 public enum GevoArt {
-    ABHEBUNG("abhebung"),
-    UEBERWEISUNG("ueberweisung"),
+    ABHEBUNG("Abhebung"),
+    UEBERWEISUNG("Ueberweisung"),
     UNBEKANNT("");
 
     private final String name;

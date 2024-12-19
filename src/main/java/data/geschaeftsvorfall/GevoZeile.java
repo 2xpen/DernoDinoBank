@@ -49,11 +49,11 @@ public class GevoZeile {
     @Override
     public String toString() {
         return "GevoZeile{" +
-                "datum=" + datum +
-                ", empfaenger=" + empfaenger +
-                ", sender=" + sender +
-                ", beschreibung='" + beschreibung + '\'' +
-                ", betrag=" + betrag +
+                "Datum=" + datum +
+                ", Empfaenger=" + empfaenger +
+                ", Sender=" + sender +
+                ", Beschreibung='" + beschreibung + '\'' +
+                ", Betrag=" + betrag +
                 '}';
     }
 }

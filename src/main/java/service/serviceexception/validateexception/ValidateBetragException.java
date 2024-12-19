@@ -12,7 +12,7 @@ public class ValidateBetragException extends ValidateException {
         BETRAG_NICHT_KORREKT("""
                 Folgender Betrag fehlerhaft: %s\
                 
-                -maximal 2 nachkommastellen\
+                -maximal 2 Nachkommastellen\
                 
                 - nicht mehr als 18 Stellen nach dem Komma\
                 

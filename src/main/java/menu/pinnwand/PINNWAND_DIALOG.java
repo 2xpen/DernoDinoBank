@@ -3,8 +3,8 @@ package menu.pinnwand;
 public enum PINNWAND_DIALOG {
     BESITZER_VON_PINNWAND_EINGEBEN("Bitte gib den Namen von dem Besitzer der Pinnwand ein:"),
     PINNWAND_IST_LEER("Diese Pinnwand ist leer"),
-    PINNWAND_NACHRICHT_EINGEBEN("Bitte gebe deine Nachricht ein:"),
-    PINNWAND_NACHRICHT_ERSTELLT("Pinnwand-eintrag wurde erstellt");
+    PINNWAND_NACHRICHT_EINGEBEN("Bitte gib deine Nachricht ein:"),
+    PINNWAND_NACHRICHT_ERSTELLT("Pinnwandeintrag wurde erstellt");
 
     private final String text;
     private final Runnable action;

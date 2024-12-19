@@ -6,8 +6,8 @@ public class DatenbankException extends ServiceException {
     }
 
     public enum Message implements ServiceErrorMessageProvider {
-        KONTOSTAND_VON_SENDER_LADEN("Das laden vom Kontostand des Sender ist fehlgeschlagen"),
-        UEBERWEISUNG("Fehler beim senden der Überweisung an die Datenbank"),
+        KONTOSTAND_VON_SENDER_LADEN("Das Laden vom Kontostand des Sender ist fehlgeschlagen"),
+        UEBERWEISUNG("Fehler beim Senden der Überweisung an die Datenbank"),
         KONTOSTAND_LADEN_FEHLGESCHLAGEN("Kontostand konnte nicht geladen werden"),
         ANMELDUNG_FEHLGESCHLAGEN("Feler beim Anmeldeprozesss"),
         BENUTZER_NOT_FOUND("Für den angegebenen Namen konnte kein User gefunden werden"),

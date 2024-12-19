@@ -83,7 +83,7 @@ public class MessageManager extends ManagerBase {
     }
 
     public void einstiegMitPersonsuche(User selector, User selectedUser) {
-        System.out.println("1: Convo ansehen");
+        System.out.println("1: Konversation ansehen");
         System.out.println("2: Nachricht senden");
         System.out.println("0: Zurück");
 
@@ -116,7 +116,7 @@ public class MessageManager extends ManagerBase {
                     """);
             String messageToSend = scanner.nextLine();
             if (messageService.sendMessage(new Timestamp(System.currentTimeMillis()), selector.getUserId(), selectedUser.getUserId(), messageToSend)) {
-                System.out.println("Deine Nachricht wurde erfolgreich versendet!");
+                System.out.println("Deine Nachricht wurde erfolgreich versendet");
                 try {
                     Thread.sleep(1500);
                 } catch (InterruptedException e) {
@@ -291,7 +291,7 @@ public class MessageManager extends ManagerBase {
             default:
                 Menufehlermeldungen.WAHLNUMMER_NICHT_KORREKT.print();
 
-                System.out.println("erneut Versuchen? (y/n)");
+                System.out.println("Erneut Versuchen? (y/n)");
 
                 if (scanner.nextLine().equals("y")) {
                     exportKontoAnsicht(nachrichten, user);
@@ -354,7 +354,7 @@ public class MessageManager extends ManagerBase {
             default:
                 Menufehlermeldungen.WAHLNUMMER_NICHT_KORREKT.print();
 
-                System.out.println("erneut Versuchen? (y/n)");
+                System.out.println("Erneut Versuchen? (y/n)");
 
                 if (scanner.nextLine().equals("y")) {
                     exportPersonsucheAnsicht(nachrichten, selector, selectedUser);

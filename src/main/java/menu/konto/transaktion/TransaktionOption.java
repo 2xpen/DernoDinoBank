@@ -6,7 +6,7 @@ public enum TransaktionOption {
     EINFACHE_UEBERWEISUNG("Einfache Überweisung", 1),
     MASSEN_UBERWEISUNG("Massenüberweisung ", 2),
     GELD_ABHEBEN("Geld abheben", 3),
-    Zurueck("zurück", 0);
+    Zurueck("Zurück", 0);
 
     private final String text;
     private final int wahlNummer;

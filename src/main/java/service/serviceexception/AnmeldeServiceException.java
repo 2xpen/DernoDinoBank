@@ -6,7 +6,7 @@ public class AnmeldeServiceException extends ServiceException {
     }
 
     public enum Message implements ServiceErrorMessageProvider {
-        BENUTZERNAME_NICHT_VERGEBEN("der Benutzername ist nicht vergeben"),
+        BENUTZERNAME_NICHT_VERGEBEN("Der Benutzername ist nicht vergeben"),
         PASSWORT_NICHT_KORREKT("Passwort ist nicht korrekt");
 
         private final String message;

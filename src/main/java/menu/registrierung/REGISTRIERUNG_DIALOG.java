@@ -1,8 +1,8 @@
 package menu.registrierung;
 
 public enum REGISTRIERUNG_DIALOG {
-    NAME_EINGEBEN("Bitte namen angeben"),
-    PASSWORT("Bitte passwort angeben");
+    NAME_EINGEBEN("Bitte Namen angeben"),
+    PASSWORT("Bitte Passwort angeben");
 
     private final String text;
     private final Runnable action;

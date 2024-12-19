@@ -85,11 +85,11 @@ public class TransaktionsManager extends ManagerBase {
         }
 
         try {
-            System.out.println("An wen wollen Sie Geld schicken?");
+            System.out.println("An wen möchten Sie Geld überweisen?");
 
             UserName name = new UserName(scanner.nextLine());
 
-            System.out.println("Wie viel wollen Sie überweisen?");
+            System.out.println("Wie viel möchten Sie überweisen?");
             System.out.println("\nBetrag angeben!");
 
             double gewaehlterBetrag = Double.parseDouble(scanner.nextLine());
@@ -128,7 +128,7 @@ public class TransaktionsManager extends ManagerBase {
     }
 
     private void startMassenUberweisung() {
-        System.out.println("Bitte den Pfad angeben, worunter die Anweisungen liegen sollen!");
+        System.out.println("Bitte den Pfad angeben, unter dem die Anweisungen liegen sollen!");
 
         Path quellpfad = null;
 
@@ -179,7 +179,7 @@ public class TransaktionsManager extends ManagerBase {
 
         }
 
-        System.out.println("Wie viel wollen Sie abheben?");
+        System.out.println("Wie viel möchten Sie abheben?");
         System.out.println("\nBetrag angeben!");
 
         try {

@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public enum DIRECT_MESSAGES_MENU_OPTION {
     DIRECT_MESSAGES_ANSEHEN("Alle Direktnahrichten ansehen", 1),
-    ZURÜCK("zurück", 0);
+    ZURÜCK("Zurück", 0);
     private final String text;
     private final int wahlnummer;
     private final Runnable action;

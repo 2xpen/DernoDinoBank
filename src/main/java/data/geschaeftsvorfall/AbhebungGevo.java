@@ -7,7 +7,7 @@ import data.identifier.UserId;
 
 public class AbhebungGevo extends GeschaeftsVorfall {
     private final double betrag;
-    private final String beschreibung = "abhebung";
+    private final String beschreibung = "Abhebung";
 
     public AbhebungGevo(AbhebungsAnweisung anweisung) {
         super(GevoArt.ABHEBUNG, anweisung.getKontoId());

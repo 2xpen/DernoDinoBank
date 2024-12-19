@@ -2,11 +2,11 @@ package menu.anmeldung;
 
 public enum ANMELDE_DIALOG{
     ANMELDE_FENSTER("Bitte Anmelden"),
-    BENUTZERNAMEN_EINGEBEN("geben sie ihren Benutzernamen ein: "),
-    PASSWORT_EINGEBEN("geben sie ihr Passwort ein: "),
+    BENUTZERNAMEN_EINGEBEN("Geben Sie ihren Benutzernamen ein: "),
+    PASSWORT_EINGEBEN("Geben Sie ihr Passwort ein: "),
     PASSWORT_NICHT_KORREKT("Passwort ist nicht korrekt"),
     BENUTZERNAME_NICHT_VERGEBEN("Benutzer Name ist nicht vergeben"),
-    ZURÜCK("zurück");
+    ZURÜCK("Zurück");
 
     private final String text;
     private final Runnable runnable;

@@ -3,8 +3,8 @@ package menu.anmeldung;
 import java.util.Arrays;
 
 public enum ANMELDE_MENU_OPTION {
-    ANMELDEN("zur Anmeldung", 1),
-    ZURUECK("zurück zum Hauptbildschirm", 0);
+    ANMELDEN("Zur Anmeldung", 1),
+    ZURUECK("Zurück zum Hauptbildschirm", 0);
 
     private final String text;
     private final int wahlNummer;

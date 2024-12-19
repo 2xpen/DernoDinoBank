@@ -26,7 +26,7 @@ public class PersonSucheManager extends ManagerBase {
     public void selectUser(User user) {
         printHead();
 
-        System.out.println("Bitte den Namen der zu suchenden Person angeben.");
+        System.out.println("Bitte den Namen der Person angeben.");
 
         try {
             User gefundenerUser = userService.ermittleUserByUserName(new UserName(scanner.nextLine()));

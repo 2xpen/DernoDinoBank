@@ -6,7 +6,7 @@ public class RegistrierungException extends ServiceException {
     }
 
     public enum Message implements ServiceErrorMessageProvider {
-        BENUTZERNAME_BEREITS_VERGEBEN("der gewählte Benutzername exsistiert bereits");
+        BENUTZERNAME_BEREITS_VERGEBEN("Der gewählte Benutzername exsistiert bereits");
 
         private final String message;
 
