@@ -35,8 +35,8 @@ public class KontoauszugManager extends ManagerBase {
         this.user = user;
 
         System.out.println("1: Alle Kontobewegungen sehen");
-        System.out.println("2: Kontoauszuege exportieren");
-        System.out.println("0: zurück");
+        System.out.println("2: Kontoauszüge exportieren");
+        System.out.println("0: Zurück");
 
         try {
             KontoauszugWrapper kontoauszugWrapper = gevoService.fetchTransaktionsHistorie(user.getUserId());

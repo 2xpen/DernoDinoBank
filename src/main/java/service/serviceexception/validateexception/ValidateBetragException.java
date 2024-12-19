@@ -14,9 +14,9 @@ public class ValidateBetragException extends ValidateException {
                 
                 -maximal 2 Nachkommastellen\
                 
-                - nicht mehr als 18 Stellen nach dem Komma\
+                -nicht mehr als 18 Stellen nach dem Komma\
                 
-                - größer als 0""");
+                -größer als 0""");
 
         private String message;
 
